@@ -1,0 +1,18 @@
+#include "TROOT.h"
+
+class EventDefintion()
+{
+ public:  
+    
+  void AttachInputChainToVariables(TChain* TheChain)
+  {
+    
+  }
+  void AttachOutputTreeToVarialbes(TTree* TheTree)
+  {
+    
+  }
+  void CalculateRelevantValues(){}
+  bool IsGoodEvent(){return false;}
+};
+
