@@ -23,6 +23,9 @@ def AddMuWeightingsToEvent(FileToRun):
     #ReweightFile.mt_tree.eta_1 gets the muon eta    
         Mu_ID_SF[0] = ID_SF_File.NUM_MediumID_DEN_genTracks_pt_abseta.GetBinContent(ID_SF_File.NUM_MediumID_DEN_genTracks_pt_abseta.FindBin(ReweightFile.mt_tree.pt_1,abs(ReweightFile.mt_tree.eta_1)))
         Mu_Iso_SF[0] = ISO_SF_File.NUM_TightRelIso_DEN_MediumID_pt_abseta.GetBinContent(ISO_SF_File.NUM_TightRelIso_DEN_MediumID_pt_abseta.FindBin(ReweightFile.mt_tree.pt_1,abs(ReweightFile.mt_tree.eta_1)))
+        if("Data" in FileToRun):
+            Mu_ID_SF[0] = 1.0
+            Mu_Iso_SF[0] = 1.0
 
         ReweightFile.mt_tree.Fill()
 
