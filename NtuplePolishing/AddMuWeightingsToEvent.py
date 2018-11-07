@@ -27,6 +27,19 @@ def AddMuWeightingsToEvent(FileToRun):
             Mu_ID_SF[0] = 1.0
             Mu_Iso_SF[0] = 1.0
 
+        if(abs(Mu_ID_SF[0]) > 200.0):
+            print("Large Mu ID SF!")
+            print("Mu_ID_SF[0]: "+str(Mu_ID_SF[0]))
+        if(Mu_ID_SF[0] < 0.0):
+            print("Negative Mu ID SF!")
+            print("Mu_ID_SF[0]: "+str(Mu_ID_SF[0]))
+        if(abs(Mu_Iso_SF[0]) > 200.0):
+            print("Large Mu Iso SF!")
+            print("Mu_Iso_SF[0]: "+str(Mu_Iso_SF[0]))
+        if(Mu_Iso_SF[0] < 0.0):
+            print("Negative Mu Iso SF!")
+            print("Mu_Iso_SF[0]: "+str(Mu_Iso_SF[0]))
+
         ReweightFile.mt_tree.Fill()
 
     ReweightFile.mt_tree.Write()

@@ -29,9 +29,12 @@ def AddFakeFactorWeightings(FileToRun):
     ff = ff_file.Get('ff_comb')
 
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
-    Event_Fake_Factor = array('f',[0])    
+    Event_Fake_Factor = array('f',[0])
 
     ReweightFile.mt_tree.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')    
+
+    Num = 0
+    Denom = 0
 
     for i in tqdm(range(ReweightFile.mt_tree.GetEntries())):
         ReweightFile.mt_tree.GetEntry(i)
@@ -67,20 +70,24 @@ def AddFakeFactorWeightings(FileToRun):
                   Frac_w,
                   Frac_tt]
 
-        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))
+        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))        
+        Num += Event_Fake_Factor[0]
+        Denom += 1.0
         
-        ReweightFile.mt_tree.Fill()
+        ReweightFile.mt_tree.Fill()    
 
-    print("Cleaning up Fakes")
     ff.Delete()
     ff_file.Close()
-
-    print("Writing Tree")
-    ReweightFile.mt_tree.Write()
-    print("Writing File")
+    
+    ReweightFile.mt_tree.Write()    
     ReweightFile.Write()
     ReweightFile.Close()
         
+#Okay, we may need to take a stab at this in the actual signal region to get proper fractions
+#how do we do that? I barely know what the signal region is at this point.
+#let's just make a thing we pass a whatever too and it checks the stuff and tells us if we're good
+#From there we'll put in the old Tau ID signal region selection and we'll take stab?
+
 #This is composed of (W+ZJ+VVJ)/ data events
 def CalculateFractionW():
     WJetsEvents = 0.0
