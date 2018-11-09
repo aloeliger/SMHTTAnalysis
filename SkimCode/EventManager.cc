@@ -47,10 +47,18 @@ class EventManager
     Float_t DeltaR = MuVector.DeltaR(TauVector);
     if(DeltaR < 0.5) EventValid = false;
     //check that the pt's work with the stiched together triggers
-    if(TheInputManager->GetInputDictionary()->IsoMu27Pass && !(TheInputManager->GetInputDictionary()->mPt > 29.0)) EventValid = false;
-    if(TheInputManager->GetInputDictionary()->Mu20Tau27Pass && 
-       !(TheInputManager->GetInputDictionary()->mPt > 22.0 && TheInputManager->GetInputDictionary()->tPt > 29.0))
-      EventValid = false;
+    if(TheInputManager->GetInputDictionary()->IsoMu27Pass && !TheInputManager->GetInputDictionary()->Mu20Tau27Pass) 
+      {
+	if(!(TheInputManager->GetInputDictionary()->mPt > 29.0))EventValid = false;
+      }
+    else if(TheInputManager->GetInputDictionary()->Mu20Tau27Pass && !TheInputManager->GetInputDictionary()->IsoMu27Pass)
+      {
+	if(!(TheInputManager->GetInputDictionary()->mPt > 22.0 && TheInputManager->GetInputDictionary()->tPt > 29.0)) EventValid = false;
+      }
+    else if (TheInputManager->GetInputDictionary()->IsoMu27Pass && TheInputManager->GetInputDictionary()->Mu20Tau27Pass)
+      {
+	if(!(TheInputManager->GetInputDictionary()->mPt > 29.0 && TheInputManager->GetInputDictionary()->tPt > 29.0)) EventValid = false;
+      }
     //Look at event etas    
     //original iso mu 27 etas
     if( TheInputManager->GetInputDictionary()->IsoMu27Pass && 
