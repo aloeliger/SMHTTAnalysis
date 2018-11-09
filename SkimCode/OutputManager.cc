@@ -379,9 +379,7 @@ class OutputManager
     this->GetCurrentOutputDictionary()->metphi = MetVector.Phi();
 
     this->GetCurrentOutputDictionary()->nbtag = TheInputManager->GetInputDictionary()->bjetCISVVeto20Medium;
-    this->GetCurrentOutputDictionary()->njets = TheInputManager->GetInputDictionary()->jetVeto30;
-    std::cout<<"njets: "<<this->GetCurrentOutputDictionary()->njets<<std::endl;
-    std::cout<<"jetVeto30: "<<TheInputManager->GetInputDictionary()->jetVeto30<<std::endl;
+    this->GetCurrentOutputDictionary()->njets = TheInputManager->GetInputDictionary()->jetVeto30;    
     //new trigger variables
     this->GetCurrentOutputDictionary()->passMu20Tau27 = TheInputManager->GetInputDictionary()->Mu20Tau27Pass;
     this->GetCurrentOutputDictionary()->MuonMatchesMu20Tau27 = TheInputManager->GetInputDictionary()->mMatchesIsoMu20Tau27Path;
