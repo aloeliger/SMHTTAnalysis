@@ -8,7 +8,7 @@ def AddCrossSectionWeightings(FileToRun):
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
     CrossSectionWeighting = array('f',[0])
 
-    ReweightFile.mt_tree.Branch('CrossSectionWeighting',CrossSectionWeighting,'CrossSectionWeighting/F')
+    TheBranch = ReweightFile.mt_tree.Branch('CrossSectionWeighting',CrossSectionWeighting,'CrossSectionWeighting/F')
 
     #I believe this is the correct distribution to get?
     TotalNumberOfEvents = ReweightFile.eventCount.GetBinContent(1)    
@@ -65,7 +65,7 @@ def AddCrossSectionWeightings(FileToRun):
             print("Unrecognized input sample! Defaulting to unweighted events!")
             
         #print("Cross Section Weighting: "+str(CrossSectionWeighting))
-        ReweightFile.mt_tree.Fill()
+        TheBranch.Fill()
 
     ReweightFile.mt_tree.Write()
     ReweightFile.Write()

@@ -11,11 +11,11 @@ def AddMuWeightingsToEvent(FileToRun):
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
     Mu_ID_SF = array('f',[0])
     Mu_Iso_SF = array('f',[0])
-    Mu_Trigger_SF = array('f',[0])
+    Single_Mu_Trigger_SF = array('f',[0])
 
-    ReweightFile.mt_tree.Branch('Mu_ID_SF',Mu_ID_SF,'Mu_ID_SF/F')
-    ReweightFile.mt_tree.Branch('Mu_Iso_SF',Mu_Iso_SF,'Mu_Iso_SF/F')
-#ReweightFile.mt_tree.Branch('Mu_Trigger_SF',Mu_Iso_SF,'Mu_Trigger_SF/F')
+    IDBranch = ReweightFile.mt_tree.Branch('Mu_ID_SF',Mu_ID_SF,'Mu_ID_SF/F')
+    IsoBranch = ReweightFile.mt_tree.Branch('Mu_Iso_SF',Mu_Iso_SF,'Mu_Iso_SF/F')
+    SingleMuBranch = ReweightFile.mt_tree.Branch('Single_Mu_Trigger_SF',Single_Mu_Trigger_SF,'Single_Mu_Trigger_SF/F')
 
     for i in tqdm(range(ReweightFile.mt_tree.GetEntries())):
         ReweightFile.mt_tree.GetEntry(i)
@@ -39,8 +39,10 @@ def AddMuWeightingsToEvent(FileToRun):
         if(Mu_Iso_SF[0] < 0.0):
             print("Negative Mu Iso SF!")
             print("Mu_Iso_SF[0]: "+str(Mu_Iso_SF[0]))
-
-        ReweightFile.mt_tree.Fill()
+            
+        IDBranch.Fill()
+        IsoBranch.Fill()
+        SingleMuBranch.Fill()
 
     ReweightFile.mt_tree.Write()
     ReweightFile.Write()

@@ -31,10 +31,15 @@ def AddFakeFactorWeightings(FileToRun):
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
     Event_Fake_Factor = array('f',[0])
 
-    ReweightFile.mt_tree.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')    
+    FakeFactorBranch = ReweightFile.mt_tree.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')
 
-    Num = 0
-    Denom = 0
+    TauPTHisto = ROOT.TH1F("TauPT","TauPT", 20, 0, 200.0)
+    TauDecayModeHisto = ROOT.TH1F("TauDecayMode", "TauDecayMode", 11, 0.0, 11.0)
+    NJetsHisto = ROOT.TH1F("NJetsHisto","NJetsHisto", 20, 0.0, 20.0)
+    m_visHisto = ROOT.TH1F("m_visHisto","m_visHisto", 20, 0.0, 200.0)
+    TransverseMassHisto = ROOT.TH1F("TransverseMass","TransverseMass", 20, 0.0, 200.0)
+    IsoParameterHisto = ROOT.TH1F("IsoParameterHisto","IsoParameterHisto", 20, 0.0, 1.0)
+    
 
     for i in tqdm(range(ReweightFile.mt_tree.GetEntries())):
         ReweightFile.mt_tree.GetEntry(i)
@@ -66,27 +71,54 @@ def AddFakeFactorWeightings(FileToRun):
                   m_vis,
                   TransverseMass,
                   ReweightFile.mt_tree.iso_1,
-                  Frac_qcd,
-                  Frac_w,
-                  Frac_tt]
+                  0.155,#Frac_qcd,
+                  0.830,#Frac_w,
+                  0.0016]#Frac_tt]
 
-        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))        
-        Num += Event_Fake_Factor[0]
-        Denom += 1.0
+        TauPTHisto.Fill(ReweightFile.mt_tree.pt_2)
+        TauDecayModeHisto.Fill(ReweightFile.mt_tree.l2_decayMode)
+        NJetsHisto.Fill(ReweightFile.mt_tree.njets)
+        m_visHisto.Fill(m_vis)
+        TransverseMassHisto.Fill(TransverseMass)
+        IsoParameterHisto.Fill(ReweightFile.mt_tree.iso_1)
+
+        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))                
         
-        ReweightFile.mt_tree.Fill()    
+        FakeFactorBranch.Fill()
 
     ff.Delete()
-    ff_file.Close()
+    ff_file.Close()        
     
+    DiagnosticFile = ROOT.TFile("Diagnostics.root","RECREATE")
+    TauPTHisto.Write()
+    TauDecayModeHisto.Write()
+    NJetsHisto.Write()
+    m_visHisto.Write()
+    TransverseMassHisto.Write()
+    IsoParameterHisto.Write()
+
+    ReweightFile.cd()
     ReweightFile.mt_tree.Write()    
     ReweightFile.Write()
-    ReweightFile.Close()
+    ReweightFile.Close()    
+
+    raw_input("Press Enter to continue...")
         
 #Okay, we may need to take a stab at this in the actual signal region to get proper fractions
 #how do we do that? I barely know what the signal region is at this point.
 #let's just make a thing we pass a whatever too and it checks the stuff and tells us if we're good
 #From there we'll put in the old Tau ID signal region selection and we'll take stab?
+"""
+def IsSelectedEvent(TheTree):
+    IsGoodEvent = True
+
+    MuVector = ROOT.TLorentzVector(TheTree.pt_1, TheTree.eta_1, TheTree.phi_1, TheTree.e_1)
+    TauVector = ROOT.TLorentzVector(TheTree.pt_2, TheTree.eta_2, TheTree.phi_2, TheTree.e_2)
+    
+    if(TheTree.pt_1 < 30.0 or abs(TheTree.eta_1) > 2,4 or not TheTree.id_m_medium_1 or TheTree.iso_1 > 0.15 or 
+       abs(TheTree.dZ_1) > 0.2 or abs(d0_1) > 0.045 or not TheTree.matchIsoMu27_1)
+
+"""
 
 #This is composed of (W+ZJ+VVJ)/ data events
 def CalculateFractionW():
@@ -102,6 +134,7 @@ def CalculateFractionW():
         VVChain.GetEntry(i)
         if(VVChain.gen_match_2 == 6.0):
             WJetsEvents += 1.0
+    print(WJetsEvents / DataFile.mt_tree.GetEntries())
     return (WJetsEvents / DataFile.mt_tree.GetEntries())
 
 #This is composed of (TTJ) / data
@@ -111,6 +144,7 @@ def CalculateFractionTT():
         TTChain.GetEntry(i)
         if(TTChain.gen_match_2 == 6.0):
             TTJetsEvents += 1.0
+    print (TTJetsEvents / DataFile.mt_tree.GetEntries())
     return (TTJetsEvents / DataFile.mt_tree.GetEntries())
 
 #this is given by (ZTT+TTT+VVT)/data
@@ -131,6 +165,7 @@ def CalculateFractionReal():
         VVChain.GetEntry(i)
         if(VVChain.gen_match_2 < 5.0):
             RealEvents += 1.0
+    print(RealEvents/DataFile.mt_tree.GetEntries())
     return (RealEvents/DataFile.mt_tree.GetEntries())
 
 if __name__ == "__main__":
@@ -142,7 +177,8 @@ if __name__ == "__main__":
     Frac_real = CalculateFractionReal()
     print("Processing Fraction QCD")
     Frac_qcd = 1.0 -(Frac_w + Frac_tt + Frac_real)    
+    print(Frac_qcd)
     for File in sys.argv[1:]:
         print("Processing Fake Factors on "+File)
-        AddFakeFactorWeightings(File)
-    pass
+        AddFakeFactorWeightings(File)        
+    
