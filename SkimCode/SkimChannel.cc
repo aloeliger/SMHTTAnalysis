@@ -14,6 +14,9 @@ void SkimChannel(string FileName, string OutFileName)
   string path="";
   string line="";
   ifstream ParamFile (FileName.c_str());
+  
+  TH1F* pileup_mc = new TH1F("pileup_mc","pileup_mc", 80, 0.0, 80.0);
+  
   if(ParamFile.is_open())
     {
       int LinesProcessed = 0;
@@ -81,7 +84,9 @@ void SkimChannel(string FileName, string OutFileName)
 		  if(i==(NumEntries-1)) fprintf(stdout,"<====================>\n");
 		}
 	    }	 
-
+	  
+	  pileup_mc->Fill(TheEventManager->TheInputManager->GetInputDictionary()->nTruePU);
+	  
 	  if(!TheEventManager->IsGoodEvent()) 
 	    {
 	      ++NumFailed;
@@ -134,6 +139,8 @@ void SkimChannel(string FileName, string OutFileName)
       EventCounter->Write();
       std::cout<<"Event Weights..."<<std::endl;
       EventCounterWeights->Write();
+      std::cout<<"Pileup Histogram..."<<std::endl;
+      pileup_mc->Write();
       
       std::cout<<"Closing the files..."<<std::endl;
       OutFile->Close();
