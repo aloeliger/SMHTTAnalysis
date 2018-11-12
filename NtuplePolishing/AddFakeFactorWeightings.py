@@ -100,9 +100,7 @@ def AddFakeFactorWeightings(FileToRun):
     ReweightFile.cd()
     ReweightFile.mt_tree.Write()    
     ReweightFile.Write()
-    ReweightFile.Close()    
-
-    raw_input("Press Enter to continue...")
+    ReweightFile.Close()        
         
 #Okay, we may need to take a stab at this in the actual signal region to get proper fractions
 #how do we do that? I barely know what the signal region is at this point.

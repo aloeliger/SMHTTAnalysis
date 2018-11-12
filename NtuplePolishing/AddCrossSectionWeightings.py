@@ -16,7 +16,7 @@ def AddCrossSectionWeightings(FileToRun):
     for i in tqdm(range(ReweightFile.mt_tree.GetEntries())):
         ReweightFile.mt_tree.GetEntry(i)
         
-        LHCLumi = 41.370e15
+        LHCLumi = 41.557e15
         if ("WW.root" in FileToRun):
             CrossSectionWeighting[0] = LHCLumi * 118.7e-12 / TotalNumberOfEvents
         elif ("WZ.root" in FileToRun):
