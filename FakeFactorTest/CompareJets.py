@@ -4,7 +4,7 @@ import sys
 ROOT.gStyle.SetOptStat(0)
 
 TheNewHistoFile = ROOT.TFile("JetFile.root")
-TheNewJetHisto = TheNewHistoFile.FinalJetDistribution
+TheNewJetHisto = TheNewHistoFile.TightJetDistribution
 
 TheOldHistoFile = ROOT.TFile("FakeRateDeterminedDistributions.root")
 TheOldJetHisto = TheOldHistoFile.TightPTFRJetDistribution
