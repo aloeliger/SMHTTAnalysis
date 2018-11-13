@@ -116,6 +116,11 @@ struct OutputDictionary
   Float_t passMu20Tau27;
   Float_t MuonMatchesMu20Tau27;
   Float_t TauMatchesMu20Tau27;
+  
+  //vbf jet variables
+  Float_t njetsWoNoisyJets;
+  Float_t mjj;
+  Float_t mjjWoNoisyJets;
 };
 
 
@@ -253,6 +258,11 @@ class OutputManager
 
     TheTree->Branch("nbtag", &this->GetStagedOutputDictionary()->nbtag, "nbtag/F");
     TheTree->Branch("njets", &this->GetStagedOutputDictionary()->njets, "njets/F");
+
+    //attach the noisy jet variables
+    TheTree->Branch("njetsWoNoisyJets", &this->GetStagedOutputDictionary()->njetsWoNoisyJets, "njetsWoNoisyJets/F");
+    TheTree->Branch("mjj", &this->GetStagedOutputDictionary()->mjj, "mjj/F");
+    TheTree->Branch("mjjWoNoisyJets", &this->GetStagedOutputDictionary()->mjjWoNoisyJets, "mjjWoNoisyJets/F");
   }
 
   OutputDictionary* GetStagedOutputDictionary()
@@ -384,6 +394,11 @@ class OutputManager
     this->GetCurrentOutputDictionary()->passMu20Tau27 = TheInputManager->GetInputDictionary()->Mu20Tau27Pass;
     this->GetCurrentOutputDictionary()->MuonMatchesMu20Tau27 = TheInputManager->GetInputDictionary()->mMatchesIsoMu20Tau27Path;
     this->GetCurrentOutputDictionary()->TauMatchesMu20Tau27 = TheInputManager->GetInputDictionary()->tMatchesIsoMu20Tau27Path;
+
+    //noisy jet variables.
+    this->GetCurrentOutputDictionary()->njetsWoNoisyJets = TheInputManager->GetInputDictionary()->jetVeto30;    
+    this->GetCurrentOutputDictionary()->mjj = TheInputManager->GetInputDictionary()->vbfMass;    
+    this->GetCurrentOutputDictionary()->mjjWoNoisyJets = TheInputManager->GetInputDictionary()->vbfMassWoNoisyJets;    
   }
   
 };

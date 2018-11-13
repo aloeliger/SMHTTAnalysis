@@ -557,6 +557,11 @@ struct InputDictionary
   //get the actual matching vaiables
   Float_t mMatchesIsoMu20Tau27Path;
   Float_t tMatchesIsoMu20Tau27Path;
+
+  //for noisy jet tests
+  Float_t jetVeto30WoNoisyJets;
+  //Float_t vbfMass;
+  Float_t vbfMassWoNoisyJets;
 };
 
 class InputManager
@@ -1133,6 +1138,11 @@ class InputManager
     //attach the true chain variables
     TheChain->SetBranchAddress("mMatchesIsoMu20Tau27Path", &this->GetInputDictionary()->mMatchesIsoMu20Tau27Path);
     TheChain->SetBranchAddress("tMatchesIsoMu20Tau27Path", &this->GetInputDictionary()->tMatchesIsoMu20Tau27Path);    
+
+    //attach the noisy jet variables
+    TheChain->SetBranchAddress("jetVeto30WoNoisyJets", &this->GetInputDictionary()->jetVeto30WoNoisyJets);    
+    TheChain->SetBranchAddress("vbfMass", &this->GetInputDictionary()->vbfMass);    
+    TheChain->SetBranchAddress("vbfMassWoNoisyJets", &this->GetInputDictionary()->vbfMassWoNoisyJets);    
   }
   
   InputDictionary* GetInputDictionary()
