@@ -31,7 +31,7 @@ def AddFakeFactorWeightings(FileToRun):
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
     Event_Fake_Factor = array('f',[0])
 
-    FakeFactorBranch = ReweightFile.mt_tree.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')
+    FakeFactorBranch = ReweightFile.mutau_tree.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')
 
     TauPTHisto = ROOT.TH1F("TauPT","TauPT", 20, 0, 200.0)
     TauDecayModeHisto = ROOT.TH1F("TauDecayMode", "TauDecayMode", 11, 0.0, 11.0)
@@ -39,50 +39,52 @@ def AddFakeFactorWeightings(FileToRun):
     m_visHisto = ROOT.TH1F("m_visHisto","m_visHisto", 20, 0.0, 200.0)
     TransverseMassHisto = ROOT.TH1F("TransverseMass","TransverseMass", 20, 0.0, 200.0)
     IsoParameterHisto = ROOT.TH1F("IsoParameterHisto","IsoParameterHisto", 20, 0.0, 1.0)
+    FakeFactorHisto = ROOT.TH1F("FakeFactor","FakeFactor",20,0.0,1.0)
     
-
-    for i in tqdm(range(ReweightFile.mt_tree.GetEntries())):
-        ReweightFile.mt_tree.GetEntry(i)
+    print("Processing On "+str(ReweightFile.mutau_tree.GetEntries())+"Entries")
+    for i in tqdm(range(ReweightFile.mutau_tree.GetEntries())):
+        ReweightFile.mutau_tree.GetEntry(i)
         
         MuVector = ROOT.TLorentzVector()
-        MuVector.SetPtEtaPhiM(ReweightFile.mt_tree.pt_1,
-                              ReweightFile.mt_tree.eta_1,
-                              ReweightFile.mt_tree.phi_1,
-                              ReweightFile.mt_tree.m_1)
+        MuVector.SetPtEtaPhiM(ReweightFile.mutau_tree.pt_1,
+                              ReweightFile.mutau_tree.eta_1,
+                              ReweightFile.mutau_tree.phi_1,
+                              ReweightFile.mutau_tree.m_1)
         
         TauVector = ROOT.TLorentzVector()
-        TauVector.SetPtEtaPhiM(ReweightFile.mt_tree.pt_2,
-                               ReweightFile.mt_tree.eta_2,
-                               ReweightFile.mt_tree.phi_2,
-                               ReweightFile.mt_tree.m_2)
+        TauVector.SetPtEtaPhiM(ReweightFile.mutau_tree.pt_2,
+                               ReweightFile.mutau_tree.eta_2,
+                               ReweightFile.mutau_tree.phi_2,
+                               ReweightFile.mutau_tree.m_2)
 
         MissingMomentumVector = ROOT.TLorentzVector()
-        MissingMomentumVector.SetPtEtaPhiM(ReweightFile.mt_tree.met,
+        MissingMomentumVector.SetPtEtaPhiM(ReweightFile.mutau_tree.met,
                                            0,
-                                           ReweightFile.mt_tree.metphi,
+                                           ReweightFile.mutau_tree.metphi,
                                            0)
 
         m_vis = (MuVector + TauVector).M()
         TransverseMass = sqrt(2.0*MuVector.Pt()*MissingMomentumVector.Pt()*(1.0-cos(MuVector.DeltaPhi(MissingMomentumVector))))
 
-        inputs = [ReweightFile.mt_tree.pt_2,
-                  ReweightFile.mt_tree.l2_decayMode,
-                  ReweightFile.mt_tree.njets,
+        inputs = [ReweightFile.mutau_tree.pt_2,
+                  ReweightFile.mutau_tree.l2_decayMode,
+                  ReweightFile.mutau_tree.njets,
                   m_vis,
                   TransverseMass,
-                  ReweightFile.mt_tree.iso_1,
+                  ReweightFile.mutau_tree.iso_1,
                   0.155,#Frac_qcd,
                   0.830,#Frac_w,
                   0.0016]#Frac_tt]
 
-        TauPTHisto.Fill(ReweightFile.mt_tree.pt_2)
-        TauDecayModeHisto.Fill(ReweightFile.mt_tree.l2_decayMode)
-        NJetsHisto.Fill(ReweightFile.mt_tree.njets)
+        TauPTHisto.Fill(ReweightFile.mutau_tree.pt_2)
+        TauDecayModeHisto.Fill(ReweightFile.mutau_tree.l2_decayMode)
+        NJetsHisto.Fill(ReweightFile.mutau_tree.njets)
         m_visHisto.Fill(m_vis)
         TransverseMassHisto.Fill(TransverseMass)
-        IsoParameterHisto.Fill(ReweightFile.mt_tree.iso_1)
+        IsoParameterHisto.Fill(ReweightFile.mutau_tree.iso_1)
 
-        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))                
+        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))              
+        FakeFactorHisto.Fill(Event_Fake_Factor[0])
         
         FakeFactorBranch.Fill()
 
@@ -96,9 +98,10 @@ def AddFakeFactorWeightings(FileToRun):
     m_visHisto.Write()
     TransverseMassHisto.Write()
     IsoParameterHisto.Write()
+    FakeFactorHisto.Write()
 
     ReweightFile.cd()
-    ReweightFile.mt_tree.Write()    
+    ReweightFile.mutau_tree.Write()    
     ReweightFile.Write()
     ReweightFile.Close()        
         

@@ -25,6 +25,8 @@ def CreateVBFHisto(FileToRun):
     TheEfficiencyHisto.SetTitle("Noisy Jet Veto Signal Efficiency")
     TheEfficiencyHisto.GetXaxis().SetTitle("m_{jj} >")
     TheEfficiencyHisto.GetYaxis().SetTitle("njets >")
+    TheEfficiencyHisto.GetZaxis().SetTitle("Signal Efficiency")
+    TheEfficiencyHisto.GetZaxis().SetTitleOffset(1.4)
     TheEfficiencyHisto.Draw()
 
     raw_input("Press Enter to Continue...")

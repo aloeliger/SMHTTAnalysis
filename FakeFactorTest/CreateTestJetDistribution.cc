@@ -145,6 +145,7 @@ void CreateTestJetDistribution()
 					20,
 					50.0,
 					150.0);
+  int FullySelectedEvents = 0;
   
   for(int i=0;i < NumberOfEntries; i++)
     {
@@ -205,6 +206,7 @@ void CreateTestJetDistribution()
 	      //If I read my documentation right at this point then ...
 	      //now all we need to do is just fill the distribution 
 	      // and weight it by the fake factor and, boom, jets?
+	      FullySelectedEvents++;
 	      TightJetDistribution->Fill(Var,Event_Fake_Factor);
 	    }
 	}
@@ -212,6 +214,7 @@ void CreateTestJetDistribution()
     } // end of for loop
 
   //Write This to a new file and let's go.
+  std::cout<<"Fully Selected Events: "<<FullySelectedEvents<<std::endl;
   TFile* OutFile = new TFile("JetFile.root","RECREATE");
   TightJetDistribution->Write();
   OutFile->Close();

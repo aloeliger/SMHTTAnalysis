@@ -1,6 +1,3 @@
-[submodule "RenderCode"]
-	path = RenderCode
-	url = git@github.com:aloeliger/RenderCode.git
 [submodule "Jesterworks"]
 	path = Jesterworks
 	url = git@github.com:aloeliger/Jesterworks.git
