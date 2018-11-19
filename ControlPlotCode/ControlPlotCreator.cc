@@ -161,16 +161,17 @@ void ControlPlotCreator(std::string input)
   //this has to be done in place here, it only really works in c++
   std::cout<<"Creating Lumi Reweighting"<<std::endl;
   reweight::LumiReWeighting* LumiWeights_12;
-  /*
-    LumiWeights_12 = new reweight::LumiReWeighting(("/data/aloeliger/SMHTTData/"+input+".root").c_str(),
+  
+  LumiWeights_12 = new reweight::LumiReWeighting(("/data/aloeliger/SMHTTData/"+input+".root").c_str(),
 						 "/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/MyDataPileupHistogram.root",
 						 "pileup_mc",
 						 "pileup");
-  */
+    /*
   LumiWeights_12 = new reweight::LumiReWeighting(("/data/ccaillol/tauid_20june_mt/"+input+".root").c_str(),
 						 "/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/MyDataPileupHistogram.root",
 						 "pileup_mc",
 						 "pileup");
+    */
 
   std::cout<<"Entries to Process: "<<NumberOfEntries<<std::endl;
   for(int i =0;i < NumberOfEntries; i++)
