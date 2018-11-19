@@ -1,8 +1,9 @@
 #include "TROOT.h"
 void CreateTestJetDistribution()
 {
-  TFile* DataFile = new TFile("/data/aloeliger/SMHTTData/Data.root");
-  TTree* Tree = (TTree*) DataFile->Get("mt_tree");
+  //TFile* DataFile = new TFile("/data/aloeliger/SMHTTData/Data.root");
+  TFile* DataFile = new TFile("./Data.root");
+  TTree* Tree = (TTree*) DataFile->Get("mutau_tree");
 
   int run,lumi,evt,NUP;
   float npv,npu,amcatNLO_weight;

@@ -1,4 +1,5 @@
 #include "TROOT.h"
+
 #include "/data/aloeliger/CMSSW_9_4_0/src/PhysicsTools/Utilities/interface/LumiReweightingStandAlone.h"
 #include <cmath>
 #include <string>
@@ -173,6 +174,10 @@ void ControlPlotCreator(std::string input)
 						 "pileup");
     */
 
+  float NumberFilled = 0.0;
+  float TotalWeight = 0.0;
+  float TotalVisMass = 0.0;
+
   std::cout<<"Entries to Process: "<<NumberOfEntries<<std::endl;
   for(int i =0;i < NumberOfEntries; i++)
     {
@@ -245,19 +250,37 @@ void ControlPlotCreator(std::string input)
       float PZeta = PZetaAll - 0.85 * PZetaVis;      
 
       if(q_1 * q_2 > 0.0 or TransverseMass > 50.0 or PZeta < -25.0) continue;
-
+      
+      NumberFilled+=1.0;
+      
       //Create the weighting
       float PileupWeight = LumiWeights_12->weight(npu);
 
       float NormalizationWeight;
       if(input == "Data") NormalizationWeight = 1.0;
-      else NormalizationWeight= Mu_ID_SF*Mu_Iso_SF*Single_Mu_Trigger_SF*CrossSectionWeighting*PileupWeight*0.89; //My Temporary Tight Tau ID Weighting
+      else NormalizationWeight= Mu_ID_SF*Mu_Iso_SF*Single_Mu_Trigger_SF*CrossSectionWeighting*PileupWeight*0.89; //My Temporary Tight Tau ID Weighting      
+      /*
+      std::cout<<"Mu_ID_SF: "<<Mu_ID_SF<<std::endl;;
+      std::cout<<"Mu_Iso_SF: "<<Mu_Iso_SF<<std::endl;;
+      std::cout<<"Single_Mu_Trigger_SF: "<<Single_Mu_Trigger_SF<<std::endl;;
+      std::cout<<"CrossSectionWeighting: "<<CrossSectionWeighting<<std::endl;;
+      std::cout<<"PileupWeight: "<<PileupWeight<<std::endl;;
+      */
+
+      TotalWeight+= NormalizationWeight;      
 
       float Var = (l1+l2).M();
+
+      TotalVisMass+=Var;
+
       //alright fill the dang plot.
       ControlPlot->Fill(Var,NormalizationWeight);
     }
   std::cout<<std::endl;
+
+  std::cout<<"Number Of Filled Entries: "<<NumberOfEntries<<std::endl;
+  std::cout<<"Average Weighting: "<<TotalWeight/NumberFilled<<std::endl;
+  std::cout<<"Average Vis Mass: "<<TotalVisMass/NumberFilled<<std::endl;
 
   TFile* OutFile = new TFile(("TemporaryFiles/"+input+"_SignalRegion.root").c_str(),"RECREATE");
   ControlPlot->Write();

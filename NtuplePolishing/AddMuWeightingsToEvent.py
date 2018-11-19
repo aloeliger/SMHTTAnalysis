@@ -23,10 +23,14 @@ def AddMuWeightingsToEvent(FileToRun):
     #ReweightFile.mt_tree.eta_1 gets the muon eta    
         Mu_ID_SF[0] = ID_SF_File.NUM_MediumID_DEN_genTracks_pt_abseta.GetBinContent(ID_SF_File.NUM_MediumID_DEN_genTracks_pt_abseta.FindBin(ReweightFile.mt_tree.pt_1,abs(ReweightFile.mt_tree.eta_1)))
         Mu_Iso_SF[0] = ISO_SF_File.NUM_TightRelIso_DEN_MediumID_pt_abseta.GetBinContent(ISO_SF_File.NUM_TightRelIso_DEN_MediumID_pt_abseta.FindBin(ReweightFile.mt_tree.pt_1,abs(ReweightFile.mt_tree.eta_1)))
+        Single_Mu_Trigger_SF[0] = SingleLeptonTrigger_SF_File.IsoMu27_PtEtaBins.Get("pt_abseta_ratio").GetBinContent(SingleLeptonTrigger_SF_File.IsoMu27_PtEtaBins.Get("pt_abseta_ratio").FindBin(ReweightFile.mt_tree.pt_1,abs(ReweightFile.mt_tree.eta_1)))
         if("Data" in FileToRun):
             Mu_ID_SF[0] = 1.0
             Mu_Iso_SF[0] = 1.0
+            Single_Mu_Trigger_SF[0] = 1.0
 
+        if(Single_Mu_Trigger_SF[0] == 0.0):
+            print("Zeroed Trigger SF!")
         if(abs(Mu_ID_SF[0]) > 200.0):
             print("Large Mu ID SF!")
             print("Mu_ID_SF[0]: "+str(Mu_ID_SF[0]))
@@ -39,6 +43,7 @@ def AddMuWeightingsToEvent(FileToRun):
         if(Mu_Iso_SF[0] < 0.0):
             print("Negative Mu Iso SF!")
             print("Mu_Iso_SF[0]: "+str(Mu_Iso_SF[0]))
+        #print(Single_Mu_Trigger_SF[0])
             
         IDBranch.Fill()
         IsoBranch.Fill()
