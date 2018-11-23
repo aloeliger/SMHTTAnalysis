@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
     Run_Tree->Branch("phi_2", &phi_2, "phi_2/F");
     Run_Tree->Branch("eta_2", &eta_2, "eta_2/F");
     Run_Tree->Branch("m_2", &m_2, "m_2/F");
-    Run_Tree->Branch("e_2", &m_2, "e_2/F");
+    Run_Tree->Branch("e_2", &e_2, "e_2/F");
     Run_Tree->Branch("q_2", &q_2, "q_2/F");
     Run_Tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
     Run_Tree->Branch("againstElectronTightMVA6_2", &againstElectronTightMVA6_2, "againstElectronTightMVA6_2/F");
@@ -138,9 +138,9 @@ int main(int argc, char** argv) {
     Run_Tree->Branch("met_UESDown", &met_UESDown, "met_UESDown/F");
     Run_Tree->Branch("metphi_UESDown", &metphi_UESDown, "metphi_UESDown/F");
 
-    Run_Tree->Branch("passMu24", &passMu24, "passMu24/F");
-    Run_Tree->Branch("passMu27", &passMu27, "passMu27/F");
-    Run_Tree->Branch("passMu20Tau27", &passMu20Tau27, "passMu20Tau27/F");
+    Run_Tree->Branch(/*"passMu24"*/"trg_singlemuon_24", &passMu24, "passMu24/F");
+    Run_Tree->Branch(/*"passMu27"*/ "trg_singlemuon_27", &passMu27, "passMu27/F");
+    Run_Tree->Branch(/*"passMu20Tau27"*/"trg_crossmuon_mu20tau27", &passMu20Tau27, "passMu20Tau27/F");
 
     Run_Tree->Branch("matchMu24_1", &matchMu24_1, "matchMu24_1/F");
     Run_Tree->Branch("matchMu27_1", &matchMu27_1, "matchMu27_1/F");
@@ -151,8 +151,8 @@ int main(int argc, char** argv) {
     Run_Tree->Branch("filterMu20Tau27_1", &filterMu20Tau27_1, "filterMu20Tau27_1/F");
     Run_Tree->Branch("filterMu20Tau27_2", &filterMu20Tau27_2, "filterMu20Tau27_2/F");
 
-    Run_Tree->Branch("mjj", &mjj, "mjj/F");
-    Run_Tree->Branch("mjjWoNoisyJets", &mjjWoNoisyJets, "mjjWoNoisyJets/F");
+    Run_Tree->Branch("mjjWNoisyJets", &mjj, "mjj/F");
+    Run_Tree->Branch("mjj", &mjjWoNoisyJets, "mjjWoNoisyJets/F");
     Run_Tree->Branch("mjjWoNoisyJets_JetRelativeBalUp", &mjjWoNoisyJets_JetRelativeBalUp, "mjjWoNoisyJets_JetRelativeBalUp/F");
     Run_Tree->Branch("mjjWoNoisyJets_JetRelativeBalDown", &mjjWoNoisyJets_JetRelativeBalDown, "mjjWoNoisyJets_JetRelativeBalDown/F");
     Run_Tree->Branch("mjjWoNoisyJets_JetRelativeSampleUp", &mjjWoNoisyJets_JetRelativeSampleUp, "mjjWoNoisyJets_JetRelativeSampleUp/F");
@@ -168,8 +168,8 @@ int main(int argc, char** argv) {
 
     Run_Tree->Branch("nbtag", &nbtag, "nbtag/I");
     Run_Tree->Branch("nbtagWoNoisyJets", &nbtagWoNoisyJets, "nbtagWoNoisyJets/I");
-    Run_Tree->Branch("njets", &njets, "njets/I");
-    Run_Tree->Branch("njetsWoNoisyJets", &njetsWoNoisyJets, "njetsWoNoisyJets/I");
+    Run_Tree->Branch("njetsWNoisyJets", &njets, "njets/I");
+    Run_Tree->Branch("njets", &njetsWoNoisyJets, "njetsWoNoisyJets/I");
     Run_Tree->Branch("njetsWoNoisyJets_JetRelativeBalUp", &njetsWoNoisyJets_JetRelativeBalUp, "njetsWoNoisyJets_JetRelativeBalUp/I");
     Run_Tree->Branch("njetsWoNoisyJets_JetRelativeBalDown", &njetsWoNoisyJets_JetRelativeBalDown, "njetsWoNoisyJets_JetRelativeBalDown/I");
     Run_Tree->Branch("njetsWoNoisyJets_JetRelativeSampleUp", &njetsWoNoisyJets_JetRelativeSampleUp, "njetsWoNoisyJets_JetRelativeSampleUp/I");
@@ -229,16 +229,30 @@ int main(int argc, char** argv) {
         dau2.SetPtEtaPhiM(tree->tPt,tree->tEta,tree->tPhi,tree->tMass);
         if (dau1.DeltaR(dau2)<0.5) continue;
 	if (fabs(tree->mPVDXY)>0.045) continue;
-        if (fabs(tree->mPVDZ)>0.2) continue;
-        if (fabs(tree->mPVDZ)>0.2) continue;
-	if (dau1.Pt()<19 or dau2.Pt()<19.5) continue;
-        if (fabs(dau1.Eta())>2.4 or fabs(dau2.Eta())>2.3) continue;
-        if (!tree->tRerunMVArun2v2DBoldDMwLTVLoose) continue;
-	if (!tree->tDecayModeFinding) continue;
+	if (fabs(tree->mPVDZ)>0.2) continue;
+        if (fabs(tree->tPVDZ)>0.2) continue;
+	if (dau1.Pt()<= 21 or dau2.Pt()<= 23) continue;
+        if (fabs(dau1.Eta()) >= 2.1 or fabs(dau2.Eta())>2.3) continue;
+        if (!(tree->tRerunMVArun2v2DBoldDMwLTVVLoose > 0.5)) continue;
+	if ((!tree->tDecayModeFinding) > 0.5) continue;
+	if (!(fabs(tree->tCharge)==1))
 	if (!tree->mPFIDMedium) continue;
-	if (tree->eVetoZTTp001dxyzR0>0) continue;
-	if (tree->muVetoZTTp001dxyzR0>1) continue;
-	if (tree->dimuonVeto>0) continue;
+	//Andrew's experimental cuts
+	//Apply jet cutting like mentioned on the twiki?
+	//if(!(tree->j1pt > 20.0 && fabs(tree->j1eta) < 4.7)) continue;
+	//if(!(tree->j2pt > 20.0 && fabs(tree->j2eta) < 4.7)) continue;
+	if(dau1.Pt() > 10000.0)
+	  {
+	    std::cout<<"LARGE MUON PT!"<<std::endl;
+	    std::cout<<"ENTRY: "<<iEntry<<std::endl;
+	    std::cout<<"PT: "<<dau1.Pt()<<std::endl;
+	    std::cout<<"E: "<<dau1.E()<<std::endl;
+	    std::cout<<"M: "<<dau1.M()<<std::endl;
+	    std::cout<<"evt: "<<evt<<std::endl;
+	  }
+	//if (tree->eVetoZTTp001dxyzR0>0) continue;
+	//if (tree->muVetoZTTp001dxyzR0>1) continue;
+	//if (tree->dimuonVeto>0) continue;
 	evt_now=tree->evt;
 	if (evt_now!=evt_before){
 	   mupt_before=tree->mPt;
