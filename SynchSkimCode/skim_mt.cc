@@ -249,6 +249,7 @@ int main(int argc, char** argv) {
 	    std::cout<<"E: "<<dau1.E()<<std::endl;
 	    std::cout<<"M: "<<dau1.M()<<std::endl;
 	    std::cout<<"evt: "<<evt<<std::endl;
+	    std::cout<<"lumi: "<<tree->lumi<<std::endl;
 	  }
 	//if (tree->eVetoZTTp001dxyzR0>0) continue;
 	//if (tree->muVetoZTTp001dxyzR0>1) continue;

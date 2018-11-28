@@ -12,9 +12,7 @@ void DrawControlPlots()
   extraText = "Preliminary";
   lumi_sqrtS = "41.5 fb^{-1}, 13 TeV";
 
-  TFile* HistoFile = new TFile("ControlFile.root","READ");
-
-  /*
+  TFile* HistoFile = new TFile("ControlFile.root","READ");  
 
   TCanvas* CanvasOne = new TCanvas("CanvasOne","MuPt",550,550);
   CanvasOne->SetTickx();
@@ -985,7 +983,7 @@ void DrawControlPlots()
   Legend_NJets->AddEntry(data_obs_Fake_NJets,"Fakes","f");
 
   Legend_NJets->Draw();
-  */
+  
   //iso_1
 
   TCanvas* CanvasEight = new TCanvas("CanvasEight","iso_1",550,550);
@@ -3471,5 +3469,4 @@ void DrawControlPlots()
 
   Legend_metphi->Draw();
   
-  //Vis Mass?
 }

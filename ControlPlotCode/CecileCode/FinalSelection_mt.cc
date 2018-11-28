@@ -356,6 +356,62 @@ int main(int argc, char** argv) {
 
    TH1F* Inclusive_metphi = new TH1F((sample+"_metphi").c_str(),(sample+"_metphi").c_str(), 40, -3.14, 3.14);
    TH1F* Inclusive_metphi_Fake = new TH1F((sample+"_Fake_metphi").c_str(),(sample+"_Fake_metphi").c_str(), 40, -3.14, 3.14);
+   //ANDREW ADDED THIS IN FOR DIAGNOSITCS
+   TFile* DiagnosticFile = new TFile("DiagnosticFile.root","UPDATE");
+
+   Double_t NumSelectedEvents = 0.0;   
+   TH1F* Diagnostic_Eta_1_Percentage = new TH1F ((sample+"_Eta_1_Percentage").c_str(),
+						 (sample+"_Eta_1_Percentage").c_str(),
+						 46, -2.3, 2.3);   
+   TH1F* Diagnostic_AverageWeightEta_1 = new TH1F ((sample+"_AverageWeightEta_1").c_str(),
+						   (sample+"_AverageWeightEta_1").c_str(),
+						   46, -2.3, 2.3);   
+   TH1F* Diagnostic_Eta_2_Percentage = new TH1F ((sample+"_Eta_2_Percentage").c_str(),
+						 (sample+"_Eta_2_Percentage").c_str(),
+						 46, -2.3, 2.3);   
+   TH1F* Diagnostic_AverageWeightEta_2 = new TH1F ((sample+"_AverageWeightEta_2").c_str(),
+						   (sample+"_AverageWeightEta_2").c_str(),
+						   46, -2.3, 2.3);
+   
+   TH1F* Diagnostic_Phi_1_Percentage = new TH1F ((sample+"_Phi_1_Percentage").c_str(),
+						 (sample+"_Phi_1_Percentage").c_str(),
+						 40, -3.14, 3.14);
+   TH1F* Diagnostic_AverageWeightPhi_1 = new TH1F ((sample+"_AverageWeightPhi_1").c_str(),
+						   (sample+"_AverageWeightPhi_1").c_str(),
+						   40, -3.14, 3.14);   
+   TH1F* Diagnostic_Phi_2_Percentage = new TH1F ((sample+"_Phi_2_Percentage").c_str(),
+						 (sample+"_Phi_2_Percentage").c_str(),
+						 40, -3.14, 3.14);
+   TH1F* Diagnostic_AverageWeightPhi_2 = new TH1F ((sample+"_AverageWeightPhi_2").c_str(),
+						   (sample+"_AverageWeightPhi_2").c_str(),
+						   40, -3.14, 3.14);   
+
+   TH1F* Diagnostic_Phi_1_MinimalSelection_Percentage = new TH1F((sample+"_Phi_1_MinimalSelection_Percentage").c_str(),
+							    (sample+"_Phi_1_MinimalSelection_Percentage").c_str(),
+							    40, -3.14, 3.14);
+   TH1F* Diagnostic_Phi_2_MinimalSelection_Percentage = new TH1F((sample+"_Phi_1_MinimalSelection_Percentage").c_str(),
+								 (sample+"_Phi_1_MinimalSelection_Percentage").c_str(),
+								 40, -3.14, 3.14);
+   
+   TH1F* Diagnostic_MetPhi_BeforeMt = new TH1F ((sample+"_MetPhi_BeforeMt").c_str(),
+						(sample+"_MetPhi_BeforeMt").c_str(),
+						40, -3.14, 3.14);   
+   TH1F* Diagnostic_Phi_1_BeforeMt = new TH1F ((sample+"_Phi_1_BeforeMt").c_str(),
+					       (sample+"_Phi_1_BeforeMt").c_str(),
+					       40, -3.14, 3.14);   
+   TH1F* Diagnostic_Phi_2_BeforeMt = new TH1F ((sample+"_Phi_2_BeforeMt").c_str(),
+					       (sample+"_Phi_2_BeforeMt").c_str(),
+					       40, -3.14, 3.14);   
+   TH1F* Diagnostic_Fake_MetPhi_BeforeMt = new TH1F ((sample+"_Fake_MetPhi_BeforeMt").c_str(),
+						(sample+"_Fake_MetPhi_BeforeMt").c_str(),
+						40, -3.14, 3.14);   
+   TH1F* Diagnostic_Fake_Phi_1_BeforeMt = new TH1F ((sample+"_Fake_Phi_1_BeforeMt").c_str(),
+					       (sample+"_Fake_Phi_1_BeforeMt").c_str(),
+					       40, -3.14, 3.14);   
+   TH1F* Diagnostic_Fake_Phi_2_BeforeMt = new TH1F ((sample+"_Fake_Phi_2_BeforeMt").c_str(),
+					       (sample+"_Fake_Phi_2_BeforeMt").c_str(),
+					       40, -3.14, 3.14);   
+   
    
    //float bins0[] = {0,60,65,70,75,80,85,90,95,100,105,110,400};
    //float bins1[] = {0,80,90,100,110,120,130,140,150,160,300};
@@ -534,7 +590,9 @@ int main(int argc, char** argv) {
    for (Int_t i = 0; i < nentries_wtn; i++) {
         arbre->GetEntry(i);
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
-        fflush(stdout);
+        fflush(stdout);		
+	
+	//phi has no structure here.
 
 	// Rivet splitting
 	if (do_rivet){
@@ -585,6 +643,8 @@ int main(int argc, char** argv) {
 
 	if (fabs(eta_1)>2.1) continue;
         if (fabs(eta_2)>2.3) continue;
+	
+	//Phi has no structure here	
 
 	if (flag_goodVertices) continue;
 	if (flag_globalTightHalo2016) continue;
@@ -596,6 +656,8 @@ int main(int argc, char** argv) {
 	if (sample=="data_obs" && flag_eeBadSc) continue;
 	if (flag_ecalBadCalib) continue;
 
+	//Phi has no structure here
+
         bool trigger24=(passMu24 && matchMu24_1 && filterMu24_1 && pt_1>25);
 	bool trigger27=(passMu27 && matchMu27_1 && filterMu27_1 && pt_1>28);
         bool trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && filterMu20Tau27_2 && pt_1>21 && pt_2>31 && pt_1<25 && fabs(eta_2)<2.1); // looser tau pt to cut in the loop after shifts
@@ -604,6 +666,8 @@ int main(int argc, char** argv) {
 	}
         if (!trigger24 && !trigger27 && !trigger2027) continue;
 	if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
+
+	//Phi has no structure here.
 
         float signalRegion=(byTightIsolationMVArun2v2DBoldDMwLT_2 && iso_1<0.15);
         float antiisoRegion=(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2 && iso_1<0.15);
@@ -641,7 +705,7 @@ int main(int argc, char** argv) {
 	if (gen_match_2==2 or gen_match_2==4){
 	   if (fabs(mytau.Eta()<0.4)) aweight=aweight*1.17;
            else if (fabs(mytau.Eta()<0.8)) aweight=aweight*1.29;
-           else if (fabs(mytau.Eta()<1.2)) aweight=aweight*0.14;
+           else if (fabs(mytau.Eta()<1.2)) aweight=aweight*1.14; //Andrew's note: changed from 0.14 -> 1.14
            else if (fabs(mytau.Eta()<1.7)) aweight=aweight*0.93;
            else if (fabs(mytau.Eta()<2.3)) aweight=aweight*1.61;
 	}
@@ -846,8 +910,12 @@ int main(int argc, char** argv) {
            if (sample!="data_obs" && sample!="embedded" && nbtag>0) nbtag=PromoteDemote(h_btag_eff_b, h_btag_eff_c, h_btag_eff_oth, nbtag, bpt_1, bflavor_1, beta_1,0);
            if (nbtag>0) continue;
 
+	   //Phi has no structure here
+
 	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
 	   //if (mytau.Pt()<20) continue;
+
+	   //Phi has no structure here
 
     	   mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
 	   myvar=mtt;
@@ -856,6 +924,30 @@ int main(int argc, char** argv) {
 	   float myvar1=(mytau+mymu+mymet).Pt();
 	   float myvar2=massJets;
 	   //ANDREW ADDED THIS
+	   //Here's where we get phi structure problems. the mt cut.
+	   if(mt < 50)
+	     {
+	       Diagnostic_Phi_1_MinimalSelection_Percentage->Fill(phi_1);
+	       Diagnostic_Phi_2_MinimalSelection_Percentage->Fill(phi_2);
+	     }
+	   if(q_1*q_2 < 0 && signalRegion)
+	     {
+	       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		 {
+		   Diagnostic_MetPhi_BeforeMt->Fill(metphi,aweight*weight2);
+		   Diagnostic_Phi_1_BeforeMt->Fill(mymu.Phi(),aweight*weight2);
+		   Diagnostic_Phi_2_BeforeMt->Fill(mytau.Phi(),aweight*weight2);
+		 }
+	     }
+	   else if (q_1*q_2 < 0 && antiisoRegion)
+	     {
+	       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		 {
+		   Diagnostic_Fake_MetPhi_BeforeMt->Fill(metphi,aweight*weight2*FF);
+		   Diagnostic_Fake_Phi_1_BeforeMt->Fill(mymu.Phi(),aweight*weight2*FF);
+		   Diagnostic_Fake_Phi_2_BeforeMt->Fill(mytau.Phi(),aweight*weight2*FF);
+		 }
+	     }
 	   if(mt<50 && q_1*q_2 < 0 && signalRegion)
 	     {
 	       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
@@ -885,6 +977,16 @@ int main(int argc, char** argv) {
 		   Inclusive_vismass->Fill((mymu+mytau).M(),aweight*weight2);
 		   Inclusive_met->Fill(met,aweight*weight2);
 		   Inclusive_metphi->Fill(metphi,aweight*weight2);
+
+		   NumSelectedEvents+=1.0;
+		   Diagnostic_Eta_1_Percentage->Fill(mymu.Eta());
+		   Diagnostic_AverageWeightEta_1->Fill(mymu.Eta(),aweight*weight2);
+		   Diagnostic_Eta_2_Percentage->Fill(mytau.Eta());
+		   Diagnostic_AverageWeightEta_2->Fill(mytau.Eta(),aweight*weight2);
+		   Diagnostic_Phi_1_Percentage->Fill(mymu.Phi());
+		   Diagnostic_AverageWeightPhi_1->Fill(mymu.Phi(),aweight*weight2);
+		   Diagnostic_Phi_2_Percentage->Fill(mytau.Phi());
+		   Diagnostic_AverageWeightPhi_2->Fill(mytau.Phi(),aweight*weight2);
 		 }
 	     }
 	   else if(mt<50 && q_1*q_2 < 0 && antiisoRegion)
@@ -1677,7 +1779,42 @@ int main(int argc, char** argv) {
     Inclusive_vismass_Fake->Write();
     Inclusive_met_Fake->Write();
     Inclusive_metphi_Fake->Write();
+    Diagnostic_MetPhi_BeforeMt->Write();
+    Diagnostic_Phi_1_BeforeMt->Write();
+    Diagnostic_Phi_2_BeforeMt->Write();
+    Diagnostic_Fake_MetPhi_BeforeMt->Write();
+    Diagnostic_Fake_Phi_1_BeforeMt->Write();
+    Diagnostic_Fake_Phi_2_BeforeMt->Write();
     ControlOutFile->Close();
+
+    DiagnosticFile->cd();
+    Diagnostic_Eta_1_Percentage->Scale(1.0/NumSelectedEvents);
+    Diagnostic_Eta_2_Percentage->Scale(1.0/NumSelectedEvents);
+    Diagnostic_AverageWeightEta_1->Scale(1.0/NumSelectedEvents);
+    Diagnostic_AverageWeightEta_2->Scale(1.0/NumSelectedEvents);
+
+    Diagnostic_Phi_1_Percentage->Scale(1.0/NumSelectedEvents);
+    Diagnostic_Phi_2_Percentage->Scale(1.0/NumSelectedEvents);
+    Diagnostic_AverageWeightPhi_1->Scale(1.0/NumSelectedEvents);
+    Diagnostic_AverageWeightPhi_2->Scale(1.0/NumSelectedEvents);
+
+    Diagnostic_Phi_1_MinimalSelection_Percentage->Scale(1.0/nentries_wtn);
+    Diagnostic_Phi_2_MinimalSelection_Percentage->Scale(1.0/nentries_wtn);
+
+    Diagnostic_Eta_1_Percentage->Write();
+    Diagnostic_Eta_2_Percentage->Write();
+    Diagnostic_AverageWeightEta_1->Write();
+    Diagnostic_AverageWeightEta_2->Write();
+    Diagnostic_Phi_1_Percentage->Write();
+    Diagnostic_Phi_2_Percentage->Write();
+    Diagnostic_AverageWeightPhi_1->Write();
+    Diagnostic_AverageWeightPhi_2->Write();
+    Diagnostic_Phi_1_MinimalSelection_Percentage->Write();
+    Diagnostic_Phi_2_MinimalSelection_Percentage->Write();
+    Diagnostic_MetPhi_BeforeMt->Write();
+    Diagnostic_Phi_1_BeforeMt->Write();
+    Diagnostic_Phi_2_BeforeMt->Write();
+    DiagnosticFile->Close();
 } 
 
 
