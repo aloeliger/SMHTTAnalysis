@@ -50,9 +50,21 @@ void GenerateRecoilCorrectionUncertainties(string FileToRun)
      || FileName.find("WZ") != string::npos
      || FileName.find("ZZ") != string::npos
      || FileName.find("VV") != string::npos
-     || FileName.find("ST") != string::npos) Process= MEtSys::ProcessType::EWK;
-    else if(FileName.find("TTTo") != string::npos) Process = MEtSys::ProcessType::TOP;
-  else Process = MEtSys::ProcessType::BOSON;
+     || FileName.find("ST") != string::npos) 
+    {
+      std::cout<<"Using Process Type: EWK"<<std::endl;
+      Process= MEtSys::ProcessType::EWK;
+    }
+  else if(FileName.find("TTTo") != string::npos) 
+    {
+      std::cout<<"Using Process Type: TOP"<<std::endl;
+      Process = MEtSys::ProcessType::TOP;
+    }
+  else 
+    {
+      std::cout<<"Using Process Type: BOSON"<<std::endl;
+      Process = MEtSys::ProcessType::BOSON;
+    }
 
   int NumberOfEntries = TheTree->GetEntries();
   for(int i =0; i < NumberOfEntries; ++i)
@@ -87,7 +99,7 @@ void GenerateRecoilCorrectionUncertainties(string FileToRun)
 			 Process,
 			 MEtSys::SysType::Response,
 			 MEtSys::SysShift::Down,
-			 Met_UP_X, Met_UP_Y
+			 Met_DOWN_X, Met_DOWN_Y
 			 );
       UpBranch_X->Fill();
       UpBranch_Y->Fill();
