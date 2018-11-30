@@ -356,6 +356,14 @@ int main(int argc, char** argv) {
 
    TH1F* Inclusive_metphi = new TH1F((sample+"_metphi").c_str(),(sample+"_metphi").c_str(), 40, -3.14, 3.14);
    TH1F* Inclusive_metphi_Fake = new TH1F((sample+"_Fake_metphi").c_str(),(sample+"_Fake_metphi").c_str(), 40, -3.14, 3.14);
+   
+   //ANDREW ADDED THIS TO START GETTING RESULTS
+   TFile* ResultFile = new TFile("Results.root","UPDATE");
+   TDirectory* ZeroJetDir = ResultFile->mkdir("0jet");
+   TH1F* ZeroJet_mvis = new TH1F((sample+"_mvis").c_str(),(sample+"_mvis").c_str(), 20, 50.0, 150.0);
+   TH1F* ZeroJet_mvis_Fake = new TH1F((sample+"_Fake_mvis").c_str(),(sample+"_Fake_mvis").c_str(), 20, 50.0, 150.0);
+   
+   
    //ANDREW ADDED THIS IN FOR DIAGNOSITCS
    TFile* DiagnosticFile = new TFile("DiagnosticFile.root","UPDATE");
 
@@ -987,6 +995,10 @@ int main(int argc, char** argv) {
 		   Diagnostic_AverageWeightPhi_1->Fill(mymu.Phi(),aweight*weight2);
 		   Diagnostic_Phi_2_Percentage->Fill(mytau.Phi());
 		   Diagnostic_AverageWeightPhi_2->Fill(mytau.Phi(),aweight*weight2);
+		   if(njetsWoNoisyJets == 0)
+		     {
+		       ZeroJet_mvis->Fill((mymu+mytau).M(),aweight*weight2);
+		     }
 		 }
 	     }
 	   else if(mt<50 && q_1*q_2 < 0 && antiisoRegion)
@@ -1018,6 +1030,11 @@ int main(int argc, char** argv) {
 		   Inclusive_vismass_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);
 		   Inclusive_met_Fake->Fill(met,aweight*weight2*FF);
 		   Inclusive_metphi_Fake->Fill(metphi,aweight*weight2*FF);
+
+		   if(njetsWoNoisyJets == 0)
+		     {
+		       ZeroJet_mvis_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);
+		     }
 		 }
 	     }
 	   //
@@ -1815,6 +1832,12 @@ int main(int argc, char** argv) {
     Diagnostic_Phi_1_BeforeMt->Write();
     Diagnostic_Phi_2_BeforeMt->Write();
     DiagnosticFile->Close();
+
+    ZeroJetDir->cd();
+    ZeroJet_mvis->Write();
+    ZeroJet_mvis_Fake->Write();
+    ResultFile->Write();
+    ResultFile->Close();
 } 
 
 
