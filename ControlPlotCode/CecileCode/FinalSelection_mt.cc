@@ -358,8 +358,7 @@ int main(int argc, char** argv) {
    TH1F* Inclusive_metphi_Fake = new TH1F((sample+"_Fake_metphi").c_str(),(sample+"_Fake_metphi").c_str(), 40, -3.14, 3.14);
    
    //ANDREW ADDED THIS TO START GETTING RESULTS
-   TFile* ResultFile = new TFile("Results.root","UPDATE");
-   TDirectory* ZeroJetDir = ResultFile->mkdir("0jet");
+   TFile* ResultFile = new TFile("Results.root","UPDATE");   
    TH1F* ZeroJet_mvis = new TH1F((sample+"_mvis").c_str(),(sample+"_mvis").c_str(), 20, 50.0, 150.0);
    TH1F* ZeroJet_mvis_Fake = new TH1F((sample+"_Fake_mvis").c_str(),(sample+"_Fake_mvis").c_str(), 20, 50.0, 150.0);
    
@@ -1833,7 +1832,7 @@ int main(int argc, char** argv) {
     Diagnostic_Phi_2_BeforeMt->Write();
     DiagnosticFile->Close();
 
-    ZeroJetDir->cd();
+    ResultFile->cd();
     ZeroJet_mvis->Write();
     ZeroJet_mvis_Fake->Write();
     ResultFile->Write();
