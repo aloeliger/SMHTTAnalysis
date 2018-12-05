@@ -25,6 +25,11 @@ void GenerateRecoilCorrectionUncertainties(string FileToRun)
   float Met_UP_Y;
   float Met_DOWN_X;
   float Met_DOWN_Y;
+  
+  float Res_Met_UP_X;
+  float Res_Met_UP_Y;
+  float Res_Met_DOWN_X;
+  float Res_Met_DOWN_Y;
 
   TheTree->SetBranchAddress("met_px",&met_px);
   TheTree->SetBranchAddress("met_py",&met_py);
@@ -38,6 +43,10 @@ void GenerateRecoilCorrectionUncertainties(string FileToRun)
   TBranch* UpBranch_Y = TheTree->Branch("met_RecUnc_Y_UP",&Met_UP_Y);
   TBranch* DownBranch_X = TheTree->Branch("met_RecUnc_X_DOWN",&Met_DOWN_X);
   TBranch* DownBranch_Y = TheTree->Branch("met_RecUnc_Y_DOWN",&Met_DOWN_Y);
+  TBranch* Res_UpBranch_X = TheTree->Branch("Res_met_RecUnc_X_UP",&Res_Met_UP_X);
+  TBranch* Res_UpBranch_Y = TheTree->Branch("Res_met_RecUnc_Y_UP",&Res_Met_UP_Y);
+  TBranch* Res_DownBranch_X = TheTree->Branch("Res_met_RecUnc_X_DOWN",&Res_Met_DOWN_X);
+  TBranch* Res_DownBranch_Y = TheTree->Branch("Res_met_RecUnc_Y_DOWN",&Res_Met_DOWN_Y);
   //setup the Metsys file
   MEtSys metSys("HTT-utilities/RecoilCorrections/data/MEtSys.root");
   
@@ -101,11 +110,36 @@ void GenerateRecoilCorrectionUncertainties(string FileToRun)
 			 MEtSys::SysShift::Down,
 			 Met_DOWN_X, Met_DOWN_Y
 			 );
+      
+      metSys.ApplyMEtSys(met_px,met_py,
+ 			 genpX,genpY,
+			 vispX,vispY,
+			 njets,
+			 Process,
+			 MEtSys::SysType::Resolution,
+			 MEtSys::SysShift::Up,
+			 Res_Met_UP_X, Res_Met_UP_Y 
+			 );
+      
+      metSys.ApplyMEtSys(met_px,met_py,
+ 			 genpX,genpY,
+			 vispX,vispY,
+			 njets,
+			 Process,
+			 MEtSys::SysType::Resolution,
+			 MEtSys::SysShift::Down,
+			 Res_Met_DOWN_X, Res_Met_DOWN_Y
+			 );
+
       UpBranch_X->Fill();
       UpBranch_Y->Fill();
       DownBranch_X->Fill();
       DownBranch_Y->Fill();
-
+      
+      Res_UpBranch_X->Fill();
+      Res_UpBranch_Y->Fill();
+      Res_DownBranch_X->Fill();
+      Res_DownBranch_Y->Fill();
     }
   TheFile->cd();
   TheTree->Write();
