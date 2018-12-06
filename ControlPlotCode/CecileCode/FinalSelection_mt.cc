@@ -359,8 +359,35 @@ int main(int argc, char** argv) {
    
    //ANDREW ADDED THIS TO START GETTING RESULTS
    TFile* ResultFile = new TFile("Results.root","UPDATE");   
-   TH1F* ZeroJet_mvis = new TH1F((sample+"_mvis").c_str(),(sample+"_mvis").c_str(), 20, 50.0, 150.0);
-   TH1F* ZeroJet_mvis_Fake = new TH1F((sample+"_Fake_mvis").c_str(),(sample+"_Fake_mvis").c_str(), 20, 50.0, 150.0);
+   TDirectory* mt_0jetDir;
+   if(ResultFile->GetDirectory("mt_0jet") != NULL) mt_0jetDir = (TDirectory*) ResultFile->GetDirectory("mt_0jet");
+   else mt_0jetDir = ResultFile->mkdir("mt_0jet");
+   TH1F* ZeroJet_mvis = new TH1F((sample+"_0jet_mvis").c_str(),(sample+"_0jet_mvis").c_str(), 20, 50.0, 150.0);
+   TH1F* ZeroJet_mvis_Fake = new TH1F((sample+"_0jet_Fake_mvis").c_str(),(sample+"_0jet_Fake_mvis").c_str(), 20, 50.0, 150.0);
+   Double_t DecayModeBinning[] = {-0.5,0.5,1.5,10.5};
+   int nDecayModeBins = (int)sizeof(DecayModeBinning)/sizeof(Double_t)-1;
+   TH2F* ZeroJet_mvis_Rolled = new TH2F((sample+"_0jet_mvis_Rolled").c_str(),(sample+"_0jet_mvis_Rolled").c_str(),14,50.0,120.0,nDecayModeBins,DecayModeBinning);
+   TH2F* ZeroJet_mvis_Rolled_Fake = new TH2F((sample+"_0jet_Fake_mvis_Rolled").c_str(),(sample+"_0jet_Fake_mvis_Rolled").c_str(),14,50.0,120.0,nDecayModeBins,DecayModeBinning);
+
+   TDirectory* mt_boostedDir;
+   if(ResultFile->GetDirectory("mt_boosted") != NULL) mt_boostedDir = (TDirectory*) ResultFile->GetDirectory("mt_boosted");
+   else mt_boostedDir = ResultFile->mkdir("mt_boosted");
+   TH1F* Boosted_mvis = new TH1F((sample+"_boosted_mvis").c_str(),(sample+"_boosted_mvis").c_str(), 20, 50.0, 150.0);
+   TH1F* Boosted_mvis_Fake = new TH1F((sample+"_boosted_Fake_mvis").c_str(),(sample+"_boosted_Fake_mvis").c_str(), 20, 50.0, 150.0);
+   Double_t ptHBinning[] = {0.0,100.0,150.0,200.0,250.0,300.0,600.0};
+   int nptHBins = (int)sizeof(ptHBinning)/sizeof(Double_t)-1;
+   TH2F* Boosted_mvis_Rolled = new TH2F((sample+"_boosted_mvis_Rolled").c_str(),(sample+"_boosted_mvis_Rolled").c_str(),20,0.0,200.0,nptHBins,ptHBinning);
+   TH2F* Boosted_mvis_Rolled_Fake = new TH2F((sample+"_boosted_Fake_mvis_Rolled").c_str(),(sample+"_boosted_Fake_mvis_Rolled").c_str(),20,0.0,200.0,nptHBins,ptHBinning);
+
+   TDirectory* mt_vbfDir;
+   if(ResultFile->GetDirectory("mt_vbf") != NULL) mt_vbfDir = (TDirectory*) ResultFile->GetDirectory("mt_vbf");
+   else mt_vbfDir = ResultFile->mkdir("mt_vbf");
+   TH1F* VBF_mvis = new TH1F((sample+"_vbf_mvis").c_str(),(sample+"_vbf_mvis").c_str(), 20, 50.0, 150.0);
+   TH1F* VBF_mvis_Fake = new TH1F((sample+"_vbf_Fake_mvis").c_str(),(sample+"_vbf_Fake_mvis").c_str(),20, 50.0, 150.0);
+   Double_t mjjBinning[] = {300.0,700.0,1100.0,1500.0,4000.0};
+   int nmjjBins = (int)sizeof(mjjBinning)/sizeof(Double_t)-1;
+   TH2F* VBF_mvis_Rolled = new TH2F((sample+"_vbf_mvis_Rolled").c_str(),(sample+"_vbf_mvis_Rolled").c_str(),20,0.0,200.0,nmjjBins,mjjBinning);
+   TH2F* VBF_mvis_Rolled_Fake = new TH2F((sample+"_vbf_Fake_mvis_Rolled").c_str(),(sample+"_vbf_Fake_mvis_Rolled").c_str(),20,0.0,200.0,nmjjBins,mjjBinning);
    
    
    //ANDREW ADDED THIS IN FOR DIAGNOSITCS
@@ -994,9 +1021,21 @@ int main(int argc, char** argv) {
 		   Diagnostic_AverageWeightPhi_1->Fill(mymu.Phi(),aweight*weight2);
 		   Diagnostic_Phi_2_Percentage->Fill(mytau.Phi());
 		   Diagnostic_AverageWeightPhi_2->Fill(mytau.Phi(),aweight*weight2);
-		   if(njetsWoNoisyJets == 0)
+		   if(njetsWoNoisyJets == 0) 
 		     {
-		       ZeroJet_mvis->Fill((mymu+mytau).M(),aweight*weight2);
+		       ZeroJet_mvis->Fill((mymu+mytau).M(),aweight*weight2);		 
+		       ZeroJet_mvis_Rolled->Fill((mymu+mytau).M(),l2_decayMode,aweight*weight2);
+		     }
+		   //primitive boosted and VBF categories
+		   else if(njetsWoNoisyJets == 1) 
+		     {
+		       Boosted_mvis->Fill((mymu+mytau).M(),aweight*weight2);//primitive boosted
+		       Boosted_mvis_Rolled->Fill((mymu+mytau).M(),(mymu+mytau).Pt(),aweight*weight2);
+		     }
+		   else if(njetsWoNoisyJets >= 2) 
+		     {
+		       VBF_mvis->Fill((mymu+mytau).M(),aweight*weight2); //primitive VBF
+		       VBF_mvis_Rolled->Fill((mymu+mytau).M(),mjj,aweight*weight2);
 		     }
 		 }
 	     }
@@ -1030,9 +1069,21 @@ int main(int argc, char** argv) {
 		   Inclusive_met_Fake->Fill(met,aweight*weight2*FF);
 		   Inclusive_metphi_Fake->Fill(metphi,aweight*weight2*FF);
 
-		   if(njetsWoNoisyJets == 0)
+		   if(njetsWoNoisyJets == 0) 
 		     {
 		       ZeroJet_mvis_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);
+		       ZeroJet_mvis_Rolled_Fake->Fill((mymu+mytau).M(),l2_decayMode,aweight*weight2*FF);
+		     }
+		   //primitive boosted and VBF categories
+		   else if(njetsWoNoisyJets == 1) 
+		     {
+		       Boosted_mvis_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);//primitive boosted
+		       Boosted_mvis_Rolled_Fake->Fill((mymu+mytau).M(),(mymu+mytau).Pt(),aweight*weight2*FF);
+		     }
+		   else if(njetsWoNoisyJets >= 2) 
+		     {
+		       VBF_mvis_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF); //primitive VBF
+		       VBF_mvis_Rolled_Fake->Fill((mymu+mytau).M(),mjj,aweight*weight2*FF);
 		     }
 		 }
 	     }
@@ -1832,9 +1883,26 @@ int main(int argc, char** argv) {
     Diagnostic_Phi_2_BeforeMt->Write();
     DiagnosticFile->Close();
 
-    ResultFile->cd();
+    std::cout<<std::endl;    
+    mt_0jetDir->cd();
     ZeroJet_mvis->Write();
     ZeroJet_mvis_Fake->Write();
+    ZeroJet_mvis_Rolled->Write();
+    ZeroJet_mvis_Rolled_Fake->Write();
+        
+    mt_boostedDir->cd();
+    Boosted_mvis->Write();
+    Boosted_mvis_Fake->Write();
+    Boosted_mvis_Rolled->Write();
+    Boosted_mvis_Rolled_Fake->Write();
+    
+    mt_vbfDir->cd();    
+    VBF_mvis->Write();    
+    VBF_mvis_Fake->Write();    
+    VBF_mvis_Rolled->Write();    
+    VBF_mvis_Rolled_Fake->Write();
+
+    std::cout<<"Finishing Up..."<<std::endl;
     ResultFile->Write();
     ResultFile->Close();
 } 
