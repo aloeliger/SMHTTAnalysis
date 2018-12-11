@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Nov 15 12:27:35 2018 by ROOT version 6.10/09
+// Tue Dec  4 03:18:37 2018 by ROOT version 6.10/09
 // from TTree Ntuple/Expression Ntuple
-// found on file: /hdfs/store/user/caillol/SMHTT_2017_7nov/GluGluHToTauTau_M125_13TeV_powheg_pythia8_v14_ext1-v1/make_ntuples_cfg-EA715686-24B3-E811-A111-008CFA1983BC.root
+// found on file: /hdfs/store/user/caillol/SMHTT_2017_29nov/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8__94X_mc2017_realistic_v14-v1/make_ntuples_cfg-922E611C-D741-E811-89D2-001E673D2EE9.root
 //////////////////////////////////////////////////////////
 
 #ifndef HTauTauTree_mt_h
@@ -160,6 +160,16 @@ public :
    Float_t         j1phiWoNoisyJets;
    Float_t         j1pt;
    Float_t         j1ptWoNoisyJets;
+   Float_t         j1ptWoNoisyJets_JetEta0to3Down;
+   Float_t         j1ptWoNoisyJets_JetEta0to3Up;
+   Float_t         j1ptWoNoisyJets_JetEta0to5Down;
+   Float_t         j1ptWoNoisyJets_JetEta0to5Up;
+   Float_t         j1ptWoNoisyJets_JetEta3to5Down;
+   Float_t         j1ptWoNoisyJets_JetEta3to5Up;
+   Float_t         j1ptWoNoisyJets_JetRelativeBalDown;
+   Float_t         j1ptWoNoisyJets_JetRelativeBalUp;
+   Float_t         j1ptWoNoisyJets_JetRelativeSampleDown;
+   Float_t         j1ptWoNoisyJets_JetRelativeSampleUp;
    Float_t         j2csv;
    Float_t         j2csvWoNoisyJets;
    Float_t         j2eta;
@@ -170,6 +180,16 @@ public :
    Float_t         j2phiWoNoisyJets;
    Float_t         j2pt;
    Float_t         j2ptWoNoisyJets;
+   Float_t         j2ptWoNoisyJets_JetEta0to3Down;
+   Float_t         j2ptWoNoisyJets_JetEta0to3Up;
+   Float_t         j2ptWoNoisyJets_JetEta0to5Down;
+   Float_t         j2ptWoNoisyJets_JetEta0to5Up;
+   Float_t         j2ptWoNoisyJets_JetEta3to5Down;
+   Float_t         j2ptWoNoisyJets_JetEta3to5Up;
+   Float_t         j2ptWoNoisyJets_JetRelativeBalDown;
+   Float_t         j2ptWoNoisyJets_JetRelativeBalUp;
+   Float_t         j2ptWoNoisyJets_JetRelativeSampleDown;
+   Float_t         j2ptWoNoisyJets_JetRelativeSampleUp;
    Float_t         jb1csv;
    Float_t         jb1csvWoNoisyJets;
    Float_t         jb1eta;
@@ -390,6 +410,8 @@ public :
    Float_t         mVZ;
    Float_t         mValidFraction;
    Float_t         mZTTGenMatching;
+   Float_t         m_t_DR;
+   Float_t         m_t_Mass;
    Float_t         m_t_doubleL1IsoTauMatch;
    Float_t         metSig;
    Float_t         metcov00;
@@ -434,6 +456,8 @@ public :
    Float_t         pvY;
    Float_t         pvZ;
    Float_t         pvndof;
+   Float_t         raw_pfMetEt;
+   Float_t         raw_pfMetPhi;
    Float_t         recoilDaught;
    Float_t         recoilWithMet;
    Float_t         rho;
@@ -578,14 +602,38 @@ public :
    Float_t         type1_pfMetPhi;
    Float_t         type1_pfMet_shiftedPhi_JetEnDown;
    Float_t         type1_pfMet_shiftedPhi_JetEnUp;
+   Float_t         type1_pfMet_shiftedPhi_JetEta0to3Down;
+   Float_t         type1_pfMet_shiftedPhi_JetEta0to3Up;
+   Float_t         type1_pfMet_shiftedPhi_JetEta0to5Down;
+   Float_t         type1_pfMet_shiftedPhi_JetEta0to5Up;
+   Float_t         type1_pfMet_shiftedPhi_JetEta3to5Down;
+   Float_t         type1_pfMet_shiftedPhi_JetEta3to5Up;
+   Float_t         type1_pfMet_shiftedPhi_JetRelativeBalDown;
+   Float_t         type1_pfMet_shiftedPhi_JetRelativeBalUp;
+   Float_t         type1_pfMet_shiftedPhi_JetRelativeSampleDown;
+   Float_t         type1_pfMet_shiftedPhi_JetRelativeSampleUp;
    Float_t         type1_pfMet_shiftedPhi_JetResDown;
    Float_t         type1_pfMet_shiftedPhi_JetResUp;
+   Float_t         type1_pfMet_shiftedPhi_JetTotalDown;
+   Float_t         type1_pfMet_shiftedPhi_JetTotalUp;
    Float_t         type1_pfMet_shiftedPhi_UnclusteredEnDown;
    Float_t         type1_pfMet_shiftedPhi_UnclusteredEnUp;
    Float_t         type1_pfMet_shiftedPt_JetEnDown;
    Float_t         type1_pfMet_shiftedPt_JetEnUp;
+   Float_t         type1_pfMet_shiftedPt_JetEta0to3Down;
+   Float_t         type1_pfMet_shiftedPt_JetEta0to3Up;
+   Float_t         type1_pfMet_shiftedPt_JetEta0to5Down;
+   Float_t         type1_pfMet_shiftedPt_JetEta0to5Up;
+   Float_t         type1_pfMet_shiftedPt_JetEta3to5Down;
+   Float_t         type1_pfMet_shiftedPt_JetEta3to5Up;
+   Float_t         type1_pfMet_shiftedPt_JetRelativeBalDown;
+   Float_t         type1_pfMet_shiftedPt_JetRelativeBalUp;
+   Float_t         type1_pfMet_shiftedPt_JetRelativeSampleDown;
+   Float_t         type1_pfMet_shiftedPt_JetRelativeSampleUp;
    Float_t         type1_pfMet_shiftedPt_JetResDown;
    Float_t         type1_pfMet_shiftedPt_JetResUp;
+   Float_t         type1_pfMet_shiftedPt_JetTotalDown;
+   Float_t         type1_pfMet_shiftedPt_JetTotalUp;
    Float_t         type1_pfMet_shiftedPt_UnclusteredEnDown;
    Float_t         type1_pfMet_shiftedPt_UnclusteredEnUp;
    Float_t         vbfDeta;
@@ -820,6 +868,16 @@ public :
    TBranch        *b_j1phiWoNoisyJets;   //!
    TBranch        *b_j1pt;   //!
    TBranch        *b_j1ptWoNoisyJets;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta0to3Down;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta0to3Up;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta0to5Down;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta0to5Up;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta3to5Down;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetEta3to5Up;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetRelativeBalDown;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetRelativeBalUp;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetRelativeSampleDown;   //!
+   TBranch        *b_j1ptWoNoisyJets_JetRelativeSampleUp;   //!
    TBranch        *b_j2csv;   //!
    TBranch        *b_j2csvWoNoisyJets;   //!
    TBranch        *b_j2eta;   //!
@@ -830,6 +888,16 @@ public :
    TBranch        *b_j2phiWoNoisyJets;   //!
    TBranch        *b_j2pt;   //!
    TBranch        *b_j2ptWoNoisyJets;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta0to3Down;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta0to3Up;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta0to5Down;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta0to5Up;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta3to5Down;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetEta3to5Up;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetRelativeBalDown;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetRelativeBalUp;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetRelativeSampleDown;   //!
+   TBranch        *b_j2ptWoNoisyJets_JetRelativeSampleUp;   //!
    TBranch        *b_jb1csv;   //!
    TBranch        *b_jb1csvWoNoisyJets;   //!
    TBranch        *b_jb1eta;   //!
@@ -1050,6 +1118,8 @@ public :
    TBranch        *b_mVZ;   //!
    TBranch        *b_mValidFraction;   //!
    TBranch        *b_mZTTGenMatching;   //!
+   TBranch        *b_m_t_DR;   //!
+   TBranch        *b_m_t_Mass;   //!
    TBranch        *b_m_t_doubleL1IsoTauMatch;   //!
    TBranch        *b_metSig;   //!
    TBranch        *b_metcov00;   //!
@@ -1094,6 +1164,8 @@ public :
    TBranch        *b_pvY;   //!
    TBranch        *b_pvZ;   //!
    TBranch        *b_pvndof;   //!
+   TBranch        *b_raw_pfMetEt;   //!
+   TBranch        *b_raw_pfMetPhi;   //!
    TBranch        *b_recoilDaught;   //!
    TBranch        *b_recoilWithMet;   //!
    TBranch        *b_rho;   //!
@@ -1238,14 +1310,38 @@ public :
    TBranch        *b_type1_pfMetPhi;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_JetEnDown;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_JetEnUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta0to3Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta0to3Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta0to5Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta0to5Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta3to5Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetEta3to5Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetRelativeBalDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetRelativeBalUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetRelativeSampleDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetRelativeSampleUp;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_JetResDown;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_JetResUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetTotalDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPhi_JetTotalUp;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_UnclusteredEnDown;   //!
    TBranch        *b_type1_pfMet_shiftedPhi_UnclusteredEnUp;   //!
    TBranch        *b_type1_pfMet_shiftedPt_JetEnDown;   //!
    TBranch        *b_type1_pfMet_shiftedPt_JetEnUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta0to3Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta0to3Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta0to5Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta0to5Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta3to5Down;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetEta3to5Up;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetRelativeBalDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetRelativeBalUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetRelativeSampleDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetRelativeSampleUp;   //!
    TBranch        *b_type1_pfMet_shiftedPt_JetResDown;   //!
    TBranch        *b_type1_pfMet_shiftedPt_JetResUp;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetTotalDown;   //!
+   TBranch        *b_type1_pfMet_shiftedPt_JetTotalUp;   //!
    TBranch        *b_type1_pfMet_shiftedPt_UnclusteredEnDown;   //!
    TBranch        *b_type1_pfMet_shiftedPt_UnclusteredEnUp;   //!
    TBranch        *b_vbfDeta;   //!
@@ -1504,6 +1600,16 @@ void HTauTauTree_mt::Init(TTree* tree)
    _tree->SetBranchAddress("j1phiWoNoisyJets", &j1phiWoNoisyJets, &b_j1phiWoNoisyJets);
    _tree->SetBranchAddress("j1pt", &j1pt, &b_j1pt);
    _tree->SetBranchAddress("j1ptWoNoisyJets", &j1ptWoNoisyJets, &b_j1ptWoNoisyJets);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to3Down", &j1ptWoNoisyJets_JetEta0to3Down, &b_j1ptWoNoisyJets_JetEta0to3Down);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to3Up", &j1ptWoNoisyJets_JetEta0to3Up, &b_j1ptWoNoisyJets_JetEta0to3Up);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to5Down", &j1ptWoNoisyJets_JetEta0to5Down, &b_j1ptWoNoisyJets_JetEta0to5Down);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta0to5Up", &j1ptWoNoisyJets_JetEta0to5Up, &b_j1ptWoNoisyJets_JetEta0to5Up);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta3to5Down", &j1ptWoNoisyJets_JetEta3to5Down, &b_j1ptWoNoisyJets_JetEta3to5Down);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetEta3to5Up", &j1ptWoNoisyJets_JetEta3to5Up, &b_j1ptWoNoisyJets_JetEta3to5Up);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeBalDown", &j1ptWoNoisyJets_JetRelativeBalDown, &b_j1ptWoNoisyJets_JetRelativeBalDown);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeBalUp", &j1ptWoNoisyJets_JetRelativeBalUp, &b_j1ptWoNoisyJets_JetRelativeBalUp);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeSampleDown", &j1ptWoNoisyJets_JetRelativeSampleDown, &b_j1ptWoNoisyJets_JetRelativeSampleDown);
+   _tree->SetBranchAddress("j1ptWoNoisyJets_JetRelativeSampleUp", &j1ptWoNoisyJets_JetRelativeSampleUp, &b_j1ptWoNoisyJets_JetRelativeSampleUp);
    _tree->SetBranchAddress("j2csv", &j2csv, &b_j2csv);
    _tree->SetBranchAddress("j2csvWoNoisyJets", &j2csvWoNoisyJets, &b_j2csvWoNoisyJets);
    _tree->SetBranchAddress("j2eta", &j2eta, &b_j2eta);
@@ -1514,6 +1620,16 @@ void HTauTauTree_mt::Init(TTree* tree)
    _tree->SetBranchAddress("j2phiWoNoisyJets", &j2phiWoNoisyJets, &b_j2phiWoNoisyJets);
    _tree->SetBranchAddress("j2pt", &j2pt, &b_j2pt);
    _tree->SetBranchAddress("j2ptWoNoisyJets", &j2ptWoNoisyJets, &b_j2ptWoNoisyJets);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to3Down", &j2ptWoNoisyJets_JetEta0to3Down, &b_j2ptWoNoisyJets_JetEta0to3Down);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to3Up", &j2ptWoNoisyJets_JetEta0to3Up, &b_j2ptWoNoisyJets_JetEta0to3Up);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to5Down", &j2ptWoNoisyJets_JetEta0to5Down, &b_j2ptWoNoisyJets_JetEta0to5Down);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta0to5Up", &j2ptWoNoisyJets_JetEta0to5Up, &b_j2ptWoNoisyJets_JetEta0to5Up);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta3to5Down", &j2ptWoNoisyJets_JetEta3to5Down, &b_j2ptWoNoisyJets_JetEta3to5Down);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetEta3to5Up", &j2ptWoNoisyJets_JetEta3to5Up, &b_j2ptWoNoisyJets_JetEta3to5Up);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeBalDown", &j2ptWoNoisyJets_JetRelativeBalDown, &b_j2ptWoNoisyJets_JetRelativeBalDown);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeBalUp", &j2ptWoNoisyJets_JetRelativeBalUp, &b_j2ptWoNoisyJets_JetRelativeBalUp);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeSampleDown", &j2ptWoNoisyJets_JetRelativeSampleDown, &b_j2ptWoNoisyJets_JetRelativeSampleDown);
+   _tree->SetBranchAddress("j2ptWoNoisyJets_JetRelativeSampleUp", &j2ptWoNoisyJets_JetRelativeSampleUp, &b_j2ptWoNoisyJets_JetRelativeSampleUp);
    _tree->SetBranchAddress("jb1csv", &jb1csv, &b_jb1csv);
    _tree->SetBranchAddress("jb1csvWoNoisyJets", &jb1csvWoNoisyJets, &b_jb1csvWoNoisyJets);
    _tree->SetBranchAddress("jb1eta", &jb1eta, &b_jb1eta);
@@ -1734,6 +1850,8 @@ void HTauTauTree_mt::Init(TTree* tree)
    _tree->SetBranchAddress("mVZ", &mVZ, &b_mVZ);
    _tree->SetBranchAddress("mValidFraction", &mValidFraction, &b_mValidFraction);
    _tree->SetBranchAddress("mZTTGenMatching", &mZTTGenMatching, &b_mZTTGenMatching);
+   _tree->SetBranchAddress("m_t_DR", &m_t_DR, &b_m_t_DR);
+   _tree->SetBranchAddress("m_t_Mass", &m_t_Mass, &b_m_t_Mass);
    _tree->SetBranchAddress("m_t_doubleL1IsoTauMatch", &m_t_doubleL1IsoTauMatch, &b_m_t_doubleL1IsoTauMatch);
    _tree->SetBranchAddress("metSig", &metSig, &b_metSig);
    _tree->SetBranchAddress("metcov00", &metcov00, &b_metcov00);
@@ -1778,6 +1896,8 @@ void HTauTauTree_mt::Init(TTree* tree)
    _tree->SetBranchAddress("pvY", &pvY, &b_pvY);
    _tree->SetBranchAddress("pvZ", &pvZ, &b_pvZ);
    _tree->SetBranchAddress("pvndof", &pvndof, &b_pvndof);
+   _tree->SetBranchAddress("raw_pfMetEt", &raw_pfMetEt, &b_raw_pfMetEt);
+   _tree->SetBranchAddress("raw_pfMetPhi", &raw_pfMetPhi, &b_raw_pfMetPhi);
    _tree->SetBranchAddress("recoilDaught", &recoilDaught, &b_recoilDaught);
    _tree->SetBranchAddress("recoilWithMet", &recoilWithMet, &b_recoilWithMet);
    _tree->SetBranchAddress("rho", &rho, &b_rho);
@@ -1922,14 +2042,38 @@ void HTauTauTree_mt::Init(TTree* tree)
    _tree->SetBranchAddress("type1_pfMetPhi", &type1_pfMetPhi, &b_type1_pfMetPhi);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown", &type1_pfMet_shiftedPhi_JetEnDown, &b_type1_pfMet_shiftedPhi_JetEnDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnUp", &type1_pfMet_shiftedPhi_JetEnUp, &b_type1_pfMet_shiftedPhi_JetEnUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to3Down", &type1_pfMet_shiftedPhi_JetEta0to3Down, &b_type1_pfMet_shiftedPhi_JetEta0to3Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to3Up", &type1_pfMet_shiftedPhi_JetEta0to3Up, &b_type1_pfMet_shiftedPhi_JetEta0to3Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to5Down", &type1_pfMet_shiftedPhi_JetEta0to5Down, &b_type1_pfMet_shiftedPhi_JetEta0to5Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta0to5Up", &type1_pfMet_shiftedPhi_JetEta0to5Up, &b_type1_pfMet_shiftedPhi_JetEta0to5Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta3to5Down", &type1_pfMet_shiftedPhi_JetEta3to5Down, &b_type1_pfMet_shiftedPhi_JetEta3to5Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetEta3to5Up", &type1_pfMet_shiftedPhi_JetEta3to5Up, &b_type1_pfMet_shiftedPhi_JetEta3to5Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeBalDown", &type1_pfMet_shiftedPhi_JetRelativeBalDown, &b_type1_pfMet_shiftedPhi_JetRelativeBalDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeBalUp", &type1_pfMet_shiftedPhi_JetRelativeBalUp, &b_type1_pfMet_shiftedPhi_JetRelativeBalUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeSampleDown", &type1_pfMet_shiftedPhi_JetRelativeSampleDown, &b_type1_pfMet_shiftedPhi_JetRelativeSampleDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetRelativeSampleUp", &type1_pfMet_shiftedPhi_JetRelativeSampleUp, &b_type1_pfMet_shiftedPhi_JetRelativeSampleUp);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetResDown", &type1_pfMet_shiftedPhi_JetResDown, &b_type1_pfMet_shiftedPhi_JetResDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetResUp", &type1_pfMet_shiftedPhi_JetResUp, &b_type1_pfMet_shiftedPhi_JetResUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetTotalDown", &type1_pfMet_shiftedPhi_JetTotalDown, &b_type1_pfMet_shiftedPhi_JetTotalDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPhi_JetTotalUp", &type1_pfMet_shiftedPhi_JetTotalUp, &b_type1_pfMet_shiftedPhi_JetTotalUp);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnDown", &type1_pfMet_shiftedPhi_UnclusteredEnDown, &b_type1_pfMet_shiftedPhi_UnclusteredEnDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnUp", &type1_pfMet_shiftedPhi_UnclusteredEnUp, &b_type1_pfMet_shiftedPhi_UnclusteredEnUp);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnDown", &type1_pfMet_shiftedPt_JetEnDown, &b_type1_pfMet_shiftedPt_JetEnDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEnUp", &type1_pfMet_shiftedPt_JetEnUp, &b_type1_pfMet_shiftedPt_JetEnUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to3Down", &type1_pfMet_shiftedPt_JetEta0to3Down, &b_type1_pfMet_shiftedPt_JetEta0to3Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to3Up", &type1_pfMet_shiftedPt_JetEta0to3Up, &b_type1_pfMet_shiftedPt_JetEta0to3Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to5Down", &type1_pfMet_shiftedPt_JetEta0to5Down, &b_type1_pfMet_shiftedPt_JetEta0to5Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta0to5Up", &type1_pfMet_shiftedPt_JetEta0to5Up, &b_type1_pfMet_shiftedPt_JetEta0to5Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta3to5Down", &type1_pfMet_shiftedPt_JetEta3to5Down, &b_type1_pfMet_shiftedPt_JetEta3to5Down);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetEta3to5Up", &type1_pfMet_shiftedPt_JetEta3to5Up, &b_type1_pfMet_shiftedPt_JetEta3to5Up);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeBalDown", &type1_pfMet_shiftedPt_JetRelativeBalDown, &b_type1_pfMet_shiftedPt_JetRelativeBalDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeBalUp", &type1_pfMet_shiftedPt_JetRelativeBalUp, &b_type1_pfMet_shiftedPt_JetRelativeBalUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeSampleDown", &type1_pfMet_shiftedPt_JetRelativeSampleDown, &b_type1_pfMet_shiftedPt_JetRelativeSampleDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetRelativeSampleUp", &type1_pfMet_shiftedPt_JetRelativeSampleUp, &b_type1_pfMet_shiftedPt_JetRelativeSampleUp);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetResDown", &type1_pfMet_shiftedPt_JetResDown, &b_type1_pfMet_shiftedPt_JetResDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetResUp", &type1_pfMet_shiftedPt_JetResUp, &b_type1_pfMet_shiftedPt_JetResUp);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetTotalDown", &type1_pfMet_shiftedPt_JetTotalDown, &b_type1_pfMet_shiftedPt_JetTotalDown);
+   _tree->SetBranchAddress("type1_pfMet_shiftedPt_JetTotalUp", &type1_pfMet_shiftedPt_JetTotalUp, &b_type1_pfMet_shiftedPt_JetTotalUp);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnDown", &type1_pfMet_shiftedPt_UnclusteredEnDown, &b_type1_pfMet_shiftedPt_UnclusteredEnDown);
    _tree->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnUp", &type1_pfMet_shiftedPt_UnclusteredEnUp, &b_type1_pfMet_shiftedPt_UnclusteredEnUp);
    _tree->SetBranchAddress("vbfDeta", &vbfDeta, &b_vbfDeta);
