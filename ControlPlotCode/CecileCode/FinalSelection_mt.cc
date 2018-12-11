@@ -388,7 +388,20 @@ int main(int argc, char** argv) {
    int nmjjBins = (int)sizeof(mjjBinning)/sizeof(Double_t)-1;
    TH2F* VBF_Results_Rolled = new TH2F((sample+"_vbf_Results_Rolled").c_str(),(sample+"_vbf_Results_Rolled").c_str(),20,50.0,150.0,nmjjBins,mjjBinning);
    TH2F* VBF_Results_Rolled_Fake = new TH2F((sample+"_vbf_Fake_Results_Rolled").c_str(),(sample+"_vbf_Fake_Results_Rolled").c_str(),20,50.0,150.0,nmjjBins,mjjBinning);
-   
+
+   //ANDREW ADDED THIS IN FOR CUTFLOW
+   //current cutflow bins are these
+   //1: Preliminary Eta matching
+   //2: trigger, pt and eta matching,
+   //3: anti lepton vetoes
+   //4: b tagging veto
+   //5: additonal tau requirements
+   //6: Opposite Sign Matching
+   //7: transverse mass cut 
+   //8: signal and anti-iso region applications      
+
+   TH1F* CutFlow = new TH1F((sample+"_Cutflow").c_str(),(sample+"_Cutflow").c_str(), 9, 0.0, 9.0);
+   TH1F* CutFlow_Fake = new TH1F((sample+"_Fake_Cutflow").c_str(),(sample+"_Fake_Cutflow").c_str(), 9, 0.0, 9.0);
    
    //ANDREW ADDED THIS IN FOR DIAGNOSITCS
    TFile* DiagnosticFile = new TFile("DiagnosticFile.root","UPDATE");
@@ -673,35 +686,17 @@ int main(int argc, char** argv) {
            if (name.find("ZH_lep_PTV_150_250_0J_htt1") < 140 && Rivet_stage1_cat_pTjet30GeV!=402) continue;
            if (name.find("ZH_lep_PTV_150_250_Ge1J_htt1") < 140 && Rivet_stage1_cat_pTjet30GeV!=403) continue;
            if (name.find("ZH_lep_PTV_GT250_htt1") < 140 && Rivet_stage1_cat_pTjet30GeV!=404) continue;
-	}
+	}	       	
 
 	if (fabs(eta_1)>2.1) continue;
-        if (fabs(eta_2)>2.3) continue;
-	
-	//Phi has no structure here	
-
-	if (flag_goodVertices) continue;
-	if (flag_globalTightHalo2016) continue;
-	if (flag_HBHENoise) continue;
-	if (flag_HBHENoiseIso) continue;
-	if (flag_EcalDeadCellTriggerPrimitive) continue;
-	if (flag_BadPFMuon) continue;
-	if (flag_BadChargedCandidate) continue;
-	if (sample=="data_obs" && flag_eeBadSc) continue;
-	if (flag_ecalBadCalib) continue;
-
-	//Phi has no structure here
+	if (fabs(eta_2)>2.3) continue;
 
         bool trigger24=(passMu24 && matchMu24_1 && filterMu24_1 && pt_1>25);
 	bool trigger27=(passMu27 && matchMu27_1 && filterMu27_1 && pt_1>28);
         bool trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && filterMu20Tau27_2 && pt_1>21 && pt_2>31 && pt_1<25 && fabs(eta_2)<2.1); // looser tau pt to cut in the loop after shifts
 	if (sample=="embedded"){
            trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && pt_1>21 && pt_2>31 && pt_1<25 && fabs(eta_2)<2.1); // no tau trigger matching in embedded
-	}
-        if (!trigger24 && !trigger27 && !trigger2027) continue;
-	if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
-
-	//Phi has no structure here.
+	}        	
 
         float signalRegion=(byTightIsolationMVArun2v2DBoldDMwLT_2 && iso_1<0.15);
         float antiisoRegion=(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2 && iso_1<0.15);
@@ -934,22 +929,79 @@ int main(int argc, char** argv) {
                 FF=ff->value(inputs,FFsys[k-1]);
               }
 	   }
+	   
 
+	   //cutflow bin one
+	   CutFlow->Fill(0.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(0.0,aweight*weight2*FF);	   	   	  	   
+
+	   if (flag_goodVertices) continue;
+	   if (flag_globalTightHalo2016) continue;
+	   if (flag_HBHENoise) continue;
+	   if (flag_HBHENoiseIso) continue;
+	   if (flag_EcalDeadCellTriggerPrimitive) continue;
+	   if (flag_BadPFMuon) continue;
+	   if (flag_BadChargedCandidate) continue;
+	   if (sample=="data_obs" && flag_eeBadSc) continue;
+	   if (flag_ecalBadCalib) continue;
+
+	   if (!trigger24 && !trigger27 && !trigger2027) continue;	   
 
            trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && filterMu20Tau27_2 && pt_1>21 && mytau.Pt()>32 && pt_1<25 && fabs(eta_2)<2.1);
            if (sample=="embedded") trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && pt_1>21 && mytau.Pt()>32 && pt_1<25 && fabs(eta_2)<2.1); // no tau trigger matching in embedded
            if (!trigger24 && !trigger27 && !trigger2027) continue;
 
+	   //cutflow bin 2
+	   CutFlow->Fill(1.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(1.0,aweight*weight2*FF);
+
+	   if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
+	   
+	   //cutflow bin 3
+	   CutFlow->Fill(2.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(2.0,aweight*weight2*FF);
+
            nbtag=rawnbtag;
            if (sample!="data_obs" && sample!="embedded" && nbtag>0) nbtag=PromoteDemote(h_btag_eff_b, h_btag_eff_c, h_btag_eff_oth, nbtag, bpt_1, bflavor_1, beta_1,0);
-           if (nbtag>0) continue;
+           if (nbtag>0) continue;	   
 
-	   //Phi has no structure here
+	   //cutflow bin 4
+	   CutFlow->Fill(3.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(3.0, aweight*weight2*FF);
 
 	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
-	   //if (mytau.Pt()<20) continue;
+	   //if (mytau.Pt()<20) continue;	   
 
-	   //Phi has no structure here
+	   //cutflow bin 5
+	   CutFlow->Fill(4.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(4.0, aweight*weight2*FF);
+
+	   //cutflow bins 6,7 & 8
+	   if(q_1*q_2 < 0)
+	     {
+	       CutFlow->Fill(5.0,aweight*weight2);
+	       if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+		 CutFlow_Fake->Fill(5.0, aweight*weight2*FF);
+	       if(mt<50)
+		 {
+		   CutFlow->Fill(6.0,aweight*weight2);
+		   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+		     CutFlow_Fake->Fill(6.0,aweight*weight2*FF);
+		   if(signalRegion)
+		     {
+		       CutFlow->Fill(7.0,aweight*weight2);
+		     }
+		   else if(antiisoRegion)
+		     {
+		       CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
+		     }
+		 }
+	     }
 
     	   mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
 	   myvar=mtt;
@@ -1908,6 +1960,10 @@ int main(int argc, char** argv) {
     DiagnosticFile->Close();
 
     std::cout<<std::endl;    
+    ResultFile->cd();
+    CutFlow->Write();
+    CutFlow_Fake->Write();
+    
     mt_0jetDir->cd();
     ZeroJet_Results->Write();
     ZeroJet_Results_Fake->Write();
@@ -1924,7 +1980,7 @@ int main(int argc, char** argv) {
     VBF_Results->Write();    
     VBF_Results_Fake->Write();    
     VBF_Results_Rolled->Write();    
-    VBF_Results_Rolled_Fake->Write();
+    VBF_Results_Rolled_Fake->Write();    
 
     std::cout<<"Finishing Up..."<<std::endl;
     ResultFile->Write();
