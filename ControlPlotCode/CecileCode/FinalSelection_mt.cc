@@ -391,7 +391,7 @@ int main(int argc, char** argv) {
 
    //ANDREW ADDED THIS IN FOR CUTFLOW
    //current cutflow bins are these
-   //1: Preliminary Eta matching
+   //1: No Selection   
    //2: trigger, pt and eta matching,
    //3: anti lepton vetoes
    //4: b tagging veto
@@ -688,9 +688,6 @@ int main(int argc, char** argv) {
            if (name.find("ZH_lep_PTV_GT250_htt1") < 140 && Rivet_stage1_cat_pTjet30GeV!=404) continue;
 	}	       	
 
-	if (fabs(eta_1)>2.1) continue;
-	if (fabs(eta_2)>2.3) continue;
-
         bool trigger24=(passMu24 && matchMu24_1 && filterMu24_1 && pt_1>25);
 	bool trigger27=(passMu27 && matchMu27_1 && filterMu27_1 && pt_1>28);
         bool trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && filterMu20Tau27_2 && pt_1>21 && pt_2>31 && pt_1<25 && fabs(eta_2)<2.1); // looser tau pt to cut in the loop after shifts
@@ -934,7 +931,15 @@ int main(int argc, char** argv) {
 	   //cutflow bin one
 	   CutFlow->Fill(0.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(0.0,aweight*weight2*FF);	   	   	  	   
+	     CutFlow_Fake->Fill(0.0,aweight*weight2*FF);
+	   
+	   if (fabs(eta_1)>2.1) continue;
+	   if (fabs(eta_2)>2.3) continue;
+	   
+	   //cutflow bin 2
+	   CutFlow->Fill(1.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(1.0,aweight*weight2*FF);
 
 	   if (flag_goodVertices) continue;
 	   if (flag_globalTightHalo2016) continue;
@@ -952,53 +957,53 @@ int main(int argc, char** argv) {
            if (sample=="embedded") trigger2027=(passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && pt_1>21 && mytau.Pt()>32 && pt_1<25 && fabs(eta_2)<2.1); // no tau trigger matching in embedded
            if (!trigger24 && !trigger27 && !trigger2027) continue;
 
-	   //cutflow bin 2
-	   CutFlow->Fill(1.0,aweight*weight2);
-	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(1.0,aweight*weight2*FF);
-
-	   if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
-	   
 	   //cutflow bin 3
 	   CutFlow->Fill(2.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
 	     CutFlow_Fake->Fill(2.0,aweight*weight2*FF);
 
-           nbtag=rawnbtag;
-           if (sample!="data_obs" && sample!="embedded" && nbtag>0) nbtag=PromoteDemote(h_btag_eff_b, h_btag_eff_c, h_btag_eff_oth, nbtag, bpt_1, bflavor_1, beta_1,0);
-           if (nbtag>0) continue;	   
-
+	   if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
+	   
 	   //cutflow bin 4
 	   CutFlow->Fill(3.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(3.0, aweight*weight2*FF);
+	     CutFlow_Fake->Fill(3.0,aweight*weight2*FF);
 
-	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
-	   //if (mytau.Pt()<20) continue;	   
+           nbtag=rawnbtag;
+           if (sample!="data_obs" && sample!="embedded" && nbtag>0) nbtag=PromoteDemote(h_btag_eff_b, h_btag_eff_c, h_btag_eff_oth, nbtag, bpt_1, bflavor_1, beta_1,0);
+           if (nbtag>0) continue;	   
 
 	   //cutflow bin 5
 	   CutFlow->Fill(4.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
 	     CutFlow_Fake->Fill(4.0, aweight*weight2*FF);
 
-	   //cutflow bins 6,7 & 8
+	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
+	   //if (mytau.Pt()<20) continue;	   
+
+	   //cutflow bin 6
+	   CutFlow->Fill(5.0,aweight*weight2);
+	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
+	     CutFlow_Fake->Fill(5.0, aweight*weight2*FF);
+
+	   //cutflow bins 7,8 & 9
 	   if(q_1*q_2 < 0)
 	     {
-	       CutFlow->Fill(5.0,aweight*weight2);
+	       CutFlow->Fill(6.0,aweight*weight2);
 	       if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-		 CutFlow_Fake->Fill(5.0, aweight*weight2*FF);
+		 CutFlow_Fake->Fill(6.0, aweight*weight2*FF);
 	       if(mt<50)
 		 {
-		   CutFlow->Fill(6.0,aweight*weight2);
+		   CutFlow->Fill(7.0,aweight*weight2);
 		   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-		     CutFlow_Fake->Fill(6.0,aweight*weight2*FF);
+		     CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
 		   if(signalRegion)
 		     {
-		       CutFlow->Fill(7.0,aweight*weight2);
+		       CutFlow->Fill(8.0,aweight*weight2);
 		     }
 		   else if(antiisoRegion)
 		     {
-		       CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
+		       CutFlow_Fake->Fill(8.0,aweight*weight2*FF);
 		     }
 		 }
 	     }
