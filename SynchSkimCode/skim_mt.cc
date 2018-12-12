@@ -206,6 +206,10 @@ int main(int argc, char** argv) {
     Run_Tree->Branch("gen_Higgs_pt", &gen_Higgs_pt, "gen_Higgs_pt/F");
     Run_Tree->Branch("gen_Higgs_mass", &gen_Higgs_mass, "gen_Higgs_mass/F");
 
+    //Andrew's patch, include the right anti lepton discrims
+    Run_Tree->Branch("againstMuonTight3_2", &againstMuonTight3_2, "againstMuonTight3_2/F");
+    Run_Tree->Branch("againstElectronVLooseMVA6_2", &againstElectronVLooseMVA6_2, "againstElectronVLooseMVA6_2/F");
+
     int bestEntry=-1;
     ULong64_t evt_now=0;
     ULong64_t evt_before=-1;
