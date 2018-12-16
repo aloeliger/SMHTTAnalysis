@@ -76,7 +76,7 @@ DYAll_SS_mvis.SetLineColor(ROOT.kBlack)
 DYAll_SS_mvis.SetFillColor(ROOT.kBlue)
 
 TT_SS_mvis.SetLineColor(ROOT.kBlack)
-TT_SS_mvis.SetLineColor(ROOT.kViolet)
+TT_SS_mvis.SetFillColor(ROOT.kViolet)
 
 VV_SS_mvis.SetLineColor(ROOT.kBlack)
 VV_SS_mvis.SetFillColor(ROOT.kOrange)
@@ -194,7 +194,7 @@ DYAll_SS_TauPt.SetLineColor(ROOT.kBlack)
 DYAll_SS_TauPt.SetFillColor(ROOT.kBlue)
 
 TT_SS_TauPt.SetLineColor(ROOT.kBlack)
-TT_SS_TauPt.SetLineColor(ROOT.kViolet)
+TT_SS_TauPt.SetFillColor(ROOT.kViolet)
 
 VV_SS_TauPt.SetLineColor(ROOT.kBlack)
 VV_SS_TauPt.SetFillColor(ROOT.kOrange)
@@ -312,7 +312,7 @@ DYAll_HighMT_mvis.SetLineColor(ROOT.kBlack)
 DYAll_HighMT_mvis.SetFillColor(ROOT.kBlue)
 
 TT_HighMT_mvis.SetLineColor(ROOT.kBlack)
-TT_HighMT_mvis.SetLineColor(ROOT.kViolet)
+TT_HighMT_mvis.SetFillColor(ROOT.kViolet)
 
 VV_HighMT_mvis.SetLineColor(ROOT.kBlack)
 VV_HighMT_mvis.SetFillColor(ROOT.kOrange)
@@ -430,7 +430,7 @@ DYAll_HighMT_TauPt.SetLineColor(ROOT.kBlack)
 DYAll_HighMT_TauPt.SetFillColor(ROOT.kBlue)
 
 TT_HighMT_TauPt.SetLineColor(ROOT.kBlack)
-TT_HighMT_TauPt.SetLineColor(ROOT.kViolet)
+TT_HighMT_TauPt.SetFillColor(ROOT.kViolet)
 
 VV_HighMT_TauPt.SetLineColor(ROOT.kBlack)
 VV_HighMT_TauPt.SetFillColor(ROOT.kOrange)
@@ -476,7 +476,7 @@ HighMT_TauPt_Legend.AddEntry(Fake_HighMT_TauPt,"fakes","f")
 
 #do the ttbar enriched region
 data_obs_TTBar_PZeta = ResultsFile.Get("data_obs_tt_PZeta")
-Fake_TTBar_PZeta = ResultsFile.Get("data_obs_SS_Fake_mvis")
+Fake_TTBar_PZeta = ResultsFile.Get("data_obs_tt_Fake_PZeta")
 embedded_TTBar_PZeta = ResultsFile.Get("embedded_tt_PZeta")
 DY_TTBar_PZeta = ResultsFile.Get("DY_tt_PZeta")
 DYlow_TTBar_PZeta = ResultsFile.Get("DYlow_tt_PZeta")
@@ -548,7 +548,7 @@ DYAll_TTBar_PZeta.SetLineColor(ROOT.kBlack)
 DYAll_TTBar_PZeta.SetFillColor(ROOT.kBlue)
 
 TT_TTBar_PZeta.SetLineColor(ROOT.kBlack)
-TT_TTBar_PZeta.SetLineColor(ROOT.kViolet)
+TT_TTBar_PZeta.SetFillColor(ROOT.kViolet)
 
 VV_TTBar_PZeta.SetLineColor(ROOT.kBlack)
 VV_TTBar_PZeta.SetFillColor(ROOT.kOrange)
