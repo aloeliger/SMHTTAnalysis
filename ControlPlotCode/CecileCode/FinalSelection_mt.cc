@@ -929,17 +929,21 @@ int main(int argc, char** argv) {
 	   
 
 	   //cutflow bin one
-	   CutFlow->Fill(0.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(0.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(0.0,aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(0.0,aweight*weight2*FF);
 	   
 	   if (fabs(eta_1)>2.1) continue;
 	   if (fabs(eta_2)>2.3) continue;
 	   
 	   //cutflow bin 2
-	   CutFlow->Fill(1.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(1.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(1.0,aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(1.0,aweight*weight2*FF);
 
 	   if (flag_goodVertices) continue;
 	   if (flag_globalTightHalo2016) continue;
@@ -958,57 +962,72 @@ int main(int argc, char** argv) {
            if (!trigger24 && !trigger27 && !trigger2027) continue;
 
 	   //cutflow bin 3
-	   CutFlow->Fill(2.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(2.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(2.0,aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(2.0,aweight*weight2*FF);
 
 	   if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
 	   
 	   //cutflow bin 4
-	   CutFlow->Fill(3.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(3.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(3.0,aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(3.0,aweight*weight2*FF);
 
            nbtag=rawnbtag;
            if (sample!="data_obs" && sample!="embedded" && nbtag>0) nbtag=PromoteDemote(h_btag_eff_b, h_btag_eff_c, h_btag_eff_oth, nbtag, bpt_1, bflavor_1, beta_1,0);
            if (nbtag>0) continue;	   
 
 	   //cutflow bin 5
-	   CutFlow->Fill(4.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(4.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(4.0, aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(4.0, aweight*weight2*FF);
 
 	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
 	   //if (mytau.Pt()<20) continue;	   
 
 	   //cutflow bin 6
-	   CutFlow->Fill(5.0,aweight*weight2);
+	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	     CutFlow->Fill(5.0,aweight*weight2);
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-	     CutFlow_Fake->Fill(5.0, aweight*weight2*FF);
+	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+	       CutFlow_Fake->Fill(5.0, aweight*weight2*FF);	   
 
+    	   mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
+	   
 	   //cutflow bins 7,8 & 9
 	   if(q_1*q_2 < 0)
 	     {
-	       CutFlow->Fill(6.0,aweight*weight2);
+	       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		 CutFlow->Fill(6.0,aweight*weight2);
 	       if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-		 CutFlow_Fake->Fill(6.0, aweight*weight2*FF);
+		 if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		   CutFlow_Fake->Fill(6.0, aweight*weight2*FF);
 	       if(mt<50)
 		 {
-		   CutFlow->Fill(7.0,aweight*weight2);
+		   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		     CutFlow->Fill(7.0,aweight*weight2);
 		   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
-		     CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
+		     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+		       CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
 		   if(signalRegion)
 		     {
-		       CutFlow->Fill(8.0,aweight*weight2);
+		       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+			 CutFlow->Fill(8.0,aweight*weight2);
 		     }
 		   else if(antiisoRegion)
 		     {
-		       CutFlow_Fake->Fill(8.0,aweight*weight2*FF);
+		       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
+			 CutFlow_Fake->Fill(8.0,aweight*weight2*FF);
 		     }
 		 }
 	     }
 
-    	   mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
 	   myvar=mtt;
 	   if (numberJets==0) myvar=(mymu+mytau).M();
 	   float myvar0=mytau.Pt();
