@@ -722,7 +722,7 @@ int main(int argc, char** argv) {
             else if (numGenJets==4)
                 weight=0.229;
         }
-	if ((sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic") && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue; // remove overlap with embedded samples
+	if ((sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic") && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue; // remove overlap with embedded samples	
 
 	float aweight=genweight*weight*LumiWeights_12->weight(npu);
         if (sample=="embedded") aweight=genweight;
@@ -769,8 +769,8 @@ int main(int argc, char** argv) {
           aweight=aweight*w->function("m_iso_binned_embed_kit_ratio")->getVal();
           aweight=aweight*w->function("m_id_embed_kit_ratio")->getVal();
           if (trigger24 or trigger27) aweight=aweight*w->function("m_trg24_27_embed_kit_ratio")->getVal();
-          else aweight=aweight*1.0; //FIXME
-	}
+          else aweight=aweight*1.0; //FIXME	  
+	}	
 
 	// Top pT reweighting
 	float topfactor=1.0;
@@ -783,19 +783,13 @@ int main(int argc, char** argv) {
            aweight*=topfactor;
 	}
 
+
+	// problem happens in here somewhere. Here's what we'll do
+	//bring everything up to and including triggering cuts back up here.
+	//then we'll run it and see what we get?
+	// Can't... need fake factors. Move those too?
+
 	float zptweight=1.0;
-	if (sample!="embedded" && sample!="data_obs"){
-          wmc->var("m_pt")->setVal(mymu.Pt());
-          wmc->var("m_eta")->setVal(mymu.Eta());
-          wmc->var("z_gen_mass")->setVal(genM);
-          wmc->var("z_gen_pt")->setVal(genpT);
-          aweight=aweight*wmc->function("m_iso_kit_ratio")->getVal();
-          aweight=aweight*wmc->function("m_id_kit_ratio")->getVal();
-	  zptweight=wmc->function("zptmass_weight_nom")->getVal();
-	  if (sample=="DY") aweight=aweight*zptweight;
-	  if (trigger24 or trigger27) aweight*wmc->function("m_trg24_27_kit_data")->getVal()/wmc->function("m_trg24_27_kit_mc")->getVal();
-	  else aweight=aweight*(wmc->function("m_trg20_data")->getVal()/wmc->function("m_trg20_mc")->getVal())*getDiTauScaleFactor(pt_2,eta_2,phi_2,0,mTauMC_,mTauEtaPhiMC_,mTauEtaPhiAvgMC_,mTauData_,mTauEtaPhiData_,mTauEtaPhiAvgData_);
-	}
 
 	//************************ Compute fake factors ******************
 	float frac_qcd=0.2;
@@ -826,6 +820,7 @@ int main(int argc, char** argv) {
             frac_w=frac_w_vbf->Integral()/frac_data_vbf->Integral();
             frac_tt=frac_tt_vbf->Integral()/frac_data_vbf->Integral();*/
         }
+
 
 	float mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
 
@@ -967,6 +962,22 @@ int main(int argc, char** argv) {
 	   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
 	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
 	       CutFlow_Fake->Fill(2.0,aweight*weight2*FF);
+
+	   
+	if (sample!="embedded" && sample!="data_obs"){
+          wmc->var("m_pt")->setVal(mymu.Pt());
+          wmc->var("m_eta")->setVal(mymu.Eta());
+          wmc->var("z_gen_mass")->setVal(genM);
+          wmc->var("z_gen_pt")->setVal(genpT);
+          aweight=aweight*wmc->function("m_iso_kit_ratio")->getVal();
+          aweight=aweight*wmc->function("m_id_kit_ratio")->getVal();
+	  zptweight=wmc->function("zptmass_weight_nom")->getVal();
+	  if (sample=="DY") aweight=aweight*zptweight;
+	  if (trigger24 or trigger27) aweight*wmc->function("m_trg24_27_kit_data")->getVal()/wmc->function("m_trg24_27_kit_mc")->getVal();
+	  else aweight=aweight*(wmc->function("m_trg20_data")->getVal()/wmc->function("m_trg20_mc")->getVal())*getDiTauScaleFactor(pt_2,eta_2,phi_2,0,mTauMC_,mTauEtaPhiMC_,mTauEtaPhiAvgMC_,mTauData_,mTauEtaPhiData_,mTauEtaPhiAvgData_);
+	}
+
+   
 
 	   if (!againstElectronTightMVA6_2 or !againstMuonLoose3_2) continue;
 	   
