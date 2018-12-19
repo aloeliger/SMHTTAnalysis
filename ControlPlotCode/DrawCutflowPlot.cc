@@ -41,6 +41,8 @@ void DrawCutflowPlot()
   RatioHist->GetXaxis()->SetBinLabel(8,"Transverse Mass Cut");
   RatioHist->GetXaxis()->SetBinLabel(9,"Isolation");
 
+  Cutflow_Stack->SetMaximum(std::max(Cutflow_Stack->GetMaximum(),data_obs_Cutflow->GetMaximum()));  
+
   Cutflow_Stack->Draw();
   Cutflow_StackErrors->Draw("SAME e2");
   Cutflow_Stack->GetYaxis()->SetTitle("Events");
@@ -48,6 +50,8 @@ void DrawCutflowPlot()
   Cutflow_Stack->SetTitle("#mu#tau Channel Cutflow");
   data_obs_Cutflow->Draw("SAME e1");
   Cutflow_Legend->Draw();
+
+  Cutflow_Stack->GetXaxis()->SetLabelSize(0.0);
 
   CMS_lumi(Cutflow_Pad,0,33);
 

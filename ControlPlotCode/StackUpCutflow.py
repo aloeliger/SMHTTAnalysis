@@ -76,7 +76,7 @@ DY_Cutflow.SetLineColor(ROOT.kBlack)
 DY_Cutflow.SetFillColor(ROOT.kBlue)
 
 TT_Cutflow.SetLineColor(ROOT.kBlack)
-TT_Cutflow.SetLineColor(ROOT.kViolet)
+TT_Cutflow.SetFillColor(ROOT.kViolet)
 
 VV_Cutflow.SetLineColor(ROOT.kBlack)
 VV_Cutflow.SetFillColor(ROOT.kOrange)
