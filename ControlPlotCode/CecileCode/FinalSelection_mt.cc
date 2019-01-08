@@ -81,18 +81,18 @@ int main(int argc, char** argv) {
     else if (sample=="ZZ2L2Q") {xs=3.688; weight=luminosity*xs/ngen;}
     else if (sample=="WW4Q") {xs=47.73; weight=luminosity*xs/ngen;}
     else if (sample=="WWLNuQQ") {xs=45.99; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_tW_antitop") {xs=35.85; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_tW_antitop") {xs=35.85; weight=luminosity*xs/ngen;}//{xs=35.85; weight=luminosity*xs/ngen;}
     else if (sample=="ST_tW_top") {xs=35.85; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_t_antitop") {xs=26.23; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_t_top") {xs=44.07; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_t_antitop") {xs=80.95; weight=luminosity*xs/ngen;}//{xs=26.23; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_t_top") {xs=136.02; weight=luminosity*xs/ngen;}//{xs=44.07; weight=luminosity*xs/ngen;}
     else if (sample=="ggH_htt125") {xs=48.58*0.0627; weight=luminosity*xs/ngen;}
     else if (sample=="qqH_htt125") {xs=3.782*0.0627; weight=luminosity*xs/ngen;}
     else if (sample=="WplusH125") {xs=0.840*0.0627; weight=luminosity*xs/ngen;}
     else if (sample=="WminusH125") {xs=0.5328*0.0627; weight=luminosity*xs/ngen;}
     else if (sample=="ZH125") {xs=0.8839*0.0627; weight=luminosity*xs/ngen;}
-    else if (sample=="ZZ") {xs=16.523; weight=luminosity*xs/ngen;}
-    else if (sample=="WZ") {xs=47.13; weight=luminosity*xs/ngen;}
-    else if (sample=="WW") {xs=118.7; weight=luminosity*xs/ngen;}
+    else if (sample=="ZZ") {xs=12.14; weight=luminosity*xs/ngen;}//{xs=16.523; weight=luminosity*xs/ngen;}
+    else if (sample=="WZ") {xs=27.57; weight=luminosity*xs/ngen;}//{xs=47.13; weight=luminosity*xs/ngen;}
+    else if (sample=="WW") {xs=75.88; weight=luminosity*xs/ngen;}//{xs=118.7; weight=luminosity*xs/ngen;}
     else if (sample=="WGLNu") {xs=489.0; weight=luminosity*xs/ngen;}
     else if (sample=="WGstarMuMu") {xs=2.793; weight=luminosity*xs/ngen;}
     else if (sample=="WGstarEE") {xs=3.526; weight=luminosity*xs/ngen;}
@@ -217,6 +217,8 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("flag_ecalBadCalib",&flag_ecalBadCalib);
     arbre->SetBranchAddress("flag_duplicateMuons",&flag_duplicateMuons);
     arbre->SetBranchAddress("flag_badMuons",&flag_badMuons);
+    //Andrew added these branches
+    
 
    bool is_ggh=(name.find("ggH") < 140);   
    int nbhist=1;
@@ -459,6 +461,22 @@ int main(int argc, char** argv) {
 					       (sample+"_Fake_Phi_2_BeforeMt").c_str(),
 					       40, -3.14, 3.14);   
    
+   //debug ho!
+   int PassIso = 0;
+   int FailIso = 0;
+   double AverageFakeFactor = 0.0;
+   double NApplied = 0.0;
+   TTree* DebugTree = new TTree("DebugTree","DebugTree");   
+   DebugTree->Branch("run", &run);
+   DebugTree->Branch("lumi", &lumi);
+   DebugTree->Branch("evt", &evt);
+   DebugTree->Branch("iso_1", &iso_1);
+   DebugTree->Branch("byVLooseIsolationMVArun2v2DBoldDMwLT_2",&byVLooseIsolationMVArun2v2DBoldDMwLT_2);
+   DebugTree->Branch("byLooseIsolationMVArun2v2DBoldDMwLT_2",&byLooseIsolationMVArun2v2DBoldDMwLT_2);
+   DebugTree->Branch("byMediumIsolationMVArun2v2DBoldDMwLT_2",&byMediumIsolationMVArun2v2DBoldDMwLT_2);
+   DebugTree->Branch("byTightIsolationMVArun2v2DBoldDMwLT_2",&byTightIsolationMVArun2v2DBoldDMwLT_2);
+   DebugTree->Branch("byVTightIsolationMVArun2v2DBoldDMwLT_2",&byVTightIsolationMVArun2v2DBoldDMwLT_2);
+
    
    //float bins0[] = {0,60,65,70,75,80,85,90,95,100,105,110,400};
    //float bins1[] = {0,80,90,100,110,120,130,140,150,160,300};
@@ -704,14 +722,31 @@ int main(int argc, char** argv) {
         mymu.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
 
         if (sample=="W"){
-            weight=32.7;
+	  weight=32.7;	    
+	  if (numGenJets==1) weight=7.05;
+	  else if (numGenJets==2) weight=13.89;
+	  else if (numGenJets==3) weight=2.27;
+	  else if (numGenJets==4) weight=1.05;
+	  /*
+	    weight=32.7;	    
             if (numGenJets==1) weight=5.91;
             else if (numGenJets==2) weight=12.57;
             else if (numGenJets==3) weight=2.25;
             else if (numGenJets==4) weight=2.16;
+	    */
         }
 
         if (sample=="DY"){
+	  weight=2.66;
+            if (numGenJets==1)
+                weight=0.551;
+            else if (numGenJets==2)
+                weight=1.06;
+            else if (numGenJets==3)
+                weight=0.598;
+            else if (numGenJets==4)
+                weight=0.293;
+	  /*
             weight=2.63;
             if (numGenJets==1)
                 weight=0.21;
@@ -721,6 +756,7 @@ int main(int argc, char** argv) {
                 weight=0.602;
             else if (numGenJets==4)
                 weight=0.229;
+	  */
         }
 	if ((sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic") && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue; // remove overlap with embedded samples	
 
@@ -920,8 +956,21 @@ int main(int argc, char** argv) {
 	      if (k>0 && k<31){ // FF x 30
                 FF=ff->value(inputs,FFsys[k-1]);
               }
-	   }
+	   }	   	   	   
 	   
+	   //Skim Redundant cuts
+	   if(mytau.DeltaR(mymu)<0.5) continue;
+	   //if(fabs(d0_1>0.045)) continue;
+	   //if(fabs(dZ_1>0.2)) continue;
+	   //if(fabs(dZ_2>0.2)) continue;
+	   if(mymu.Pt()<19 or mytau.Pt()<29.5) continue;
+	   if(fabs(mymu.Eta() > 2.4) or fabs(mytau.Eta()>2.3)) continue;
+	   //if(!RerunMVArun2v2DBoldDMwLTVLoose_2) continue;
+	   //if(!DecayModeFinding_2) continue;
+	   //if (!tree->mPFIDMedium) continue;
+	   //if (tree->eVetoZTTp001dxyzR0>0) continue;
+	   //if (tree->muVetoZTTp001dxyzR0>1) continue;
+	   //if (tree->dimuonVeto>0) continue;
 
 	   //cutflow bin one
 	   if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
@@ -999,7 +1048,7 @@ int main(int argc, char** argv) {
 	     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
 	       CutFlow_Fake->Fill(4.0, aweight*weight2*FF);
 
-	   if (mytau.Pt()<20 or (numberJets>0 && mytau.Pt()<30)) continue;
+	   if (mytau.Pt()<30 or (numberJets>0 && mytau.Pt()<30)) continue;
 	   //if (mytau.Pt()<20) continue;	   
 
 	   //cutflow bin 6
@@ -1010,7 +1059,8 @@ int main(int argc, char** argv) {
 	       CutFlow_Fake->Fill(5.0, aweight*weight2*FF);	   
 
     	   mt=TMass_F(mymu.Pt(),mymet.Pt(),mymu.Px(),mymet.Px(),mymu.Py(),mymet.Py());
-	   
+	  	   
+ 
 	   //cutflow bins 7,8 & 9
 	   if(q_1*q_2 < 0)
 	     {
@@ -1025,16 +1075,25 @@ int main(int argc, char** argv) {
 		     CutFlow->Fill(7.0,aweight*weight2);
 		   if(byVLooseIsolationMVArun2v2DBoldDMwLT_2 && !byTightIsolationMVArun2v2DBoldDMwLT_2)
 		     if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
-		       CutFlow_Fake->Fill(7.0,aweight*weight2*FF);
+		       CutFlow_Fake->Fill(7.0,aweight*weight2*FF);		   
+		   DebugTree->Fill();
+
 		   if(signalRegion)
 		     {
 		       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
 			 CutFlow->Fill(8.0,aweight*weight2);
+		       if(sample=="data_obs")PassIso++;
 		     }
 		   else if(antiisoRegion)
 		     {
 		       if(!(sample == "DY") || (sample == "DY" && gen_match_2 != 5))
 			 CutFlow_Fake->Fill(8.0,aweight*weight2*FF);
+		       if(sample=="data_obs")
+			 {
+			   AverageFakeFactor+=FF;
+			   NApplied+=1.0;
+			   FailIso++;
+			 }
 		     }
 		 }
 	     }
@@ -1906,6 +1965,15 @@ int main(int argc, char** argv) {
     delete w;
 
     //ANDREW ADDED THIS
+    //debug ho!
+    if(sample=="data_obs")
+      {
+	std::cout<<std::endl;
+	std::cout<<"PassIso: "<<PassIso<<std::endl;
+	std::cout<<"FailIso: "<<FailIso<<std::endl;
+	AverageFakeFactor = AverageFakeFactor/NApplied;
+	std::cout<<"AverageFakeFactor: "<<AverageFakeFactor<<std::endl;
+      }
     ControlOutFile->cd();
     Inclusive_MuPt->Write();
     Inclusive_MuPt_Fake->Write();
@@ -1966,6 +2034,7 @@ int main(int argc, char** argv) {
     ControlOutFile->Close();
 
     DiagnosticFile->cd();
+    DebugTree->Write();
     Diagnostic_Eta_1_Percentage->Scale(1.0/NumSelectedEvents);
     Diagnostic_Eta_2_Percentage->Scale(1.0/NumSelectedEvents);
     Diagnostic_AverageWeightEta_1->Scale(1.0/NumSelectedEvents);
