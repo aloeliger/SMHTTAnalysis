@@ -124,7 +124,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_MuPt_Errors = MakeStackErrors(BackgroundStack_MuPt);
 
-  TPad* PlotPad_MuPt = MakeRatioPlot(CanvasOne, BackgroundStack_MuPt, data_obs_MuPt,"#mu Pt");
+  TPad* PlotPad_MuPt = MakeRatioPlot(CanvasOne, BackgroundStack_MuPt, data_obs_MuPt,"#mu Pt",0.7,1.3);
 
   BackgroundStack_MuPt->SetMaximum(max(BackgroundStack_MuPt->GetMaximum(),data_obs_MuPt->GetMaximum()));
 
@@ -134,6 +134,7 @@ void DrawControlPlots()
   data_obs_MuPt->Draw("SAME e1");
   BackgroundStack_MuPt->GetYaxis()->SetTitle("Events");
   BackgroundStack_MuPt->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_MuPt->GetXaxis()->SetLabelSize(0.0);
 
   CMS_lumi(PlotPad_MuPt,0,33);
 
@@ -150,6 +151,8 @@ void DrawControlPlots()
   Legend_MuPt->AddEntry(data_obs_Fake_MuPt,"Fakes","f");
 
   Legend_MuPt->Draw();
+
+  CanvasOne->SaveAs("ControlDump/MuPt.png");
 
   //tau pt plot
 
@@ -263,7 +266,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_TauPt_Errors = MakeStackErrors(BackgroundStack_TauPt);
 
-  TPad* PlotPad_TauPt = MakeRatioPlot(CanvasTwo, BackgroundStack_TauPt, data_obs_TauPt,"#tau Pt");
+  TPad* PlotPad_TauPt = MakeRatioPlot(CanvasTwo, BackgroundStack_TauPt, data_obs_TauPt,"#tau Pt",0.7,1.3);
 
   BackgroundStack_TauPt->SetMaximum(max(BackgroundStack_TauPt->GetMaximum(),data_obs_TauPt->GetMaximum()));
 
@@ -273,6 +276,7 @@ void DrawControlPlots()
   data_obs_TauPt->Draw("SAME e1");
   BackgroundStack_TauPt->GetYaxis()->SetTitle("Events");
   BackgroundStack_TauPt->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_TauPt->GetXaxis()->SetLabelSize(0.0);
 
   CMS_lumi(PlotPad_TauPt,0,33);
 
@@ -290,6 +294,8 @@ void DrawControlPlots()
 
   Legend_TauPt->Draw();
   
+  CanvasTwo->SaveAs("ControlDump/TauPt.png");
+
   //Mu Eta
   TCanvas* CanvasThree = new TCanvas("CanvasThree","MuEta",550,550);
   CanvasThree->SetTickx();
@@ -401,7 +407,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_MuEta_Errors = MakeStackErrors(BackgroundStack_MuEta);
 
-  TPad* PlotPad_MuEta = MakeRatioPlot(CanvasThree, BackgroundStack_MuEta, data_obs_MuEta,"#mu Eta");
+  TPad* PlotPad_MuEta = MakeRatioPlot(CanvasThree, BackgroundStack_MuEta, data_obs_MuEta,"#mu Eta",0.7,1.3);
 
   BackgroundStack_MuEta->SetMaximum(max(BackgroundStack_MuEta->GetMaximum(),data_obs_MuEta->GetMaximum()));
 
@@ -411,6 +417,7 @@ void DrawControlPlots()
   data_obs_MuEta->Draw("SAME e1");
   BackgroundStack_MuEta->GetYaxis()->SetTitle("Events");
   BackgroundStack_MuEta->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_MuEta->GetXaxis()->SetLabelSize(0.0);
 
   CMS_lumi(PlotPad_MuEta,0,33);
 
@@ -427,6 +434,8 @@ void DrawControlPlots()
   Legend_MuEta->AddEntry(data_obs_Fake_MuEta,"Fakes","f");
 
   Legend_MuEta->Draw();
+
+  CanvasThree->SaveAs("ControlDump/MuEta.png");
 
   //Tau Eta
   
@@ -540,7 +549,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_TauEta_Errors = MakeStackErrors(BackgroundStack_TauEta);
 
-  TPad* PlotPad_TauEta = MakeRatioPlot(CanvasFour, BackgroundStack_TauEta, data_obs_TauEta,"#tau Eta");
+  TPad* PlotPad_TauEta = MakeRatioPlot(CanvasFour, BackgroundStack_TauEta, data_obs_TauEta,"#tau Eta",0.7,1.3);
 
   BackgroundStack_TauEta->SetMaximum(max(BackgroundStack_TauEta->GetMaximum(),data_obs_TauEta->GetMaximum()));
 
@@ -550,6 +559,7 @@ void DrawControlPlots()
   data_obs_TauEta->Draw("SAME e1");
   BackgroundStack_TauEta->GetYaxis()->SetTitle("Events");
   BackgroundStack_TauEta->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_TauEta->GetXaxis()->SetLabelSize(0.0);
 
   CMS_lumi(PlotPad_TauEta,0,33);
 
@@ -566,6 +576,10 @@ void DrawControlPlots()
   Legend_TauEta->AddEntry(data_obs_Fake_TauEta,"Fakes","f");
 
   Legend_TauEta->Draw();
+  
+  CanvasFour->SaveAs("ControlDump/TauEta.png");
+
+  /*
 
   //Mu Phi
 
@@ -679,7 +693,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_MuPhi_Errors = MakeStackErrors(BackgroundStack_MuPhi);
 
-  TPad* PlotPad_MuPhi = MakeRatioPlot(CanvasFive, BackgroundStack_MuPhi, data_obs_MuPhi,"#tau #phi");
+  TPad* PlotPad_MuPhi = MakeRatioPlot(CanvasFive, BackgroundStack_MuPhi, data_obs_MuPhi,"#tau #phi",0.7,1.3);
 
   BackgroundStack_MuPhi->SetMaximum(max(BackgroundStack_MuPhi->GetMaximum(),data_obs_MuPhi->GetMaximum()));
 
@@ -818,7 +832,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_TauPhi_Errors = MakeStackErrors(BackgroundStack_TauPhi);
 
-  TPad* PlotPad_TauPhi = MakeRatioPlot(CanvasSix, BackgroundStack_TauPhi, data_obs_TauPhi,"#tau #phi");
+  TPad* PlotPad_TauPhi = MakeRatioPlot(CanvasSix, BackgroundStack_TauPhi, data_obs_TauPhi,"#tau #phi",0.7,1.3);
 
   BackgroundStack_TauPhi->SetMaximum(max(BackgroundStack_TauPhi->GetMaximum(),data_obs_TauPhi->GetMaximum()));
 
@@ -957,7 +971,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_NJets_Errors = MakeStackErrors(BackgroundStack_NJets);
 
-  TPad* PlotPad_NJets = MakeRatioPlot(CanvasSeven, BackgroundStack_NJets, data_obs_NJets,"NJets");
+  TPad* PlotPad_NJets = MakeRatioPlot(CanvasSeven, BackgroundStack_NJets, data_obs_NJets,"NJets",0.7,1.3);
 
   BackgroundStack_NJets->SetMaximum(max(BackgroundStack_NJets->GetMaximum(),data_obs_NJets->GetMaximum()));
 
@@ -1096,7 +1110,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_iso_1_Errors = MakeStackErrors(BackgroundStack_iso_1);
 
-  TPad* PlotPad_iso_1 = MakeRatioPlot(CanvasEight, BackgroundStack_iso_1, data_obs_iso_1,"iso_1");
+  TPad* PlotPad_iso_1 = MakeRatioPlot(CanvasEight, BackgroundStack_iso_1, data_obs_iso_1,"iso_1",0.7,1.3);
 
   BackgroundStack_iso_1->SetMaximum(max(BackgroundStack_iso_1->GetMaximum(),data_obs_iso_1->GetMaximum()));
 
@@ -1234,7 +1248,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jpt_1_Errors = MakeStackErrors(BackgroundStack_jpt_1);
 
-  TPad* PlotPad_jpt_1 = MakeRatioPlot(CanvasNine, BackgroundStack_jpt_1, data_obs_jpt_1,"jpt_1");
+  TPad* PlotPad_jpt_1 = MakeRatioPlot(CanvasNine, BackgroundStack_jpt_1, data_obs_jpt_1,"jpt_1",0.7,1.3);
 
   BackgroundStack_jpt_1->SetMaximum(max(BackgroundStack_jpt_1->GetMaximum(),data_obs_jpt_1->GetMaximum()));
 
@@ -1372,7 +1386,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jpt_2_Errors = MakeStackErrors(BackgroundStack_jpt_2);
 
-  TPad* PlotPad_jpt_2 = MakeRatioPlot(CanvasTen, BackgroundStack_jpt_2, data_obs_jpt_2,"jpt_2");
+  TPad* PlotPad_jpt_2 = MakeRatioPlot(CanvasTen, BackgroundStack_jpt_2, data_obs_jpt_2,"jpt_2",0.7,1.3);
 
   BackgroundStack_jpt_2->SetMaximum(max(BackgroundStack_jpt_2->GetMaximum(),data_obs_jpt_2->GetMaximum()));
 
@@ -1510,7 +1524,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jeta_1_Errors = MakeStackErrors(BackgroundStack_jeta_1);
 
-  TPad* PlotPad_jeta_1 = MakeRatioPlot(CanvasEleven, BackgroundStack_jeta_1, data_obs_jeta_1,"jeta_1");
+  TPad* PlotPad_jeta_1 = MakeRatioPlot(CanvasEleven, BackgroundStack_jeta_1, data_obs_jeta_1,"jeta_1",0.7,1.3);
 
   BackgroundStack_jeta_1->SetMaximum(max(BackgroundStack_jeta_1->GetMaximum(),data_obs_jeta_1->GetMaximum()));
 
@@ -1648,7 +1662,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jeta_2_Errors = MakeStackErrors(BackgroundStack_jeta_2);
 
-  TPad* PlotPad_jeta_2 = MakeRatioPlot(CanvasTwelve, BackgroundStack_jeta_2, data_obs_jeta_2,"jeta_2");
+  TPad* PlotPad_jeta_2 = MakeRatioPlot(CanvasTwelve, BackgroundStack_jeta_2, data_obs_jeta_2,"jeta_2",0.7,1.3);
 
   BackgroundStack_jeta_2->SetMaximum(max(BackgroundStack_jeta_2->GetMaximum(),data_obs_jeta_2->GetMaximum()));
 
@@ -1786,7 +1800,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jphi_1_Errors = MakeStackErrors(BackgroundStack_jphi_1);
 
-  TPad* PlotPad_jphi_1 = MakeRatioPlot(CanvasThirteen, BackgroundStack_jphi_1, data_obs_jphi_1,"jphi_1");
+  TPad* PlotPad_jphi_1 = MakeRatioPlot(CanvasThirteen, BackgroundStack_jphi_1, data_obs_jphi_1,"jphi_1",0.7,1.3);
 
   BackgroundStack_jphi_1->SetMaximum(max(BackgroundStack_jphi_1->GetMaximum(),data_obs_jphi_1->GetMaximum()));
 
@@ -1924,7 +1938,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_jphi_2_Errors = MakeStackErrors(BackgroundStack_jphi_2);
 
-  TPad* PlotPad_jphi_2 = MakeRatioPlot(CanvasFourteen, BackgroundStack_jphi_2, data_obs_jphi_2,"jphi_2");
+  TPad* PlotPad_jphi_2 = MakeRatioPlot(CanvasFourteen, BackgroundStack_jphi_2, data_obs_jphi_2,"jphi_2",0.7,1.3);
 
   BackgroundStack_jphi_2->SetMaximum(max(BackgroundStack_jphi_2->GetMaximum(),data_obs_jphi_2->GetMaximum()));
 
@@ -2062,7 +2076,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_bpt_1_Errors = MakeStackErrors(BackgroundStack_bpt_1);
 
-  TPad* PlotPad_bpt_1 = MakeRatioPlot(CanvasFifteen, BackgroundStack_bpt_1, data_obs_bpt_1,"bpt_1");
+  TPad* PlotPad_bpt_1 = MakeRatioPlot(CanvasFifteen, BackgroundStack_bpt_1, data_obs_bpt_1,"bpt_1",0.7,1.3);
 
   BackgroundStack_bpt_1->SetMaximum(max(BackgroundStack_bpt_1->GetMaximum(),data_obs_bpt_1->GetMaximum()));
 
@@ -2200,7 +2214,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_bpt_2_Errors = MakeStackErrors(BackgroundStack_bpt_2);
 
-  TPad* PlotPad_bpt_2 = MakeRatioPlot(CanvasSixteen, BackgroundStack_bpt_2, data_obs_bpt_2,"bpt_2");
+  TPad* PlotPad_bpt_2 = MakeRatioPlot(CanvasSixteen, BackgroundStack_bpt_2, data_obs_bpt_2,"bpt_2",0.7,1.3);
 
   BackgroundStack_bpt_2->SetMaximum(max(BackgroundStack_bpt_2->GetMaximum(),data_obs_bpt_2->GetMaximum()));
 
@@ -2338,7 +2352,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_beta_1_Errors = MakeStackErrors(BackgroundStack_beta_1);
 
-  TPad* PlotPad_beta_1 = MakeRatioPlot(CanvasSeventeen, BackgroundStack_beta_1, data_obs_beta_1,"beta_1");
+  TPad* PlotPad_beta_1 = MakeRatioPlot(CanvasSeventeen, BackgroundStack_beta_1, data_obs_beta_1,"beta_1",0.7,1.3);
 
   BackgroundStack_beta_1->SetMaximum(max(BackgroundStack_beta_1->GetMaximum(),data_obs_beta_1->GetMaximum()));
 
@@ -2476,7 +2490,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_beta_2_Errors = MakeStackErrors(BackgroundStack_beta_2);
 
-  TPad* PlotPad_beta_2 = MakeRatioPlot(CanvasEighteen, BackgroundStack_beta_2, data_obs_beta_2,"beta_2");
+  TPad* PlotPad_beta_2 = MakeRatioPlot(CanvasEighteen, BackgroundStack_beta_2, data_obs_beta_2,"beta_2",0.7,1.3);
 
   BackgroundStack_beta_2->SetMaximum(max(BackgroundStack_beta_2->GetMaximum(),data_obs_beta_2->GetMaximum()));
 
@@ -2614,7 +2628,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_bphi_1_Errors = MakeStackErrors(BackgroundStack_bphi_1);
 
-  TPad* PlotPad_bphi_1 = MakeRatioPlot(CanvasNineteen, BackgroundStack_bphi_1, data_obs_bphi_1,"bphi_1");
+  TPad* PlotPad_bphi_1 = MakeRatioPlot(CanvasNineteen, BackgroundStack_bphi_1, data_obs_bphi_1,"bphi_1",0.7,1.3);
 
   BackgroundStack_bphi_1->SetMaximum(max(BackgroundStack_bphi_1->GetMaximum(),data_obs_bphi_1->GetMaximum()));
 
@@ -2752,7 +2766,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_bphi_2_Errors = MakeStackErrors(BackgroundStack_bphi_2);
 
-  TPad* PlotPad_bphi_2 = MakeRatioPlot(CanvasTwenty, BackgroundStack_bphi_2, data_obs_bphi_2,"bphi_2");
+  TPad* PlotPad_bphi_2 = MakeRatioPlot(CanvasTwenty, BackgroundStack_bphi_2, data_obs_bphi_2,"bphi_2",0.7,1.3);
 
   BackgroundStack_bphi_2->SetMaximum(max(BackgroundStack_bphi_2->GetMaximum(),data_obs_bphi_2->GetMaximum()));
 
@@ -2890,7 +2904,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_npv_Errors = MakeStackErrors(BackgroundStack_npv);
 
-  TPad* PlotPad_npv = MakeRatioPlot(CanvasTwentyOne, BackgroundStack_npv, data_obs_npv,"npv");
+  TPad* PlotPad_npv = MakeRatioPlot(CanvasTwentyOne, BackgroundStack_npv, data_obs_npv,"npv",0.7,1.3);
 
   BackgroundStack_npv->SetMaximum(max(BackgroundStack_npv->GetMaximum(),data_obs_npv->GetMaximum()));
 
@@ -3028,7 +3042,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_nbtag_Errors = MakeStackErrors(BackgroundStack_nbtag);
 
-  TPad* PlotPad_nbtag = MakeRatioPlot(CanvasTwentyTwo, BackgroundStack_nbtag, data_obs_nbtag,"nbtag");
+  TPad* PlotPad_nbtag = MakeRatioPlot(CanvasTwentyTwo, BackgroundStack_nbtag, data_obs_nbtag,"nbtag",0.7,1.3);
 
   BackgroundStack_nbtag->SetMaximum(max(BackgroundStack_nbtag->GetMaximum(),data_obs_nbtag->GetMaximum()));
 
@@ -3166,7 +3180,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_vismass_Errors = MakeStackErrors(BackgroundStack_vismass);
 
-  TPad* PlotPad_vismass = MakeRatioPlot(CanvasTwentyThree, BackgroundStack_vismass, data_obs_vismass,"m_{vis}");
+  TPad* PlotPad_vismass = MakeRatioPlot(CanvasTwentyThree, BackgroundStack_vismass, data_obs_vismass,"m_{vis}",0.7,1.3);
 
   BackgroundStack_vismass->SetMaximum(max(BackgroundStack_vismass->GetMaximum(),data_obs_vismass->GetMaximum()));
 
@@ -3304,7 +3318,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_met_Errors = MakeStackErrors(BackgroundStack_met);
 
-  TPad* PlotPad_met = MakeRatioPlot(CanvasTwentyFour, BackgroundStack_met, data_obs_met,"met");
+  TPad* PlotPad_met = MakeRatioPlot(CanvasTwentyFour, BackgroundStack_met, data_obs_met,"met",0.7,1.3);
 
   BackgroundStack_met->SetMaximum(max(BackgroundStack_met->GetMaximum(),data_obs_met->GetMaximum()));
 
@@ -3442,7 +3456,7 @@ void DrawControlPlots()
 
   TH1F* BackgroundStack_metphi_Errors = MakeStackErrors(BackgroundStack_metphi);
 
-  TPad* PlotPad_metphi = MakeRatioPlot(CanvasTwentyFive, BackgroundStack_metphi, data_obs_metphi,"metphi");
+  TPad* PlotPad_metphi = MakeRatioPlot(CanvasTwentyFive, BackgroundStack_metphi, data_obs_metphi,"metphi",0.7,1.3);
 
   BackgroundStack_metphi->SetMaximum(max(BackgroundStack_metphi->GetMaximum(),data_obs_metphi->GetMaximum()));
 
@@ -3468,5 +3482,7 @@ void DrawControlPlots()
   Legend_metphi->AddEntry(data_obs_Fake_metphi,"Fakes","f");
 
   Legend_metphi->Draw();
+
+  */
   
 }
