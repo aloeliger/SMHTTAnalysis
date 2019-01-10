@@ -12,6 +12,9 @@ void DrawControlPlots()
   extraText = "Preliminary";
   lumi_sqrtS = "41.5 fb^{-1}, 13 TeV";
 
+  TColor* DYColor = new TColor((4.0*16.0+4.0)/256.0,(9.0*16.0+6.0)/256.0,(12.0*16.0+8.0)/256.0);
+  TColor* OtherColor = new TColor((16.0+2.0)/256.0,(12.0*16.0+10.0)/256.0,(13.0*16.0+13.0)/256.0);
+
   TFile* HistoFile = new TFile("ControlFile.root","READ");  
 
   TCanvas* CanvasOne = new TCanvas("CanvasOne","MuPt",550,550);
@@ -77,50 +80,75 @@ void DrawControlPlots()
   TH1F* EWKFinal_MuPt = (TH1F*) EWKZLL_MuPt->Clone();
   EWKFinal_MuPt->Add(EWKZNuNu_MuPt);
 
+  TH1F* Other_MuPt = (TH1F*) VVFinal_MuPt->Clone();
+  Other_MuPt->Add(STFinal_MuPt);
+  Other_MuPt->Add(EWKFinal_MuPt);  
+  Other_MuPt->Add(VHFinal_MuPt);
+  Other_MuPt->Add(ggH_htt125_MuPt);
+  Other_MuPt->Add(qqH_htt125_MuPt);
+
+  TH1F* AllHiggs_MuPt = (TH1F*) VHFinal_MuPt->Clone();
+  AllHiggs_MuPt->Add(ggH_htt125_MuPt);
+  AllHiggs_MuPt->Add(qqH_htt125_MuPt);
+  AllHiggs_MuPt->Scale(30.0);
+
   data_obs_MuPt->SetMarkerStyle(20);
   data_obs_MuPt->Sumw2();
   
-  data_obs_Fake_MuPt->SetFillColor(kRed);
+  //data_obs_Fake_MuPt->SetFillColor(kRed);
+  data_obs_Fake_MuPt->SetFillColor(606);
   data_obs_Fake_MuPt->SetLineColor(kBlack);
 
-  embedded_MuPt->SetFillColor(kYellow);
+  //embedded_MuPt->SetFillColor(kYellow);  
+  embedded_MuPt->SetFillColor(796);
   embedded_MuPt->SetLineColor(kBlack);
 
-  DYFinal_MuPt->SetFillColor(kBlue);
+  //DYFinal_MuPt->SetFillColor(kBlue);    
+  DYFinal_MuPt->SetFillColor(DYColor->GetNumber());
   DYFinal_MuPt->SetLineColor(kBlack);
 
-  TTFinal_MuPt->SetFillColor(kViolet-3);
+  //TTFinal_MuPt->SetFillColor(kViolet-3);
+  TTFinal_MuPt->SetFillColor(592);
   TTFinal_MuPt->SetLineColor(kBlack);
 
   VVFinal_MuPt->SetFillColor(kPink-3);
+  //VVFinal_MuPt->SetFillColor(1180);
   VVFinal_MuPt->SetLineColor(kBlack);
 
   STFinal_MuPt->SetFillColor(kGreen);
+  //STFinal_MuPt->SetFillColor(1180);
   STFinal_MuPt->SetLineColor(kBlack);
 
   qqH_htt125_MuPt->SetFillColor(kCyan);
   qqH_htt125_MuPt->SetLineColor(kBlack);
 
-  ggH_htt125_MuPt->SetFillColor(kCyan);
+  ggH_htt125_MuPt->SetFillColor(kGreen);
   ggH_htt125_MuPt->SetLineColor(kBlack);
 
-  VHFinal_MuPt->SetFillColor(kOrange);
+  VHFinal_MuPt->SetFillColor(kBlue);
   VHFinal_MuPt->SetLineColor(kBlack);
 
   EWKFinal_MuPt->SetFillColor(kBlue-2);
+  //EWKFinal_MuPt->SetFillColor(1180);
   EWKFinal_MuPt->SetLineColor(kBlack);
+  
+  Other_MuPt->SetFillColor(OtherColor->GetNumber());
+  Other_MuPt->SetLineColor(kBlack);
+
+  AllHiggs_MuPt->SetLineColor(kRed);
   
   THStack* BackgroundStack_MuPt = new THStack("BackgroundStack_MuPt","BackgroundStack_MuPt");
   BackgroundStack_MuPt->Add(data_obs_Fake_MuPt,"hist");
   BackgroundStack_MuPt->Add(DYFinal_MuPt,"hist");
   BackgroundStack_MuPt->Add(embedded_MuPt,"hist");
   BackgroundStack_MuPt->Add(TTFinal_MuPt,"hist");
-  BackgroundStack_MuPt->Add(VVFinal_MuPt,"hist");
-  BackgroundStack_MuPt->Add(STFinal_MuPt,"hist");
-  BackgroundStack_MuPt->Add(qqH_htt125_MuPt,"hist");
-  BackgroundStack_MuPt->Add(ggH_htt125_MuPt,"hist");
-  BackgroundStack_MuPt->Add(VHFinal_MuPt,"hist");
-  BackgroundStack_MuPt->Add(EWKFinal_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(VVFinal_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(STFinal_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(EWKFinal_MuPt,"hist");
+  BackgroundStack_MuPt->Add(Other_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(qqH_htt125_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(ggH_htt125_MuPt,"hist");
+  //BackgroundStack_MuPt->Add(VHFinal_MuPt,"hist");  
 
   TH1F* BackgroundStack_MuPt_Errors = MakeStackErrors(BackgroundStack_MuPt);
 
@@ -135,20 +163,23 @@ void DrawControlPlots()
   BackgroundStack_MuPt->GetYaxis()->SetTitle("Events");
   BackgroundStack_MuPt->GetYaxis()->SetTitleOffset(1.58);
   BackgroundStack_MuPt->GetXaxis()->SetLabelSize(0.0);
+  AllHiggs_MuPt->Draw("SAME HIST");
 
   CMS_lumi(PlotPad_MuPt,0,33);
 
   TLegend* Legend_MuPt = new TLegend(0.61,0.41,0.88,0.68);
-  Legend_MuPt->AddEntry(embedded_MuPt,"embedded","f");
-  Legend_MuPt->AddEntry(DYFinal_MuPt, "Other DY","f");
-  Legend_MuPt->AddEntry(TTFinal_MuPt,"t#bar{t}","f");
-  Legend_MuPt->AddEntry(VVFinal_MuPt,"Dibsoson","f");
-  Legend_MuPt->AddEntry(STFinal_MuPt,"Single Top","f");
-  Legend_MuPt->AddEntry(qqH_htt125_MuPt,"qqh","f");
-  Legend_MuPt->AddEntry(ggH_htt125_MuPt,"ggH","f");
-  Legend_MuPt->AddEntry(VHFinal_MuPt,"VH","f");
-  Legend_MuPt->AddEntry(EWKFinal_MuPt,"EWK","f");
   Legend_MuPt->AddEntry(data_obs_Fake_MuPt,"Fakes","f");
+  Legend_MuPt->AddEntry(embedded_MuPt,"Z#rightarrow#tau#tau","f");
+  Legend_MuPt->AddEntry(DYFinal_MuPt, "Z#rightarrow ll","f");
+  Legend_MuPt->AddEntry(TTFinal_MuPt,"t#bar{t}","f");
+  //Legend_MuPt->AddEntry(VVFinal_MuPt,"Dibsoson","f");
+  //Legend_MuPt->AddEntry(STFinal_MuPt,"Single Top","f");
+  //Legend_MuPt->AddEntry(EWKFinal_MuPt,"EWK","f");
+  Legend_MuPt->AddEntry(Other_MuPt, "Other","f");
+  //Legend_MuPt->AddEntry(qqH_htt125_MuPt,"qqh","f");
+  //Legend_MuPt->AddEntry(ggH_htt125_MuPt,"ggH","f");
+  //Legend_MuPt->AddEntry(VHFinal_MuPt,"VH","f");    
+  Legend_MuPt->AddEntry(AllHiggs_MuPt,"All Higgs (#times 30)","l");
 
   Legend_MuPt->Draw();
 
@@ -218,20 +249,36 @@ void DrawControlPlots()
 
   TH1F* EWKFinal_TauPt = (TH1F*) EWKZLL_TauPt->Clone();
   EWKFinal_TauPt->Add(EWKZNuNu_TauPt);
+  
+  TH1F* Other_TauPt = (TH1F*) VVFinal_TauPt->Clone();
+  Other_TauPt->Add(STFinal_TauPt);
+  Other_TauPt->Add(EWKFinal_TauPt);
+  Other_TauPt->Add(VHFinal_TauPt);
+  Other_TauPt->Add(ggH_htt125_TauPt);
+  Other_TauPt->Add(qqH_htt125_TauPt);
+
+  TH1F* AllHiggs_TauPt = (TH1F*) VHFinal_TauPt->Clone();
+  AllHiggs_TauPt->Add(ggH_htt125_TauPt);
+  AllHiggs_TauPt->Add(qqH_htt125_TauPt);
+  AllHiggs_TauPt->Scale(30.0);
 
   data_obs_TauPt->SetMarkerStyle(20);
   data_obs_TauPt->Sumw2();
   
-  data_obs_Fake_TauPt->SetFillColor(kRed);
+  //data_obs_Fake_TauPt->SetFillColor(kRed);
+  data_obs_Fake_TauPt->SetFillColor(606);
   data_obs_Fake_TauPt->SetLineColor(kBlack);
 
-  embedded_TauPt->SetFillColor(kYellow);
+  //embedded_TauPt->SetFillColor(kYellow);
+  embedded_TauPt->SetFillColor(796);
   embedded_TauPt->SetLineColor(kBlack);
 
-  DYFinal_TauPt->SetFillColor(kBlue);
+  //DYFinal_TauPt->SetFillColor(kBlue);
+  DYFinal_TauPt->SetFillColor(DYColor->GetNumber());
   DYFinal_TauPt->SetLineColor(kBlack);
 
-  TTFinal_TauPt->SetFillColor(kViolet-3);
+  //TTFinal_TauPt->SetFillColor(kViolet-3);
+  TTFinal_TauPt->SetFillColor(592);
   TTFinal_TauPt->SetLineColor(kBlack);
 
   VVFinal_TauPt->SetFillColor(kPink-3);
@@ -251,18 +298,24 @@ void DrawControlPlots()
 
   EWKFinal_TauPt->SetFillColor(kBlue-2);
   EWKFinal_TauPt->SetLineColor(kBlack);
+
+  Other_TauPt->SetFillColor(OtherColor->GetNumber());
+  Other_TauPt->SetLineColor(kBlack);
+
+  AllHiggs_TauPt->SetLineColor(kRed);
   
   THStack* BackgroundStack_TauPt = new THStack("BackgroundStack_TauPt","BackgroundStack_TauPt");
   BackgroundStack_TauPt->Add(data_obs_Fake_TauPt,"hist");
   BackgroundStack_TauPt->Add(DYFinal_TauPt,"hist");
   BackgroundStack_TauPt->Add(embedded_TauPt,"hist");
   BackgroundStack_TauPt->Add(TTFinal_TauPt,"hist");
-  BackgroundStack_TauPt->Add(VVFinal_TauPt,"hist");
-  BackgroundStack_TauPt->Add(STFinal_TauPt,"hist");
-  BackgroundStack_TauPt->Add(qqH_htt125_TauPt,"hist");
-  BackgroundStack_TauPt->Add(ggH_htt125_TauPt,"hist");
-  BackgroundStack_TauPt->Add(VHFinal_TauPt,"hist");
-  BackgroundStack_TauPt->Add(EWKFinal_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(VVFinal_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(STFinal_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(EWKFinal_TauPt,"hist");
+  BackgroundStack_TauPt->Add(Other_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(qqH_htt125_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(ggH_htt125_TauPt,"hist");
+  //BackgroundStack_TauPt->Add(VHFinal_TauPt,"hist");  
 
   TH1F* BackgroundStack_TauPt_Errors = MakeStackErrors(BackgroundStack_TauPt);
 
@@ -277,20 +330,23 @@ void DrawControlPlots()
   BackgroundStack_TauPt->GetYaxis()->SetTitle("Events");
   BackgroundStack_TauPt->GetYaxis()->SetTitleOffset(1.58);
   BackgroundStack_TauPt->GetXaxis()->SetLabelSize(0.0);
+  AllHiggs_TauPt->Draw("SAME HIST");
 
   CMS_lumi(PlotPad_TauPt,0,33);
 
   TLegend* Legend_TauPt = new TLegend(0.61,0.41,0.88,0.68);
-  Legend_TauPt->AddEntry(embedded_TauPt,"embedded","f");
-  Legend_TauPt->AddEntry(DYFinal_TauPt, "Other DY","f");
-  Legend_TauPt->AddEntry(TTFinal_TauPt,"t#bar{t}","f");
-  Legend_TauPt->AddEntry(VVFinal_TauPt,"Dibsoson","f");
-  Legend_TauPt->AddEntry(STFinal_TauPt,"Single Top","f");
-  Legend_TauPt->AddEntry(qqH_htt125_TauPt,"qqh","f");
-  Legend_TauPt->AddEntry(ggH_htt125_TauPt,"ggH","f");
-  Legend_TauPt->AddEntry(VHFinal_TauPt,"VH","f");
-  Legend_TauPt->AddEntry(EWKFinal_TauPt,"EWK","f");
   Legend_TauPt->AddEntry(data_obs_Fake_TauPt,"Fakes","f");
+  Legend_TauPt->AddEntry(embedded_TauPt,"Z#rightarrow#tau#tau","f");
+  Legend_TauPt->AddEntry(DYFinal_TauPt, "Z#rightarrow ll","f");
+  Legend_TauPt->AddEntry(TTFinal_TauPt,"t#bar{t}","f");
+  //Legend_TauPt->AddEntry(VVFinal_TauPt,"Dibsoson","f");
+  //Legend_TauPt->AddEntry(STFinal_TauPt,"Single Top","f");
+  //Legend_TauPt->AddEntry(EWKFinal_TauPt,"EWK","f");
+  Legend_TauPt->AddEntry(Other_TauPt,"Other","f");
+  //Legend_TauPt->AddEntry(qqH_htt125_TauPt,"qqh","f");
+  //Legend_TauPt->AddEntry(ggH_htt125_TauPt,"ggH","f");
+  //Legend_TauPt->AddEntry(VHFinal_TauPt,"VH","f");    
+  Legend_TauPt->AddEntry(AllHiggs_TauPt,"All Higgs (#times 30)","l");
 
   Legend_TauPt->Draw();
   
@@ -360,19 +416,35 @@ void DrawControlPlots()
   TH1F* EWKFinal_MuEta = (TH1F*) EWKZLL_MuEta->Clone();
   EWKFinal_MuEta->Add(EWKZNuNu_MuEta);
 
+  TH1F* Other_MuEta = (TH1F*) VVFinal_MuEta->Clone();
+  Other_MuEta->Add(STFinal_MuEta);
+  Other_MuEta->Add(EWKFinal_MuEta);
+  Other_MuPt->Add(VHFinal_MuEta);
+  Other_MuPt->Add(ggH_htt125_MuEta);
+  Other_MuPt->Add(qqH_htt125_MuEta);
+
+  TH1F* AllHiggs_MuEta = (TH1F*) VHFinal_MuEta->Clone();
+  AllHiggs_MuEta->Add(ggH_htt125_MuEta);
+  AllHiggs_MuEta->Add(qqH_htt125_MuEta);
+  AllHiggs_MuEta->Scale(30.0);
+
   data_obs_MuEta->SetMarkerStyle(20);
   data_obs_MuEta->Sumw2();
   
-  data_obs_Fake_MuEta->SetFillColor(kRed);
+  //data_obs_Fake_MuEta->SetFillColor(kRed);
+  data_obs_Fake_MuEta->SetFillColor(606);
   data_obs_Fake_MuEta->SetLineColor(kBlack);
 
-  embedded_MuEta->SetFillColor(kYellow);
+  //embedded_MuEta->SetFillColor(kYellow);
+  embedded_MuEta->SetFillColor(796);
   embedded_MuEta->SetLineColor(kBlack);
 
-  DYFinal_MuEta->SetFillColor(kBlue);
+  //DYFinal_MuEta->SetFillColor(kBlue);
+  DYFinal_MuEta->SetFillColor(DYColor->GetNumber());
   DYFinal_MuEta->SetLineColor(kBlack);
 
-  TTFinal_MuEta->SetFillColor(kViolet-3);
+  //TTFinal_MuEta->SetFillColor(kViolet-3);
+  TTFinal_MuEta->SetFillColor(592);
   TTFinal_MuEta->SetLineColor(kBlack);
 
   VVFinal_MuEta->SetFillColor(kPink-3);
@@ -392,18 +464,25 @@ void DrawControlPlots()
 
   EWKFinal_MuEta->SetFillColor(kBlue-2);
   EWKFinal_MuEta->SetLineColor(kBlack);
+
+  Other_MuEta->SetFillColor(OtherColor->GetNumber());
+  Other_MuEta->SetLineColor(kBlack);
+
+  AllHiggs_MuEta->SetLineColor(kRed);
   
   THStack* BackgroundStack_MuEta = new THStack("BackgroundStack_MuEta","BackgroundStack_MuEta");
   BackgroundStack_MuEta->Add(data_obs_Fake_MuEta,"hist");
   BackgroundStack_MuEta->Add(DYFinal_MuEta,"hist");
   BackgroundStack_MuEta->Add(embedded_MuEta,"hist");
   BackgroundStack_MuEta->Add(TTFinal_MuEta,"hist");
-  BackgroundStack_MuEta->Add(VVFinal_MuEta,"hist");
-  BackgroundStack_MuEta->Add(STFinal_MuEta,"hist");
-  BackgroundStack_MuEta->Add(qqH_htt125_MuEta,"hist");
-  BackgroundStack_MuEta->Add(ggH_htt125_MuEta,"hist");
-  BackgroundStack_MuEta->Add(VHFinal_MuEta,"hist");
-  BackgroundStack_MuEta->Add(EWKFinal_MuEta,"hist");
+  //BackgroundStack_MuEta->Add(VVFinal_MuEta,"hist");
+  //BackgroundStack_MuEta->Add(STFinal_MuEta,"hist");
+  //BackgroundStack_MuEta->Add(EWKFinal_MuEta,"hist");
+  BackgroundStack_MuEta->Add(Other_MuEta,"hist");
+  //BackgroundStack_MuEta->Add(qqH_htt125_MuEta,"hist");  
+  //BackgroundStack_MuEta->Add(ggH_htt125_MuEta,"hist");
+  //BackgroundStack_MuEta->Add(VHFinal_MuEta,"hist");
+  
 
   TH1F* BackgroundStack_MuEta_Errors = MakeStackErrors(BackgroundStack_MuEta);
 
@@ -418,20 +497,23 @@ void DrawControlPlots()
   BackgroundStack_MuEta->GetYaxis()->SetTitle("Events");
   BackgroundStack_MuEta->GetYaxis()->SetTitleOffset(1.58);
   BackgroundStack_MuEta->GetXaxis()->SetLabelSize(0.0);
+  AllHiggs_MuEta->Draw("SAME HIST");
 
   CMS_lumi(PlotPad_MuEta,0,33);
 
   TLegend* Legend_MuEta = new TLegend(0.1,0.7,0.3,0.9);
-  Legend_MuEta->AddEntry(embedded_MuEta,"embedded","f");
-  Legend_MuEta->AddEntry(DYFinal_MuEta, "Other DY","f");
-  Legend_MuEta->AddEntry(TTFinal_MuEta,"t#bar{t}","f");
-  Legend_MuEta->AddEntry(VVFinal_MuEta,"Dibsoson","f");
-  Legend_MuEta->AddEntry(STFinal_MuEta,"Single Top","f");
-  Legend_MuEta->AddEntry(qqH_htt125_MuEta,"qqh","f");
-  Legend_MuEta->AddEntry(ggH_htt125_MuEta,"ggH","f");
-  Legend_MuEta->AddEntry(VHFinal_MuEta,"VH","f");
-  Legend_MuEta->AddEntry(EWKFinal_MuEta,"EWK","f");
   Legend_MuEta->AddEntry(data_obs_Fake_MuEta,"Fakes","f");
+  Legend_MuEta->AddEntry(embedded_MuEta,"Z#rightarrow #tau#tau","f");
+  Legend_MuEta->AddEntry(DYFinal_MuEta, "Z#rightarrow ll","f");
+  Legend_MuEta->AddEntry(TTFinal_MuEta,"t#bar{t}","f");
+  //Legend_MuEta->AddEntry(VVFinal_MuEta,"Dibsoson","f");
+  //Legend_MuEta->AddEntry(STFinal_MuEta,"Single Top","f");
+  //Legend_MuEta->AddEntry(EWKFinal_MuEta,"EWK","f");
+  Legend_MuEta->AddEntry(Other_TauPt,"Other","hist");
+  //Legend_MuEta->AddEntry(qqH_htt125_MuEta,"qqh","f");
+  //Legend_MuEta->AddEntry(ggH_htt125_MuEta,"ggH","f");
+  //Legend_MuEta->AddEntry(VHFinal_MuEta,"VH","f");
+  Legend_MuEta->AddEntry(AllHiggs_MuEta,"All HIggs (#times 30)","l");
 
   Legend_MuEta->Draw();
 
@@ -501,20 +583,36 @@ void DrawControlPlots()
 
   TH1F* EWKFinal_TauEta = (TH1F*) EWKZLL_TauEta->Clone();
   EWKFinal_TauEta->Add(EWKZNuNu_TauEta);
+  
+  TH1F* Other_TauEta = (TH1F*) VVFinal_TauEta->Clone();
+  Other_TauEta->Add(STFinal_TauEta);
+  Other_TauEta->Add(EWKFinal_TauEta);
+  Other_TauEta->Add(VHFinal_TauEta);
+  Other_TauEta->Add(ggH_htt125_TauEta);
+  Other_TauEta->Add(qqH_htt125_TauEta);
+
+  TH1F* AllHiggs_TauEta = (TH1F*) VHFinal_TauEta->Clone();
+  AllHiggs_TauEta->Add(ggH_htt125_TauEta);
+  AllHiggs_TauEta->Add(qqH_htt125_TauEta);
+  AllHiggs_TauEta->Scale(30.0);
 
   data_obs_TauEta->SetMarkerStyle(20);
   data_obs_TauEta->Sumw2();
   
-  data_obs_Fake_TauEta->SetFillColor(kRed);
+  //data_obs_Fake_TauEta->SetFillColor(kRed);
+  data_obs_Fake_TauEta->SetFillColor(606);
   data_obs_Fake_TauEta->SetLineColor(kBlack);
 
-  embedded_TauEta->SetFillColor(kYellow);
+  //embedded_TauEta->SetFillColor(kYellow);
+  embedded_TauEta->SetFillColor(796);
   embedded_TauEta->SetLineColor(kBlack);
 
-  DYFinal_TauEta->SetFillColor(kBlue);
+  //DYFinal_TauEta->SetFillColor(kBlue);
+  DYFinal_TauEta->SetFillColor(DYColor->GetNumber());
   DYFinal_TauEta->SetLineColor(kBlack);
 
-  TTFinal_TauEta->SetFillColor(kViolet-3);
+  //TTFinal_TauEta->SetFillColor(kViolet-3);
+  TTFinal_TauEta->SetFillColor(592);
   TTFinal_TauEta->SetLineColor(kBlack);
 
   VVFinal_TauEta->SetFillColor(kPink-3);
@@ -534,18 +632,24 @@ void DrawControlPlots()
 
   EWKFinal_TauEta->SetFillColor(kBlue-2);
   EWKFinal_TauEta->SetLineColor(kBlack);
+
+  Other_TauEta->SetFillColor(OtherColor->GetNumber());
+  Other_TauEta->SetFillColor(kBlack);
+
+  AllHiggs_TauEta->SetLineColor(kRed);
   
   THStack* BackgroundStack_TauEta = new THStack("BackgroundStack_TauEta","BackgroundStack_TauEta");
   BackgroundStack_TauEta->Add(data_obs_Fake_TauEta,"hist");
   BackgroundStack_TauEta->Add(DYFinal_TauEta,"hist");
   BackgroundStack_TauEta->Add(embedded_TauEta,"hist");
   BackgroundStack_TauEta->Add(TTFinal_TauEta,"hist");
-  BackgroundStack_TauEta->Add(VVFinal_TauEta,"hist");
-  BackgroundStack_TauEta->Add(STFinal_TauEta,"hist");
-  BackgroundStack_TauEta->Add(qqH_htt125_TauEta,"hist");
-  BackgroundStack_TauEta->Add(ggH_htt125_TauEta,"hist");
-  BackgroundStack_TauEta->Add(VHFinal_TauEta,"hist");
-  BackgroundStack_TauEta->Add(EWKFinal_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(VVFinal_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(STFinal_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(EWKFinal_TauEta,"hist");
+  BackgroundStack_TauEta->Add(Other_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(qqH_htt125_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(ggH_htt125_TauEta,"hist");
+  //BackgroundStack_TauEta->Add(VHFinal_TauEta,"hist");  
 
   TH1F* BackgroundStack_TauEta_Errors = MakeStackErrors(BackgroundStack_TauEta);
 
@@ -560,20 +664,23 @@ void DrawControlPlots()
   BackgroundStack_TauEta->GetYaxis()->SetTitle("Events");
   BackgroundStack_TauEta->GetYaxis()->SetTitleOffset(1.58);
   BackgroundStack_TauEta->GetXaxis()->SetLabelSize(0.0);
+  AllHiggs_TauEta->Draw("SAME HIST");
 
   CMS_lumi(PlotPad_TauEta,0,33);
 
   TLegend* Legend_TauEta = new TLegend(0.1,0.7,0.3,0.9);
-  Legend_TauEta->AddEntry(embedded_TauEta,"embedded","f");
-  Legend_TauEta->AddEntry(DYFinal_TauEta, "Other DY","f");
-  Legend_TauEta->AddEntry(TTFinal_TauEta,"t#bar{t}","f");
-  Legend_TauEta->AddEntry(VVFinal_TauEta,"Dibsoson","f");
-  Legend_TauEta->AddEntry(STFinal_TauEta,"Single Top","f");
-  Legend_TauEta->AddEntry(qqH_htt125_TauEta,"qqh","f");
-  Legend_TauEta->AddEntry(ggH_htt125_TauEta,"ggH","f");
-  Legend_TauEta->AddEntry(VHFinal_TauEta,"VH","f");
-  Legend_TauEta->AddEntry(EWKFinal_TauEta,"EWK","f");
   Legend_TauEta->AddEntry(data_obs_Fake_TauEta,"Fakes","f");
+  Legend_TauEta->AddEntry(embedded_TauEta,"Z#rightarrow #tau#tau","f");
+  Legend_TauEta->AddEntry(DYFinal_TauEta, "Z#rightarrow ll","f");
+  Legend_TauEta->AddEntry(TTFinal_TauEta,"t#bar{t}","f");
+  //Legend_TauEta->AddEntry(VVFinal_TauEta,"Dibsoson","f");
+  //Legend_TauEta->AddEntry(STFinal_TauEta,"Single Top","f");
+  //Legend_TauEta->AddEntry(EWKFinal_TauEta,"EWK","f");
+  Legend_TauEta->AddEntry(Other_TauEta,"Other","f");
+  //Legend_TauEta->AddEntry(qqH_htt125_TauEta,"qqh","f");
+  //Legend_TauEta->AddEntry(ggH_htt125_TauEta,"ggH","f");
+  //Legend_TauEta->AddEntry(VHFinal_TauEta,"VH","f");    
+  Legend_TauEta->AddEntry(AllHiggs_TauEta,"All Higgs (#times 30)", "l");
 
   Legend_TauEta->Draw();
   

@@ -320,16 +320,16 @@ int main(int argc, char** argv) {
    std::vector<TH1F*> h6jet_AI;
    //ANDREW ADDED THIS IN:
    TFile* ControlOutFile = new TFile("ControlFile.root","UPDATE");
-   TH1F* Inclusive_MuPt = new TH1F((sample+"_MuPt").c_str(),(sample+"_MuPt").c_str(), 20, 0.0, 200.0);
-   TH1F* Inclusive_MuPt_Fake = new TH1F((sample+"_Fake_MuPt").c_str(),(sample+"_Fake_MuPt").c_str(), 20, 0.0, 200.0);
-   TH1F* Inclusive_MuEta = new TH1F((sample+"_MuEta").c_str(),(sample+"_MuEta").c_str(), 46, -2.3, 2.3);
-   TH1F* Inclusive_MuEta_Fake = new TH1F((sample+"_Fake_MuEta").c_str(),(sample+"_Fake_MuEta").c_str(), 46, -2.3, 2.3);
+   TH1F* Inclusive_MuPt = new TH1F((sample+"_MuPt").c_str(),(sample+"_MuPt").c_str(), 18, 20.0, 200.0);
+   TH1F* Inclusive_MuPt_Fake = new TH1F((sample+"_Fake_MuPt").c_str(),(sample+"_Fake_MuPt").c_str(), 18, 20.0, 200.0);
+   TH1F* Inclusive_MuEta = new TH1F((sample+"_MuEta").c_str(),(sample+"_MuEta").c_str(), 23, -2.3, 2.3);
+   TH1F* Inclusive_MuEta_Fake = new TH1F((sample+"_Fake_MuEta").c_str(),(sample+"_Fake_MuEta").c_str(), 23, -2.3, 2.3);
    TH1F* Inclusive_MuPhi = new TH1F((sample+"_MuPhi").c_str(),(sample+"_MuPhi").c_str(), 40, -3.14, 3.14);
    TH1F* Inclusive_MuPhi_Fake = new TH1F((sample+"_Fake_MuPhi").c_str(),(sample+"_Fake_MuPhi").c_str(), 40, -3.14, 3.14);
-   TH1F* Inclusive_TauPt = new TH1F((sample+"_TauPt").c_str(),(sample+"_TauPt").c_str(), 20, 0.0, 200.0);
-   TH1F* Inclusive_TauPt_Fake = new TH1F((sample+"_Fake_TauPt").c_str(),(sample+"_Fake_TauPt").c_str(), 20, 0.0, 200.0);
-   TH1F* Inclusive_TauEta = new TH1F((sample+"_TauEta").c_str(),(sample+"_TauEta").c_str(), 46, -2.3, 2.3);
-   TH1F* Inclusive_TauEta_Fake = new TH1F((sample+"_Fake_TauEta").c_str(),(sample+"_Fake_TauEta").c_str(), 46, -2.3, 2.3);
+   TH1F* Inclusive_TauPt = new TH1F((sample+"_TauPt").c_str(),(sample+"_TauPt").c_str(), 10, 20.0, 120.0);
+   TH1F* Inclusive_TauPt_Fake = new TH1F((sample+"_Fake_TauPt").c_str(),(sample+"_Fake_TauPt").c_str(), 10, 20.0, 120.0);
+   TH1F* Inclusive_TauEta = new TH1F((sample+"_TauEta").c_str(),(sample+"_TauEta").c_str(), 23, -2.3, 2.3);
+   TH1F* Inclusive_TauEta_Fake = new TH1F((sample+"_Fake_TauEta").c_str(),(sample+"_Fake_TauEta").c_str(), 23, -2.3, 2.3);
    TH1F* Inclusive_TauPhi = new TH1F((sample+"_TauPhi").c_str(),(sample+"_TauPhi").c_str(), 40, -3.14, 3.14);
    TH1F* Inclusive_TauPhi_Fake = new TH1F((sample+"_Fake_TauPhi").c_str(),(sample+"_Fake_TauPhi").c_str(), 40, -3.14, 3.14);
    TH1F* Inclusive_NJets = new TH1F((sample+"_NJets").c_str(),(sample+"_NJets").c_str(), 20, 0.0, 20.0);
@@ -705,6 +705,7 @@ int main(int argc, char** argv) {
         mymu.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
 
         if (sample=="W"){
+	  /*
 	  if(numGenJets == 0)
 	    weight = 32.7;
 	  else if(numGenJets == 1)
@@ -715,16 +716,17 @@ int main(int argc, char** argv) {
 	    weight = 2.27;
 	  else if(numGenJets == 4)
 	    weight = 1.05;
-	  /*
+	  */
+	  
             weight=32.7;
             if (numGenJets==1) weight=5.91;
             else if (numGenJets==2) weight=12.57;
             else if (numGenJets==3) weight=2.25;
-            else if (numGenJets==4) weight=2.16;
-	  */
+            else if (numGenJets==4) weight=2.16;	  
         }
 
         if (sample=="DY"){
+	  /*
 	  if(numGenJets == 0)
 	    weight = 2.665;
 	  else if(numGenJets == 1)
@@ -735,7 +737,8 @@ int main(int argc, char** argv) {
 	    weight = 0.5977;
 	  else if(numGenJets == 4)
 	    weight = 0.2933;
-	  /*
+	  */
+	  
             weight=2.63;
             if (numGenJets==1)
                 weight=0.21;
@@ -745,7 +748,6 @@ int main(int argc, char** argv) {
                 weight=0.602;
             else if (numGenJets==4)
                 weight=0.229;
-	  */
         }
 	if ((sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic") && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue; // remove overlap with embedded samples
 
