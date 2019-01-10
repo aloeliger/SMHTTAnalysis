@@ -722,21 +722,27 @@ int main(int argc, char** argv) {
         mymu.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
 
         if (sample=="W"){
+	  /*
+	  //new
 	  weight=32.7;	    
 	  if (numGenJets==1) weight=7.05;
 	  else if (numGenJets==2) weight=13.89;
 	  else if (numGenJets==3) weight=2.27;
 	  else if (numGenJets==4) weight=1.05;
-	  /*
-	    weight=32.7;	    
-            if (numGenJets==1) weight=5.91;
-            else if (numGenJets==2) weight=12.57;
-            else if (numGenJets==3) weight=2.25;
-            else if (numGenJets==4) weight=2.16;
-	    */
+	  */
+	  
+	  //old
+	  weight=32.7;	    
+	  if (numGenJets==1) weight=5.91;
+	  else if (numGenJets==2) weight=12.57;
+	  else if (numGenJets==3) weight=2.25;
+	  else if (numGenJets==4) weight=2.16;
+	  
         }
 
         if (sample=="DY"){
+	  /*
+	  //new
 	  weight=2.66;
             if (numGenJets==1)
                 weight=0.551;
@@ -746,17 +752,19 @@ int main(int argc, char** argv) {
                 weight=0.598;
             else if (numGenJets==4)
                 weight=0.293;
-	  /*
-            weight=2.63;
-            if (numGenJets==1)
-                weight=0.21;
-            else if (numGenJets==2)
-                weight=0.956;
-            else if (numGenJets==3)
-                weight=0.602;
-            else if (numGenJets==4)
-                weight=0.229;
 	  */
+	  
+	    //old
+	  weight=2.63;
+	  if (numGenJets==1)
+	    weight=0.21;
+	  else if (numGenJets==2)
+	    weight=0.956;
+	  else if (numGenJets==3)
+	    weight=0.602;
+	  else if (numGenJets==4)
+	    weight=0.229;
+	  
         }
 	if ((sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic") && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue; // remove overlap with embedded samples	
 

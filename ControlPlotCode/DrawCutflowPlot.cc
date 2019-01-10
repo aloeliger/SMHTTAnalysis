@@ -17,6 +17,7 @@ void DrawCutflowPlot()
   TFile* ResultsFile = new TFile("CutflowPlots.root");
 
   TH1F* data_obs_Cutflow = (TH1F*) ResultsFile->Get("data_obs_Cutflow");
+  TH1F* AllHiggs_Cutflow = (TH1F*) ResultsFile->Get("AllHiggs_Cutflow");
   THStack* Cutflow_Stack = (THStack*) ResultsFile->Get("Cutflow_Stack");
   TLegend* Cutflow_Legend = (TLegend*) ResultsFile->Get("TPave");
 
@@ -50,6 +51,7 @@ void DrawCutflowPlot()
   Cutflow_Stack->SetTitle("#mu#tau Channel Cutflow");
   data_obs_Cutflow->Draw("SAME e1");
   Cutflow_Legend->Draw();
+  AllHiggs_Cutflow->Draw("SAME HIST");
 
   Cutflow_Stack->GetXaxis()->SetLabelSize(0.0);
 
