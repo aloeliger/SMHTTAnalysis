@@ -419,9 +419,9 @@ void DrawControlPlots()
   TH1F* Other_MuEta = (TH1F*) VVFinal_MuEta->Clone();
   Other_MuEta->Add(STFinal_MuEta);
   Other_MuEta->Add(EWKFinal_MuEta);
-  Other_MuPt->Add(VHFinal_MuEta);
-  Other_MuPt->Add(ggH_htt125_MuEta);
-  Other_MuPt->Add(qqH_htt125_MuEta);
+  Other_MuEta->Add(VHFinal_MuEta);
+  Other_MuEta->Add(ggH_htt125_MuEta);
+  Other_MuEta->Add(qqH_htt125_MuEta);
 
   TH1F* AllHiggs_MuEta = (TH1F*) VHFinal_MuEta->Clone();
   AllHiggs_MuEta->Add(ggH_htt125_MuEta);
@@ -509,7 +509,7 @@ void DrawControlPlots()
   //Legend_MuEta->AddEntry(VVFinal_MuEta,"Dibsoson","f");
   //Legend_MuEta->AddEntry(STFinal_MuEta,"Single Top","f");
   //Legend_MuEta->AddEntry(EWKFinal_MuEta,"EWK","f");
-  Legend_MuEta->AddEntry(Other_TauPt,"Other","hist");
+  Legend_MuEta->AddEntry(Other_TauPt,"Other","f");
   //Legend_MuEta->AddEntry(qqH_htt125_MuEta,"qqh","f");
   //Legend_MuEta->AddEntry(ggH_htt125_MuEta,"ggH","f");
   //Legend_MuEta->AddEntry(VHFinal_MuEta,"VH","f");
@@ -634,7 +634,7 @@ void DrawControlPlots()
   EWKFinal_TauEta->SetLineColor(kBlack);
 
   Other_TauEta->SetFillColor(OtherColor->GetNumber());
-  Other_TauEta->SetFillColor(kBlack);
+  Other_TauEta->SetLineColor(kBlack);
 
   AllHiggs_TauEta->SetLineColor(kRed);
   

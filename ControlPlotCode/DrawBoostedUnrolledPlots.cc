@@ -36,9 +36,15 @@ void DrawBoostedUnrolledPlots()
   BoostedPad->SetTicky();
   BoostedPad->SetGridx();  
 
+  //color corrections
+  TColor* DYColor = new TColor((4.0*16.0+4.0)/256.0,(9.0*16.0+6.0)/256.0,(12.0*16.0+8.0)/256.0);
+  TColor* OtherColor = new TColor((16.0+2.0)/256.0,(12.0*16.0+10.0)/256.0,(13.0*16.0+13.0)/256.0);
+  ((TH1F*)BoostedStack->GetHists()->FindObject("ZL"))->SetFillColor(DYColor->GetNumber());
+  ((TH1F*)BoostedStack->GetHists()->FindObject("Other"))->SetFillColor(OtherColor->GetNumber());
+
   BoostedStack->Draw();
   BoostedStackErrors->Draw("SAME e2");    
-  BoostedStack->GetYaxis()->SetTitle("Events/5 GeV");
+  BoostedStack->GetYaxis()->SetTitle("Events/10 GeV");
   BoostedStack->GetYaxis()->SetTitleOffset(1.3);
   BoostedStack->SetTitle("Boosted m_{vis}");
   //resize the log plot
@@ -81,8 +87,8 @@ void DrawBoostedUnrolledPlots()
     {
       for(int j = 1; j<= NumBinsInPlot; ++j)
 	{
-	  //std::cout<<"Setting Label #"<<(20*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
-	  RatioHist->GetXaxis()->SetBinLabel((20*(i-1))+j,BinLabels[j-1].c_str());
+	  //std::cout<<"Setting Label #"<<(NumBinsInPlot*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
+	  RatioHist->GetXaxis()->SetBinLabel((NumBinsInPlot*(i-1))+j,BinLabels[j-1].c_str());
 	}
     }
 
@@ -96,12 +102,12 @@ void DrawBoostedUnrolledPlots()
   TLatex latex;
   latex.SetTextSize(0.025);
   latex.SetTextAlign(13);
-  latex.DrawLatex(5.0,10000.0,"0 #leq p_{t}^{#mu#tau} #leq 100");
-  latex.DrawLatex(20.0,10000.0,"100 #leq p_{t}^{#mu#tau} #leq 150");
-  latex.DrawLatex(40.0,10000.0,"150 #leq p_{t}^{#mu#tau} #leq 200");
-  latex.DrawLatex(60.0,10000.0,"200 #leq p_{t}^{#mu#tau} #leq 250");  
-  latex.DrawLatex(80.0,10000.0,"250 #leq p_{t}^{#mu#tau} #leq 300");
-  latex.DrawLatex(100.0,2000.0,"300 #leq p_{t}^{#mu#tau}");
+  latex.DrawLatex(2.0,10000.0,"0 #leq p_{t}^{#mu#tau} #leq 100");
+  latex.DrawLatex(10.0,10000.0,"100 #leq p_{t}^{#mu#tau} #leq 150");
+  latex.DrawLatex(20.0,10000.0,"150 #leq p_{t}^{#mu#tau} #leq 200");
+  latex.DrawLatex(30.0,10000.0,"200 #leq p_{t}^{#mu#tau} #leq 250");  
+  latex.DrawLatex(40.0,10000.0,"250 #leq p_{t}^{#mu#tau} #leq 300");
+  latex.DrawLatex(50.0,800.0,"300 #leq p_{t}^{#mu#tau}");
 
   CanvasOne->Draw();
   CanvasOne->SaveAs("BoostedUnrolled.png");

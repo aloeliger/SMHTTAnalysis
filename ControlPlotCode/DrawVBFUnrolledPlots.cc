@@ -39,9 +39,15 @@ void DrawVBFUnrolledPlots()
   VBFPad->SetGridx();    
   VBFPad->SetLogy();
 
+  //color corrections
+  TColor* DYColor = new TColor((4.0*16.0+4.0)/256.0,(9.0*16.0+6.0)/256.0,(12.0*16.0+8.0)/256.0);
+  TColor* OtherColor = new TColor((16.0+2.0)/256.0,(12.0*16.0+10.0)/256.0,(13.0*16.0+13.0)/256.0);
+  ((TH1F*)VBFStack->GetHists()->FindObject("ZL"))->SetFillColor(DYColor->GetNumber());
+  ((TH1F*)VBFStack->GetHists()->FindObject("Other"))->SetFillColor(OtherColor->GetNumber());
+
   VBFStack->Draw();
   VBFStackErrors->Draw("SAME e2");    
-  VBFStack->GetYaxis()->SetTitle("Events/5 GeV");
+  VBFStack->GetYaxis()->SetTitle("Events/20 GeV");
   VBFStack->GetYaxis()->SetTitleOffset(1.3);
   VBFStack->SetTitle("VBF m_{vis}");
   //resize the ridiculous log plot
@@ -84,8 +90,8 @@ void DrawVBFUnrolledPlots()
     {
       for(int j = 1; j<= NumBinsInPlot; ++j)
 	{
-	  //std::cout<<"Setting Label #"<<(20*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
-	  RatioHist->GetXaxis()->SetBinLabel((20*(i-1))+j,BinLabels[j-1].c_str());
+	  //std::cout<<"Setting Label #"<<(NumBinsInPlot*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
+	  RatioHist->GetXaxis()->SetBinLabel((NumBinsInPlot*(i-1))+j,BinLabels[j-1].c_str());
 	}
     }
 
@@ -96,13 +102,13 @@ void DrawVBFUnrolledPlots()
 
   //setup the custom slice labels
   TLatex latex;
-  latex.SetTextSize(0.03);
+  latex.SetTextSize(0.037);
   latex.SetTextAlign(13);
-  latex.DrawLatex(5.0,10000.0, "0 #leq m_{jj} #leq 300");
-  latex.DrawLatex(20.0,10000.0,"300 #leq m_{jj} #leq 700");
-  latex.DrawLatex(40.0,10000.0,"700 #leq m_{jj} #leq 1100");
-  latex.DrawLatex(60.0,10000.0,"1100 #leq m_{jj} #leq 1500");
-  latex.DrawLatex(80.0,1000.0,"1500 #leq m_{jj}");
+  latex.DrawLatex(1.0,10000.0, "0 #leq m_{jj} #leq 300");
+  latex.DrawLatex(5.0,10000.0,"300 #leq m_{jj} #leq 700");
+  latex.DrawLatex(10.0,10000.0,"700 #leq m_{jj} #leq 1100");
+  latex.DrawLatex(15.0,10000.0,"1100 #leq m_{jj} #leq 1500");
+  latex.DrawLatex(20.0,1000.0,"1500 #leq m_{jj}");
   
 
   CanvasOne->Draw();

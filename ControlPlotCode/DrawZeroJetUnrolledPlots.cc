@@ -38,9 +38,15 @@ void DrawZeroJetUnrolledPlots()
   ZeroJetPad->SetTicky();
   ZeroJetPad->SetGridx();  
 
+  //color corrections
+  TColor* DYColor = new TColor((4.0*16.0+4.0)/256.0,(9.0*16.0+6.0)/256.0,(12.0*16.0+8.0)/256.0);
+  TColor* OtherColor = new TColor((16.0+2.0)/256.0,(12.0*16.0+10.0)/256.0,(13.0*16.0+13.0)/256.0);
+  ((TH1F*)ZeroJetStack->GetHists()->FindObject("ZL"))->SetFillColor(DYColor->GetNumber());
+  ((TH1F*)ZeroJetStack->GetHists()->FindObject("Other"))->SetFillColor(OtherColor->GetNumber());
+
   ZeroJetStack->Draw();
   ZeroJetStackErrors->Draw("SAME e2");    
-  ZeroJetStack->GetYaxis()->SetTitle("Events/5 GeV");
+  ZeroJetStack->GetYaxis()->SetTitle("Events/10 GeV");
   ZeroJetStack->GetYaxis()->SetTitleOffset(1.3);
   ZeroJetStack->SetTitle("0 Jet m_{vis}");
   ZeroJetData->Draw("SAME e1");
@@ -81,26 +87,28 @@ void DrawZeroJetUnrolledPlots()
     {
       for(int j = 1; j<= NumBinsInPlot; ++j)
 	{
-	  //std::cout<<"Setting Label #"<<(20*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
-	  RatioHist->GetXaxis()->SetBinLabel((20*(i-1))+j,BinLabels[j-1].c_str());
+	  //std::cout<<"Setting Label #"<<(NumBinsInPlot*(i-1))+j<<" to "<<BinLabels[j-1].c_str()<<std::endl;
+	  RatioHist->GetXaxis()->SetBinLabel((NumBinsInPlot*(i-1))+j,BinLabels[j-1].c_str());
 	}
     }
   
-  RatioHist->GetXaxis()->SetTitleOffset(1.4);
-  RatioPad->SetMargin(0.1,1.0,0.5,1.0);
+  //RatioHist->GetXaxis()->SetTitleOffset(1.4);
+  //RatioPad->SetMargin(0.1,1.0,0.5,1.0);
   //RatioPad->SetTopMargin(1.5);
   //RatioPad->SetBottomMargin(0.55);
+  //RatioHist->LabelsOption("v","X");
+  //RatioHist->GetXaxis()->SetLabelSize(0.15);
 
   ZeroJetPad->cd();
 
   //setup the custom slice labels
   TLatex latex;
-  latex.SetTextSize(0.025);
+  latex.SetTextSize(0.04);
   latex.SetTextAlign(13);
-  latex.DrawLatex(5.0,9000.0,"30.0 #leq #tau_{p_{t}} #leq 35.0");
-  latex.DrawLatex(20.0,9000.0,"35.0 #leq #tau_{p_{t}} #leq 40.0");
-  latex.DrawLatex(40.0,9000.0,"40.0 #leq #tau_{p_{t}} #leq 50.0");
-  latex.DrawLatex(60.0,7000.0,"50.0 #leq #tau_{p_{t}}");
+  latex.DrawLatex(2.2, 14000.0,"30.0 #leq #tau_{p_{t}} #leq 35.0");
+  latex.DrawLatex(11.0,14000.0,"35.0 #leq #tau_{p_{t}} #leq 40.0");
+  latex.DrawLatex(21.0,14000.0,"40.0 #leq #tau_{p_{t}} #leq 50.0");
+  latex.DrawLatex(31.0,5000.0,"50.0 #leq #tau_{p_{t}}");
 
   CanvasOne->Draw();
   CanvasOne->SaveAs("ZeroJetUnrolled.png");

@@ -416,18 +416,18 @@ int main(int argc, char** argv) {
    TH1F* ZeroJet_Results_Fake = new TH1F((sample+"_0jet_Fake_Results").c_str(),(sample+"_0jet_Fake_Results").c_str(), 20, 50.0, 150.0);
    Double_t TauPtBinning[] = {30.0,35.0,40.0,50.0,5000.0};
    int nTauPtBins = (int)sizeof(TauPtBinning)/sizeof(Double_t)-1;
-   TH2F* ZeroJet_Results_Rolled = new TH2F((sample+"_0jet_Results_Rolled").c_str(),(sample+"_0jet_Results_Rolled").c_str(),20,50.0,150.0,nTauPtBins,TauPtBinning);
-   TH2F* ZeroJet_Results_Rolled_Fake = new TH2F((sample+"_0jet_Fake_Results_Rolled").c_str(),(sample+"_0jet_Fake_Results_Rolled").c_str(),20,50.0,150.0,nTauPtBins,TauPtBinning);
+   TH2F* ZeroJet_Results_Rolled = new TH2F((sample+"_0jet_Results_Rolled").c_str(),(sample+"_0jet_Results_Rolled").c_str(), 10, 50.0, 150.0,nTauPtBins,TauPtBinning);
+   TH2F* ZeroJet_Results_Rolled_Fake = new TH2F((sample+"_0jet_Fake_Results_Rolled").c_str(),(sample+"_0jet_Fake_Results_Rolled").c_str(), 10, 50.0, 150.0, nTauPtBins, TauPtBinning);
 
    TDirectory* mt_boostedDir;
    if(ResultFile->GetDirectory("mt_boosted") != NULL) mt_boostedDir = (TDirectory*) ResultFile->GetDirectory("mt_boosted");
    else mt_boostedDir = ResultFile->mkdir("mt_boosted");
-   TH1F* Boosted_Results = new TH1F((sample+"_boosted_Results").c_str(),(sample+"_boosted_Results").c_str(), 20, 50.0, 150.0);
-   TH1F* Boosted_Results_Fake = new TH1F((sample+"_boosted_Fake_Results").c_str(),(sample+"_boosted_Fake_Results").c_str(), 20, 50.0, 150.0);
+   TH1F* Boosted_Results = new TH1F((sample+"_boosted_Results").c_str(),(sample+"_boosted_Results").c_str(), 10, 50.0, 150.0);
+   TH1F* Boosted_Results_Fake = new TH1F((sample+"_boosted_Fake_Results").c_str(),(sample+"_boosted_Fake_Results").c_str(), 10, 50.0, 150.0);
    Double_t ptHBinning[] = {0.0,100.0, 150.0, 200.0, 250.0, 300.0, 9000.0};
    int nptHBins = (int)sizeof(ptHBinning)/sizeof(Double_t)-1;
-   TH2F* Boosted_Results_Rolled = new TH2F((sample+"_boosted_Results_Rolled").c_str(),(sample+"_boosted_Results_Rolled").c_str(),20,50.0,150.0,nptHBins,ptHBinning);
-   TH2F* Boosted_Results_Rolled_Fake = new TH2F((sample+"_boosted_Fake_Results_Rolled").c_str(),(sample+"_boosted_Fake_Results_Rolled").c_str(),20,50.0,150.0,nptHBins,ptHBinning);
+   TH2F* Boosted_Results_Rolled = new TH2F((sample+"_boosted_Results_Rolled").c_str(),(sample+"_boosted_Results_Rolled").c_str(),10,50.0,150.0,nptHBins,ptHBinning);
+   TH2F* Boosted_Results_Rolled_Fake = new TH2F((sample+"_boosted_Fake_Results_Rolled").c_str(),(sample+"_boosted_Fake_Results_Rolled").c_str(),10,50.0,150.0,nptHBins,ptHBinning);
 
    TDirectory* mt_vbfDir;
    if(ResultFile->GetDirectory("mt_vbf") != NULL) mt_vbfDir = (TDirectory*) ResultFile->GetDirectory("mt_vbf");
@@ -436,8 +436,8 @@ int main(int argc, char** argv) {
    TH1F* VBF_Results_Fake = new TH1F((sample+"_vbf_Fake_Results").c_str(),(sample+"_vbf_Fake_Results").c_str(),20, 50.0, 150.0);
    Double_t mjjBinning[] = {0.0,300.0,700.0,1100.0,1500.0,9000.0};
    int nmjjBins = (int)sizeof(mjjBinning)/sizeof(Double_t)-1;
-   TH2F* VBF_Results_Rolled = new TH2F((sample+"_vbf_Results_Rolled").c_str(),(sample+"_vbf_Results_Rolled").c_str(),20,50.0,150.0,nmjjBins,mjjBinning);
-   TH2F* VBF_Results_Rolled_Fake = new TH2F((sample+"_vbf_Fake_Results_Rolled").c_str(),(sample+"_vbf_Fake_Results_Rolled").c_str(),20,50.0,150.0,nmjjBins,mjjBinning);         
+   TH2F* VBF_Results_Rolled = new TH2F((sample+"_vbf_Results_Rolled").c_str(),(sample+"_vbf_Results_Rolled").c_str(),5,50.0,150.0,nmjjBins,mjjBinning);
+   TH2F* VBF_Results_Rolled_Fake = new TH2F((sample+"_vbf_Fake_Results_Rolled").c_str(),(sample+"_vbf_Fake_Results_Rolled").c_str(),5,50.0,150.0,nmjjBins,mjjBinning);         
    
    
    //float bins0[] = {0,60,65,70,75,80,85,90,95,100,105,110,400};
@@ -1065,31 +1065,34 @@ int main(int argc, char** argv) {
 		   //NumSelectedEvents+=1.0;		   
 		   if(njetsWoNoisyJets == 0) 
 		     {
-		       /*
+		       
 			 ZeroJet_Results->Fill((mymu+mytau).M(),aweight*weight2);		 
 			 ZeroJet_Results_Rolled->Fill((mymu+mytau).M(),mytau.Pt(),aweight*weight2);
-		       */
+			 /*
 		       ZeroJet_Results->Fill(m_sv,aweight*weight2);		 
 		       ZeroJet_Results_Rolled->Fill(m_sv,mytau.Pt(),aweight*weight2);
+			 */
 		     }
 		   //primitive boosted and VBF categories
 		   else if(njetsWoNoisyJets == 1) 
 		     {
-		       /*
+		       TLorentzVector MetVector; MetVector.SetPtEtaPhiM(met,0,metphi,0);
 			 Boosted_Results->Fill((mymu+mytau).M(),aweight*weight2);//primitive boosted
-			 Boosted_Results_Rolled->Fill((mymu+mytau).M(),(mymu+mytau).Pt(),aweight*weight2);
-		       */
+			 Boosted_Results_Rolled->Fill((mymu+mytau).M(),(mymu+mytau+MetVector).Pt(),aweight*weight2);
+			 /*
 		       Boosted_Results->Fill(m_sv,aweight*weight2);//primitive boosted
 		       Boosted_Results_Rolled->Fill(m_sv,(mymu+mytau).Pt(),aweight*weight2);
+			 */
 		     }
 		   else if(njetsWoNoisyJets >= 2) 
 		     {
-		       /*
+		       
 			 VBF_Results->Fill((mymu+mytau).M(),aweight*weight2); //primitive VBF
 			 VBF_Results_Rolled->Fill((mymu+mytau).M(),mjj,aweight*weight2);
-		       */
+			 /*
 		       VBF_Results->Fill(m_sv,aweight*weight2); //primitive VBF
 		       VBF_Results_Rolled->Fill(m_sv,mjj,aweight*weight2);
+			 */
 		     }
 		 }
 	     }
@@ -1125,31 +1128,35 @@ int main(int argc, char** argv) {
 
 		   if(njetsWoNoisyJets == 0) 
 		     {
-		       /*
+		       
 			 ZeroJet_Results_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);
 			 ZeroJet_Results_Rolled_Fake->Fill((mymu+mytau).M(),mytau.Pt(),aweight*weight2*FF);
-		       */
+			 /*
 		       ZeroJet_Results_Fake->Fill(m_sv,aweight*weight2*FF);
 		       ZeroJet_Results_Rolled_Fake->Fill(m_sv,mytau.Pt(),aweight*weight2*FF);
+			 */
 		     }
 		   //primitive boosted and VBF categories
 		   else if(njetsWoNoisyJets == 1) 
 		     {
-		       /*
+		       
+		       TLorentzVector MetVector; MetVector.SetPtEtaPhiM(met,0,metphi,0);
 			 Boosted_Results_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF);//primitive boosted
-			 Boosted_Results_Rolled_Fake->Fill((mymu+mytau).M(),(mymu+mytau).Pt(),aweight*weight2*FF);
-		       */
+			 Boosted_Results_Rolled_Fake->Fill((mymu+mytau).M(),(mymu+mytau+MetVector).Pt(),aweight*weight2*FF);
+			 /*
 		       Boosted_Results_Fake->Fill(m_sv,aweight*weight2*FF);//primitive boosted
 		       Boosted_Results_Rolled_Fake->Fill(m_sv,(mymu+mytau).Pt(),aweight*weight2*FF);
+			 */
 		     }
 		   else if(njetsWoNoisyJets >= 2) 
 		     {
-		       /*
+		       
 			 VBF_Results_Fake->Fill((mymu+mytau).M(),aweight*weight2*FF); //primitive VBF
 			 VBF_Results_Rolled_Fake->Fill((mymu+mytau).M(),mjj,aweight*weight2*FF);
-		       */
+			 /*
 		       VBF_Results_Fake->Fill(m_sv,aweight*weight2*FF); //primitive VBF
 		       VBF_Results_Rolled_Fake->Fill(m_sv,mjj,aweight*weight2*FF);
+			 */
 		     }
 		 }
 	     }
