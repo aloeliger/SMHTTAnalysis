@@ -4,3 +4,6 @@
 [submodule "RenderCode"]
 	path = RenderCode
 	url = git@github.com:aloeliger/RenderCode
+[submodule "TauIDCode"]
+	path = TauIDCode
+	url = https://github.com/aloeliger/TauIDCode
