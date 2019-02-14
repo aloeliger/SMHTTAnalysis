@@ -1,8 +1,0 @@
-/hdfs/store/user/caillol/TauID_19may_data/data_SingleMuon_Run2017B-17Nov2017
-make_ntuples_cfg-0021369B-9BD8-E711-BFE9-FA163EAA42CB.root
-make_ntuples_cfg-0022485D-44D8-E711-9CC0-0025904C7F5C.root
-make_ntuples_cfg-0079BF02-08D8-E711-9153-02163E0129DF.root
-make_ntuples_cfg-00951907-92D8-E711-806D-02163E01A2F5.root
-make_ntuples_cfg-00CE8700-5CD7-E711-9871-0CC47A13D16E.root
-make_ntuples_cfg-00DFB195-67D8-E711-8377-02163E01421E.root
-make_ntuples_cfg-0207AC61-91D7-E711-A20B-02163E01A653.root
