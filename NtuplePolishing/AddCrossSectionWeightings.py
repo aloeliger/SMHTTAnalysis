@@ -2,8 +2,9 @@ import ROOT
 import sys
 from tqdm import tqdm
 from array import array
+import argparse
 
-def AddCrossSectionWeightings(FileToRun,Year):
+def AddCrossSectionWeightings(FileToRun,args):
     
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")        
     TheTree=ReweightFile.mt_Selected
@@ -17,9 +18,9 @@ def AddCrossSectionWeightings(FileToRun,Year):
         TheTree.GetEntry(i)
         #let's differentiate between 2017 and 2018
         LHCLumi = 0        
-        if(Year == "2017"):            
+        if(args.year == "2017"):            
             LHCLumi = 41.557e15                        
-        elif(Year == "2018"):
+        elif(args.year == "2018"):
             LHCLumi = 59.97e15
         #start checking known samples
         CrossSection = 0.0
@@ -73,7 +74,7 @@ def AddCrossSectionWeightings(FileToRun,Year):
         else:
             CrossSectionWeighting[0] = 1.0
         #2017
-        if(Year == "2017"):
+        if(args.year == "2017"):
             if(FileName == "DY.root"):                
                 CrossSectionWeighting[0] = 2.665
                 if ReweightFile.mt_Selected.numGenJets == 1:
@@ -95,7 +96,7 @@ def AddCrossSectionWeightings(FileToRun,Year):
                 elif ReweightFile.mt_Selected.numGenJets == 4:
                     CrossSectionWeighting[0] = 1.05
         #2018
-        elif(Year == "2018"):
+        elif(args.year == "2018"):
             if(FileName == "DY.root"):                
                 CrossSectionWeighting[0] = 3.7
                 if ReweightFile.mt_Selected.numGenJets == 1:
@@ -121,13 +122,19 @@ def AddCrossSectionWeightings(FileToRun,Year):
         #print("LHCLumi: "+str(LHCLumi))        
         #print("Cross Section Weighting: "+str(CrossSectionWeighting[0]))
         TheBranch.Fill()
-    TheTree.Write()
+    TheTree.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
     ReweightFile.Close()
 
 if __name__ == "__main__":    
-    for File in sys.argv[2:]:
+    parser = argparse.ArgumentParser(description="Generate and attach the crosss section weighting branch.")
+    parser.add_argument('year',choices=["2016","2017","2018"],help="Select which year's cross sections are to be used")
+    parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
+    
+    args = parser.parse_args()
+
+    for File in args.Files:
         print("Processing the cross sections weights for "+File)
-        AddCrossSectionWeightings(File,sys.argv[1])
+        AddCrossSectionWeightings(File,args)
         
     
