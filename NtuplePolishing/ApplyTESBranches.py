@@ -28,15 +28,15 @@ def ApplyTESBranches(FileName,Arguments):
     TESCorrectedMET = array('f',[0.])
     TESCorrectedMETPhi = array('f',[0.])
 
-    if(not Arguments.NoEnergyCorrections):
-        CorrectedTauEnergy_Branch = TheTree.Branch('CorrectedTauEnergy',CorrectedTauEnergy)
-        CorrectedTauPt_Branch = TheTree.Branch('CorrectedTauPt',CorrectedTauPt)
-        TESCorrectedMET_Branch = TheTree.Branch('TESCorrectedMET',TESCorrectedMET)
-        TESCorrectedMETPhi_Branch = TheTree.Branch('TESCorrectedMETPhi',TESCorrectedMETPhi)
-    TES_E_UP_Branch = TheTree.Branch('TES_E_UP',TES_E_UP)
-    TES_E_DOWN_Branch = TheTree.Branch('TES_E_DOWN',TES_E_DOWN)    
-    TES_Pt_UP_Branch = TheTree.Branch('TES_Pt_UP',TES_Pt_UP)
-    TES_Pt_DOWN_Branch = TheTree.Branch('TES_Pt_DOWN',TES_Pt_DOWN)
+    if(not Arguments.NoEnergyCorrect):
+        CorrectedTauEnergy_Branch = TheTree.Branch('CorrectedTauEnergy',CorrectedTauEnergy,"CorrectedTauEnergy/F")
+        CorrectedTauPt_Branch = TheTree.Branch('CorrectedTauPt',CorrectedTauPt,"CorrectedTauPt/F")
+        TESCorrectedMET_Branch = TheTree.Branch('TESCorrectedMET',TESCorrectedMET,"TESCorrectedMET/F")
+        TESCorrectedMETPhi_Branch = TheTree.Branch('TESCorrectedMETPhi',TESCorrectedMETPhi,"TESCorrectedMETPhi/F")
+    TES_E_UP_Branch = TheTree.Branch('TES_E_UP',TES_E_UP,"TES_E_UP/F")
+    TES_E_DOWN_Branch = TheTree.Branch('TES_E_DOWN',TES_E_DOWN,"TES_E_DOWN/F")    
+    TES_Pt_UP_Branch = TheTree.Branch('TES_Pt_UP',TES_Pt_UP,"TES_Pt_UP/F")
+    TES_Pt_DOWN_Branch = TheTree.Branch('TES_Pt_DOWN',TES_Pt_DOWN,"TES_Pt_DOWN/F")
 
     for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
@@ -49,15 +49,15 @@ def ApplyTESBranches(FileName,Arguments):
         CorrectedTauVector_DOWN = ROOT.TLorentzVector()
                         
         #2016 TES Corrections
-        elif(Arguments.Year == "2016"):
-            if(TheTree.l2_decaymode == 0):
+        if(Arguments.year == "2016"):
+            if(TheTree.l2_decayMode == 0):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0 
                 else:
                     EnergyCorrectFactor - 0.005
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.012))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.012))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
@@ -66,14 +66,14 @@ def ApplyTESBranches(FileName,Arguments):
                 TES_Pt_UP[0] = CorrectedTauVector_UP.Pt()
                 TES_Pt_Down[0] = CorrectedTauVector_DOWN.Pt()
                 
-            elif(TheTree.l2_decaymode == 1):
+            elif(TheTree.l2_decayMode == 1):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = 0.011
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.012))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.012))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
@@ -82,14 +82,14 @@ def ApplyTESBranches(FileName,Arguments):
                 TES_Pt_UP[0] = CorrectedTauVector_UP.Pt()
                 TES_Pt_DOWN[0] = CorrectedTauVector_DOWN.Pt()
                 
-            elif(TheTree.l2_decaymode == 10):
+            elif(TheTree.l2_decayMode == 10):
                 if Argument.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = 0.006
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.012))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.012))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
@@ -100,15 +100,15 @@ def ApplyTESBranches(FileName,Arguments):
                 
                 
         #2017 TES corrections
-        elif(Arguments.Year=="2017"):
-            if(TheTree.l2_decaymode == 0):
+        elif(Arguments.year=="2017"):
+            if(TheTree.l2_decayMode == 0):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = 0.007
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.008))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.008))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.008))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.008))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
@@ -117,30 +117,30 @@ def ApplyTESBranches(FileName,Arguments):
                 TES_Pt_UP[0] = CorrectedTauVector_UP.Pt()
                 TES_Pt_DOWN[0] = CorrectedTauVector_DOWN.Pt()
                 
-            elif(TheTree.l2_decaymode == 1):
+            elif(TheTree.l2_decayMode == 1):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = -0.002
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.008))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.008))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.008))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.008))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
-                TES_DOWN[0] = CorrectedTauVector_E_DOWN.E()
+                TES_E_DOWN[0] = CorrectedTauVector_DOWN.E()
                 CorrectedTauPt[0] = CorrectedTauVector.Pt()
                 TES_Pt_UP[0] = CorrectedTauVector_UP.Pt()
                 TES_Pt_DOWN[0] = CorrectedTauVector_DOWN.Pt()
                 
-            elif(TheTree.l2_decaymode == 10):
+            elif(TheTree.l2_decayMode == 10):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = 0.001
-                CorrectedTauVector = (1.00+EnergyCorrectFactor)*TauVector
-                CorrectedTauVector_UP = (1.00+(EnergyCorrectFactor+0.009))*TauVector
-                CorrectedTauVector_DOWN = (1.00+(EnergyCorrectFactor-0.009))*TauVector
+                CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.009))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.009))
                 
                 CorrectedTauEnergy[0] = CorrectedTauVector.E()
                 TES_E_UP[0] = CorrectedTauVector_UP.E()
@@ -152,22 +152,22 @@ def ApplyTESBranches(FileName,Arguments):
             
         #2018 TES corrections
         #NOT YET CALCULATED!
-        elif(Arguments.Year == "2018"):
-            if(TheTree.l2_decaymode == 0):
+        elif(Arguments.year == "2018"):
+            if(TheTree.l2_decayMode == 0):
                 CorrectedTauEnergy[0] = TauVector.E()
                 TES_E_UP[0] = TauVector.E()
                 TES_E_DOWN[0] = TauVector.E()
                 CorrectedTauPt[0] = TauVector.Pt()
                 TES_Pt_UP[0] = TauVector.Pt()
                 TES_Pt_DOWN[0] = TauVector.Pt()
-            elif(TheTree.l2_decaymode == 1):
+            elif(TheTree.l2_decayMode == 1):
                 CorrectedTauEnergy[0] = TauVector.E()
                 TES_UP[0] = TauVector.E()
                 TES_DOWN[0] = TauVector.E()
                 CorrectedTauPt[0] = TauVector.Pt()
                 TES_Pt_UP[0] = TauVector.Pt()
                 TES_Pt_DOWN[0] = TauVector.Pt()
-            elif(TheTree.l2_decaymode == 10):
+            elif(TheTree.l2_decayMode == 10):
                 CorrectedTauEnergy[0] = TauVector.E()
                 TES_UP[0] = TauVector.E()
                 TES_DOWN[0] = TauVector.E()
@@ -177,7 +177,7 @@ def ApplyTESBranches(FileName,Arguments):
         CorrectedMetVector = GetCorrectedMetVector(TauVector,CorrectedTauVector,MetVector)
         TESCorrectedMET[0] = CorrectedMetVector.Pt()
         TESCorrectedMETPhi[0] = CorrectedMetVector.Phi()
-        if(not Arguments.NoEnergyCorrections):
+        if(not Arguments.NoEnergyCorrect):
             CorrectedTauEnergy_Branch.Fill()
             CorrectedTauPt_Branch.Fill()
             TESCorrectedMET_Branch.Fill()

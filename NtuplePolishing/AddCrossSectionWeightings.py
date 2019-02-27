@@ -13,15 +13,18 @@ def AddCrossSectionWeightings(FileToRun,args):
     #I believe this is the correct distribution to get?
     TotalNumberOfEvents = ReweightFile.eventCount.GetBinContent(1)    
     FileName = FileToRun[FileToRun.rfind("/")+1:]
+
+    #let's differentiate between 2017 and 2018
+    LHCLumi = 0        
+    if(args.year == "2017"):            
+        LHCLumi = 41.557e15                        
+    elif(args.year == "2018"):
+        LHCLumi = 59.97e15
+
     print(FileName)
+
     for i in tqdm(range(TheTree.GetEntries())):
-        TheTree.GetEntry(i)
-        #let's differentiate between 2017 and 2018
-        LHCLumi = 0        
-        if(args.year == "2017"):            
-            LHCLumi = 41.557e15                        
-        elif(args.year == "2018"):
-            LHCLumi = 59.97e15
+        TheTree.GetEntry(i)        
         #start checking known samples
         CrossSection = 0.0
         if FileName == "DY.root":            
