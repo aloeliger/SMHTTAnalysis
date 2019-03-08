@@ -3,13 +3,18 @@ import sys
 import math
 from array import array
 from tqdm import tqdm
+import argparse
 
-def CalculatePZeta(FileName):
+def CalculatePZeta(FileName,args):
     TheFile = ROOT.TFile(FileName,"UPDATE")
-    TheTree = TheFile.mt_tree
+    TheTree = TheFile.mutau_tree
+    PZetaVis_Value = array('f',[0.])
+    PZetaAll_Value = array('f',[0.])
     PZeta_Value = array('f',[0.])
+    PZetaVis_Branch = TheTree.Branch("PZetaVis",PZetaVis_Value,"PZetaVis/F")
+    PZetaAll_Branch = TheTree.Branch("PZetaAll",PZetaAll_Value,"PZetaAll/F")
     PZeta_Branch = TheTree.Branch("PZeta",PZeta_Value,"PZeta/F")
-
+    
     for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
         MuVector = ROOT.TLorentzVector()
@@ -34,15 +39,25 @@ def CalculatePZeta(FileName):
         
         px = visPx+MetVector.Px()
         py = visPy+MetVector.Py()
-        PZeta = px*zetaX+py*zetaY
+        PZetaAll = px*zetaX+py*zetaY
         
-        PZeta_Value[0] = (PZeta-0.85*PZetaVis)
-        PZeta_Branch.Write()
+        PZetaVis_Value[0] = PZetaVis
+        PZetaAll_Value[0] = PZetaAll
+        PZeta_Value[0] = (PZetaAll-1.85*PZetaVis)
+        
+        PZetaVis_Branch.Fill()
+        PZetaAll_Branch.Fill()
+        PZeta_Branch.Fill()
     TheTree.Write('',ROOT.TObject.kOverwrite)
     TheFile.Write()
     TheFile.Close()
 
 if __name__ == "__main__":
-    for File in sys.argv[1:]:
-        print("Adding PZeta branch to "+File)
-        CaulculatePZeta(File)
+    parser = argparse.ArgumentParser(description="Generate and attach TES branches.")
+    parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
+
+    args = parser.parse_args()
+
+    for File in args.Files:
+        print("Adding PZeta branches to "+File)
+        CalculatePZeta(File,args)
