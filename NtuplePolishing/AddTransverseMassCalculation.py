@@ -6,7 +6,10 @@ import argparse
 
 def CalculateTransverseMass(FileName,args):
     TheFile = ROOT.TFile(FileName,"UPDATE")
-    TheTree = TheFile.mutau_tree
+    if args.mumutau:
+        TheTree=TheFile.mumutau_tree
+    else:
+        TheTree = TheFile.mutau_tree
     TransverseMass_Value = array('f',[0.])
     TransverseMass_Branch = TheTree.Branch("TransverseMass",TransverseMass_Value,"TransverseMass/F")
     
@@ -29,6 +32,7 @@ def CalculateTransverseMass(FileName,args):
 if __name__== "__main__":
     parser = argparse.ArgumentParser(description="Generate and attach a transverse mass branch.")
     parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
+    parser.add_argument('--mumutau',help="use mumutau tree",action="store_true")
 
     args = parser.parse_args()
     for File in args.Files:
