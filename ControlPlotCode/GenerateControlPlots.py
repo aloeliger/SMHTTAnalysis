@@ -2,6 +2,7 @@ import ROOT
 import sys
 from tqdm import tqdm
 import argparse
+import math
 
 def GenerateControlPlots(TheFile,args):
     #Let's start with 6 possible control plots
@@ -62,9 +63,13 @@ def GenerateControlPlots(TheFile,args):
         MuVector.SetPtEtaPhiM(TheTree.pt_1,TheTree.eta_1,TheTree.phi_1,TheTree.m_1)
         TauVector.SetPtEtaPhiM(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,TheTree.m_2)        
         METVector.SetPtEtaPhiM(TheTree.met,0.0,TheTree.metphi,0.0)
+        MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
         
         if(TauVector.Pt()<30.0 or MuVector.Pt() < 26.0):
             continue
+        if(MT > 50.0):
+            continue
+        
         TheWeighting = TheTree.FinalWeighting
         if args.UseFakeFactor:
             TheWeighting = TheWeighting*TheTree.Event_Fake_Factor 
