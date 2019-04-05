@@ -4,6 +4,9 @@ from tqdm import tqdm
 from array import array
 import argparse
 
+def DefineCrossSectionArguments(parser):
+    pass
+
 def AddCrossSectionWeightings(FileToRun,args):
     
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")        
@@ -11,7 +14,7 @@ def AddCrossSectionWeightings(FileToRun,args):
     CrossSectionWeighting = array('f',[0.])
     TheBranch = TheTree.Branch("CrossSectionWeighting",CrossSectionWeighting,"CrossSectionWeighting/F")
     #I believe this is the correct distribution to get?
-    TotalNumberOfEvents = ReweightFile.eventCount.GetBinContent(1)    
+    TotalNumberOfEvents = ReweightFile.eventCount.GetBinContent(2)    
     FileName = FileToRun[FileToRun.rfind("/")+1:]
 
     #let's differentiate between 2017 and 2018
@@ -76,18 +79,19 @@ def AddCrossSectionWeightings(FileToRun,args):
             CrossSectionWeighting[0] = CrossSection * LHCLumi / TotalNumberOfEvents
         else:
             CrossSectionWeighting[0] = 1.0
+                
         #2017
         if(args.year == "2017"):
-            if(FileName == "DY.root"):                
-                CrossSectionWeighting[0] = 2.665
+            if(FileName == "DY.root" and not args.UseInclusiveDY):
+                CrossSectionWeighting[0] = 2.667
                 if ReweightFile.mt_Selected.numGenJets == 1:
-                    CrossSectionWeighting[0] = 0.5517
+                    CrossSectionWeighting[0] = 0.552
                 elif ReweightFile.mt_Selected.numGenJets == 2:
                     CrossSectionWeighting[0] = 1.066
                 elif ReweightFile.mt_Selected.numGenJets == 3:
-                    CrossSectionWeighting[0] = 0.5977
+                    CrossSectionWeighting[0] = 0.598
                 elif ReweightFile.mt_Selected.numGenJets == 4:
-                    CrossSectionWeighting[0] = 0.2933
+                    CrossSectionWeighting[0] = 0.294
             elif(FileName == "W.root"):
                 CrossSectionWeighting[0] = 32.7
                 if ReweightFile.mt_Selected.numGenJets == 1:
@@ -100,7 +104,7 @@ def AddCrossSectionWeightings(FileToRun,args):
                     CrossSectionWeighting[0] = 1.05
         #2018
         elif(args.year == "2018"):
-            if(FileName == "DY.root"):                
+            if(FileName == "DY.root" and not args.UseInclusiveDY):
                 CrossSectionWeighting[0] = 3.7
                 if ReweightFile.mt_Selected.numGenJets == 1:
                     CrossSectionWeighting[0] = 0.64
@@ -120,10 +124,10 @@ def AddCrossSectionWeightings(FileToRun,args):
                     CrossSectionWeighting[0] = 3.14
                 elif ReweightFile.mt_Selected.numGenJets == 4:
                     CrossSectionWeighting[0] = 3.25
-        #print("Cross Section: "+str(CrossSection))
-        #print("Total Number Of Events:"+str(TotalNumberOfEvents))
-        #print("LHCLumi: "+str(LHCLumi))        
-        #print("Cross Section Weighting: "+str(CrossSectionWeighting[0]))
+
+        if(FileName != "Data.root"):
+            CrossSectionWeighting[0] = CrossSectionWeighting[0] * TheTree.genweight            
+            
         TheBranch.Fill()
     TheTree.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
@@ -133,6 +137,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate and attach the crosss section weighting branch.")
     parser.add_argument('year',choices=["2016","2017","2018"],help="Select which year's cross sections are to be used")
     parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
+    parser.add_argument('--UseInclusiveDY',help="Use only the inclusive DY sample (weight by nnlo cross section)",action="store_true")
     
     args = parser.parse_args()
 
