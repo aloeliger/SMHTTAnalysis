@@ -95,12 +95,16 @@ def ApplyEESandMES(File,args):
                 
             #MES
             elif(TheTrre.gen_match_2 == 2 or TheTree.gen_match_2 == 4):
-                if():
-                if args.NoEnergyCorrect:
-                    EnergyCorrectFactor = 0.0
-                else:
-                    EnergyCorrectFactor = 0.0
-                CorrectedTauVector
+                if(TheTree.l2_decayMode == 0):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = 0.0                        
+                elif(TheTree.l2_decayMode == 0):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = 0.0
             #nothing doing. Do trivial things
             else:
             
