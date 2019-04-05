@@ -7,7 +7,10 @@ import argparse
 
 def CalculatePZeta(FileName,args):
     TheFile = ROOT.TFile(FileName,"UPDATE")
-    TheTree = TheFile.mutau_tree
+    if args.mumutau:
+        TheTree = TheFile.mumutau_tree
+    else:
+        TheTree = TheFile.mutau_tree
     PZetaVis_Value = array('f',[0.])
     PZetaAll_Value = array('f',[0.])
     PZeta_Value = array('f',[0.])
@@ -55,6 +58,7 @@ def CalculatePZeta(FileName,args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate and attach TES branches.")
     parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
+    parser.add_argument('--mumutau',help = "use tree name mumutau",action="store_true")
 
     args = parser.parse_args()
 
