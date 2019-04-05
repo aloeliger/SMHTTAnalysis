@@ -1,6 +1,43 @@
 #include "TROOT.h"
 #include "SFtautrigger.h"
 #include <string>
+#include "Python.h"
+
+static PyObject * DiTauTriggerFactorWrapper(PyObject *self, PyObject *args)
+{
+  float_t pt_2,eta_2,phi_2
+
+    if(!PyArg_ParseTuple(args,"fff", &pt_2, &eta_2, &phi_2))
+    {
+      return NULL;
+    }
+  
+  TFile* fTylerN = new TFile("Weightings/tauTriggerEfficiencies2017_New.root");
+  TFile* fTyler= new TFile("Weightings/tauTriggerEfficiencies2017.root");
+  
+  TH1F* mTauData_ = (TH1F*) fTylerN->Get("hist_MuTauTriggerEfficiency_tightTauMVA_DATA");
+  TH1F* mTauMC_ = (TH1F*) fTylerN->Get("hist_MuTauTriggerEfficiency_tightTauMVA_MC");
+  TH2F* mTauEtaPhiData_ =(TH2F*) fTyler->Get("muTau_tight_DATA");
+  TH2F* mTauEtaPhiMC_ =(TH2F*) fTyler->Get("muTau_tight_MC");
+  TH2F* mTauEtaPhiAvgData_ =(TH2F*) fTyler->Get("muTau_tight_AVG_DATA");
+  TH2F* mTauEtaPhiAvgMC_ =(TH2F*) fTyler->Get("muTau_tight_AVG_MC");
+
+  float DiTauTriggerWeight = getDiTauScaleFactor(pt_2,eta_2,phi_2,0,mTauMC_,mTauEtaPhiMC_,mTauEtaPhiAvgMC_,mTauData_,mTauEtaPhiData_,mTauEtaPhiAvgData_);
+
+  return PyBuildValue("f",DiTauTriggerWeight);
+
+}
+
+static PyMethodDef DiTauTriggerMethods[] = 
+  {
+    {"DiTauTriggerWrapper",DiTauTriggerWrapper,METH_VARARGS,"Get the DiTau Trigger Scale Factor"},
+    {NULL,NULL,0,NULL}
+  };
+
+PyMODINIT_FUNC initDiTau(void)
+{
+  (void) Py_InitModile("DiTauTriggerWrapper",DiTauTriggerMethods);
+}
 
 void AddDiTauTriggerFactor(std::string input)
 {

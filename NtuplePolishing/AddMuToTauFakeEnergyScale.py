@@ -45,6 +45,7 @@ def AddMutotauFakeEnergyScale(FileName,Arguments):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description="Generate and attach mu-to-tau-fake energy uncertainty branches.")
+    parser.add_argument('year',choices=["2016","2017","2018"],help="What year's samples?")
     parser.add_argument('Files',nargs="+","List of the files to run the tool on.")
 
     args = parser.parse_args()
