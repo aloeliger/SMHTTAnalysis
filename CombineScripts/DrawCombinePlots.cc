@@ -24,7 +24,7 @@ void DrawCombinePlots()
   //ZeroJet
   TCanvas* CanvasOne = new TCanvas("CanvasOne","ZeroJet",550,550);
   CanvasOne->SetTickx();
-  CanvasOne->SetTicky();
+  CanvasOne->SetTicky();  
 
   gStyle->SetOptStat(0);
   TDirectory* ZeroJetDir = (TDirectory*) HistoFile->Get("ZeroJet");
@@ -41,10 +41,10 @@ void DrawCombinePlots()
   ZeroJet_Other->SetFillColor(OtherColor->GetNumber());
 
   THStack* ZeroJetStack = new THStack("ZeroJetStack","ZeroJetStack");
-  ZeroJetStack->Add(ZeroJet_Fakes,"HIST");
-  ZeroJetStack->Add(ZeroJet_TT,"HIST");
-  ZeroJetStack->Add(ZeroJet_ZMM,"HIST");
   ZeroJetStack->Add(ZeroJet_Other,"HIST");
+  ZeroJetStack->Add(ZeroJet_TT,"HIST");  
+  ZeroJetStack->Add(ZeroJet_ZMM,"HIST");  
+  ZeroJetStack->Add(ZeroJet_Fakes,"HIST");
   ZeroJetStack->Add(ZeroJet_Embedded,"HIST");
 
   TH1F* ZeroJet_Errors = MakeStackErrors(ZeroJetStack);
@@ -53,6 +53,7 @@ void DrawCombinePlots()
   ZeroJet_PlotPad->SetTickx();
   ZeroJet_PlotPad->SetTicky();
   ZeroJet_PlotPad->SetGridx();
+  ZeroJet_PlotPad->SetLogy();
   
   ZeroJetStack->SetMaximum(max(ZeroJetStack->GetMaximum(),ZeroJet_Data->GetMaximum())*1.1);
   
@@ -77,7 +78,7 @@ void DrawCombinePlots()
   ZeroJetLegend->AddEntry(ZeroJet_Higgs_Upscale,"All Higgs (#times 30)","l");
   ZeroJetLegend->Draw();
 
-  numCategories = 4;
+  numCategories = 5;
   TH1F* ZeroJetGridDivision = new TH1F("ZeroJetGrid","ZeroJetGrid",
 				 ZeroJet_Higgs_Upscale->GetNbinsX(),
 				 ZeroJet_Higgs_Upscale->GetXaxis()->GetXmin(),
@@ -87,18 +88,21 @@ void DrawCombinePlots()
   ZeroJetGridDivision->Draw("SAME");
   
   latex.SetTextSize(0.025);
-  latex.SetTextAlign(13);
-  latex.DrawLatex(2.0,13000.0,"30.0 #leq #tau_{p_{t}} #leq 35.0");
-  latex.DrawLatex(22.0,13000.0,"35.0 #leq #tau_{p_{t}} #leq 40.0");
-  latex.DrawLatex(42.0,13000.0,"40.0 #leq #tau_{p_{t}} #leq 50.0");
-  latex.DrawLatex(62.0,10000.0,"50.0 #leq #tau_{p_{t}}");
+  latex.SetTextAlign(13);  
+  latex.DrawLatex(4.0,17000,"30 #leq #tau_{p_{t}} #leq 40");
+  latex.DrawLatex(12.0,17000,"40 #leq #tau_{p_{t}} #leq 60");
+  latex.DrawLatex(22.0,17000,"50 #leq #tau_{p_{t}} #leq 60");
+  latex.DrawLatex(32.0,17000,"60 #leq #tau_{p_{t}} #leq 70");
+  latex.DrawLatex(42.0,17000,"70 #leq #tau_{p_{t}} #leq 80");
+  //latex.DrawLatex(52.0,5000,"80 #leq #tau_{p_{t}}");
 
   CanvasOne->Draw();
+  CanvasOne->SaveAs("PrefitChecks/ZeroJet.png");
 
   //Boosted
   TCanvas* CanvasTwo = new TCanvas("CanvasTwo","Boosted",550,550);
   CanvasTwo->SetTickx();
-  CanvasTwo->SetTicky();
+  CanvasTwo->SetTicky();  
 
   gStyle->SetOptStat(0);
   TDirectory* BoostedDir = (TDirectory*) HistoFile->Get("Boosted");
@@ -115,18 +119,19 @@ void DrawCombinePlots()
   Boosted_Other->SetFillColor(OtherColor->GetNumber());
 
   THStack* BoostedStack = new THStack("BoostedStack","BoostedStack");
-  BoostedStack->Add(Boosted_Fakes,"HIST");
-  BoostedStack->Add(Boosted_TT,"HIST");
-  BoostedStack->Add(Boosted_ZMM,"HIST");
   BoostedStack->Add(Boosted_Other,"HIST");
+  BoostedStack->Add(Boosted_TT,"HIST");
+  BoostedStack->Add(Boosted_ZMM,"HIST");  
+  BoostedStack->Add(Boosted_Fakes,"HIST");
   BoostedStack->Add(Boosted_Embedded,"HIST");
 
   TH1F* Boosted_Errors = MakeStackErrors(BoostedStack);
   
-  TPad* Boosted_PlotPad = MakeRatioPlot(CanvasTwo,BoostedStack,Boosted_Data,"m_{vis}",0.7,1.3);
+  TPad* Boosted_PlotPad = MakeRatioPlot(CanvasTwo,BoostedStack,Boosted_Data,"m_{sv}",0.7,1.3);
   Boosted_PlotPad->SetTickx();
   Boosted_PlotPad->SetTicky();
   Boosted_PlotPad->SetGridx();
+  Boosted_PlotPad->SetLogy();
   
   BoostedStack->SetMaximum(max(BoostedStack->GetMaximum(),Boosted_Data->GetMaximum())*1.1);
   
@@ -151,7 +156,7 @@ void DrawCombinePlots()
   BoostedLegend->AddEntry(Boosted_Higgs_Upscale,"All Higgs (#times 30)","l");
   BoostedLegend->Draw();
 
-  numCategories = 5;
+  numCategories = 4;
   TH1F* BoostedGridDivision = new TH1F("BoostedGrid","BoostedGrid",
 				 Boosted_Higgs_Upscale->GetNbinsX(),
 				 Boosted_Higgs_Upscale->GetXaxis()->GetXmin(),
@@ -162,20 +167,20 @@ void DrawCombinePlots()
 
   latex.SetTextSize(0.017);
   latex.SetTextAlign(13);
-  latex.DrawLatex(2.0,4500.0,"0.0 #leq H_{p_{t}} #leq 30.0");
-  latex.DrawLatex(22.0,4500.0,"30.0 #leq H_{p_{t}} #leq 60.0");
-  latex.DrawLatex(42.0,4500.0,"60.0 #leq H_{p_{t}} #leq 100.0");
-  latex.DrawLatex(62.0,4500.0,"100.0 #leq H_{p_{t}} #leq 150.0");
-  //latex.DrawLatex(82.0,6000.0,"250.0 #leq H_{p_{t}} #leq 300.0");
-  latex.DrawLatex(102.0,3200.0,"150.0 #leq H_{p_{t}}");
+  latex.DrawLatex(2.0,20000.0,"0.0 #leq H_{p_{t}} #leq 100.0");
+  latex.DrawLatex(12.0,4000.0,"100.0 #leq H_{p_{t}} #leq 170.0");
+  latex.DrawLatex(22.0,4000.0,"170.0 #leq H_{p_{t}} #leq 300.0");
+  //latex.DrawLatex(62.0,4500.0,"100.0 #leq H_{p_{t}} #leq 150.0");  
+  latex.DrawLatex(32.0,3200.0,"300.0 #leq H_{p_{t}}");
 
   CanvasTwo->Draw();
+  CanvasTwo->SaveAs("PrefitChecks/Boosted.png");
   
   //VBF
   
   TCanvas* CanvasThree = new TCanvas("CanvasThree","VBF",550,550);
   CanvasThree->SetTickx();
-  CanvasThree->SetTicky();
+  CanvasThree->SetTicky();  
 
   gStyle->SetOptStat(0);
   TDirectory* VBFDir = (TDirectory*) HistoFile->Get("VBF");
@@ -191,19 +196,20 @@ void DrawCombinePlots()
   VBF_ZMM->SetFillColor(DYColor->GetNumber());
   VBF_Other->SetFillColor(OtherColor->GetNumber());
 
-  THStack* VBFStack = new THStack("VBFStack","VBFStack");
-  VBFStack->Add(VBF_Fakes,"HIST");
-  VBFStack->Add(VBF_TT,"HIST");
-  VBFStack->Add(VBF_ZMM,"HIST");
+  THStack* VBFStack = new THStack("VBFStack","VBFStack");  
   VBFStack->Add(VBF_Other,"HIST");
+  VBFStack->Add(VBF_TT,"HIST");
+  VBFStack->Add(VBF_ZMM,"HIST");  
+  VBFStack->Add(VBF_Fakes,"HIST");
   VBFStack->Add(VBF_Embedded,"HIST");
 
   TH1F* VBF_Errors = MakeStackErrors(VBFStack);
   
-  TPad* VBF_PlotPad = MakeRatioPlot(CanvasThree,VBFStack,VBF_Data,"m_{vis}",0.7,1.3);
+  TPad* VBF_PlotPad = MakeRatioPlot(CanvasThree,VBFStack,VBF_Data,"m_{sv}",0.7,1.3);
   VBF_PlotPad->SetTickx();
   VBF_PlotPad->SetTicky();
   VBF_PlotPad->SetGridx();
+  VBF_PlotPad->SetLogy();
   
   VBFStack->SetMaximum(max(VBFStack->GetMaximum(),VBF_Data->GetMaximum())*1.1);
   
@@ -239,12 +245,13 @@ void DrawCombinePlots()
 
   latex.SetTextSize(0.017);
   latex.SetTextAlign(13);
-  latex.DrawLatex(2.0,900.0,"0.0 #leq m_{jj} #leq 100.0");
-  latex.DrawLatex(22.0,900.0,"100.0 #leq m_{jj} #leq 200.0");
-  latex.DrawLatex(42.0,900.0,"200.0 #leq m_{jj} #leq 300.0");
+  latex.DrawLatex(2.0,1500.0,"300.0 #leq m_{jj} #leq 700.0");
+  latex.DrawLatex(12.0,310.0,"700.0 #leq m_{jj} #leq 1100.0");
+  latex.DrawLatex(22.0,310.0,"1100.0 #leq m_{jj} #leq 1500.0");
   //latex.DrawLatex(62.0,1800.0,"1100.0 #leq m_{jj} #leq 1500.0");
-  latex.DrawLatex(82.0,700.0,"300.0 #leq m_{jj}");
+  latex.DrawLatex(32.0,225.0,"1500.0 #leq m_{jj}");
 
   CanvasThree->Draw();
-  
+  CanvasThree->SaveAs("PrefitChecks/VBF.png");
+
 }
