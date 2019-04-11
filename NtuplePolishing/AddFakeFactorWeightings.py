@@ -332,27 +332,27 @@ def AddFakeFactorWeightings(args):
     ff_tt_dm0_njet1_stat_down = array('f',[0.])
 
     FakeFactorBranch = ReweightFile.mt_Selected.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')
+    if not args.DisableUncertainties:
+        ff_qcd_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_up',ff_qcd_syst_up,'ff_qcd_syst_up/F')
+        ff_qcd_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_down',ff_qcd_syst_down,'ff_qcd_syst_down/F')
+        ff_qcd_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_up',ff_qcd_dm0_njet0_stat_up,'ff_qcd_dm0_njet0_stat_up/F')
+        ff_qcd_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_down',ff_qcd_dm0_njet0_stat_down,'ff_qcd_dm0_njet0_stat_down/F')
+        ff_qcd_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_up',ff_qcd_dm0_njet1_stat_up,'ff_qcd_dm0_njet1_stat_up/F')
+        ff_qcd_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_down',ff_qcd_dm0_njet1_stat_down,'ff_qcd_dm0_njet1_stat_down/F')
 
-    ff_qcd_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_up',ff_qcd_syst_up,'ff_qcd_syst_up/F')
-    ff_qcd_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_down',ff_qcd_syst_down,'ff_qcd_syst_down/F')
-    ff_qcd_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_up',ff_qcd_dm0_njet0_stat_up,'ff_qcd_dm0_njet0_stat_up/F')
-    ff_qcd_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_down',ff_qcd_dm0_njet0_stat_down,'ff_qcd_dm0_njet0_stat_down/F')
-    ff_qcd_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_up',ff_qcd_dm0_njet1_stat_up,'ff_qcd_dm0_njet1_stat_up/F')
-    ff_qcd_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_down',ff_qcd_dm0_njet1_stat_down,'ff_qcd_dm0_njet1_stat_down/F')
+        ff_w_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_up',ff_w_syst_up,'ff_w_syst_up/F')
+        ff_w_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_down',ff_w_syst_down,'ff_w_syst_down/F')
+        ff_w_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_up',ff_w_dm0_njet0_stat_up,'ff_w_dm0_njet0_stat_up/F')
+        ff_w_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_down',ff_w_dm0_njet0_stat_down,'ff_w_dm0_njet0_stat_down/F')
+        ff_w_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_up',ff_w_dm0_njet1_stat_up,'ff_w_dm0_njet1_stat_up/F')
+        ff_w_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_down',ff_w_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
 
-    ff_w_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_up',ff_w_syst_up,'ff_w_syst_up/F')
-    ff_w_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_down',ff_w_syst_down,'ff_w_syst_down/F')
-    ff_w_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_up',ff_w_dm0_njet0_stat_up,'ff_w_dm0_njet0_stat_up/F')
-    ff_w_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_down',ff_w_dm0_njet0_stat_down,'ff_w_dm0_njet0_stat_down/F')
-    ff_w_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_up',ff_w_dm0_njet1_stat_up,'ff_w_dm0_njet1_stat_up/F')
-    ff_w_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_down',ff_w_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
-
-    ff_tt_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_up',ff_tt_syst_up,'ff_tt_syst_up/F')
-    ff_tt_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_down',ff_tt_syst_down,'ff_tt_syst_down/F')
-    ff_tt_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_up',ff_tt_dm0_njet0_stat_up,'ff_tt_dm0_njet0_stat_up/F')
-    ff_tt_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_down',ff_tt_dm0_njet0_stat_down,'ff_tt_dm0_njet0_stat_down/F')
-    ff_tt_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_up',ff_tt_dm0_njet1_stat_up,'ff_tt_dm0_njet1_stat_up/F')
-    ff_tt_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_down',ff_tt_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
+        ff_tt_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_up',ff_tt_syst_up,'ff_tt_syst_up/F')
+        ff_tt_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_down',ff_tt_syst_down,'ff_tt_syst_down/F')
+        ff_tt_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_up',ff_tt_dm0_njet0_stat_up,'ff_tt_dm0_njet0_stat_up/F')
+        ff_tt_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_down',ff_tt_dm0_njet0_stat_down,'ff_tt_dm0_njet0_stat_down/F')
+        ff_tt_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_up',ff_tt_dm0_njet1_stat_up,'ff_tt_dm0_njet1_stat_up/F')
+        ff_tt_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_down',ff_tt_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
     
 
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
@@ -414,25 +414,26 @@ def AddFakeFactorWeightings(args):
         ff_tt_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_down')
 
         FakeFactorBranch.Fill()
-        ff_qcd_syst_up_Branch.Fill()
-        ff_qcd_syst_down_Branch.Fill()
-        ff_qcd_dm0_njet0_stat_up_Branch.Fill()
-        ff_qcd_dm0_njet0_stat_down_Branch.Fill()
-        ff_qcd_dm0_njet1_stat_up_Branch.Fill()
-        ff_qcd_dm0_njet1_stat_down_Branch.Fill()
-        ff_w_syst_up_Branch.Fill()
-        ff_w_syst_down_Branch.Fill()
-        ff_w_dm0_njet0_stat_up_Branch.Fill()
-        ff_w_dm0_njet0_stat_down_Branch.Fill()
-        ff_w_dm0_njet1_stat_up_Branch.Fill()
-        ff_w_dm0_njet1_stat_down_Branch.Fill()
-        ff_tt_syst_up_Branch.Fill()
-        ff_tt_syst_down_Branch.Fill()
-        ff_tt_dm0_njet0_stat_up_Branch.Fill()
-        ff_tt_dm0_njet0_stat_down_Branch.Fill()
-        ff_tt_dm0_njet1_stat_up_Branch.Fill()
-        ff_tt_dm0_njet1_stat_down_Branch.Fill()
-    
+        if not args.DisableUncertainties:
+            ff_qcd_syst_up_Branch.Fill()
+            ff_qcd_syst_down_Branch.Fill()
+            ff_qcd_dm0_njet0_stat_up_Branch.Fill()
+            ff_qcd_dm0_njet0_stat_down_Branch.Fill()
+            ff_qcd_dm0_njet1_stat_up_Branch.Fill()
+            ff_qcd_dm0_njet1_stat_down_Branch.Fill()
+            ff_w_syst_up_Branch.Fill()
+            ff_w_syst_down_Branch.Fill()
+            ff_w_dm0_njet0_stat_up_Branch.Fill()
+            ff_w_dm0_njet0_stat_down_Branch.Fill()
+            ff_w_dm0_njet1_stat_up_Branch.Fill()
+            ff_w_dm0_njet1_stat_down_Branch.Fill()
+            ff_tt_syst_up_Branch.Fill()
+            ff_tt_syst_down_Branch.Fill()
+            ff_tt_dm0_njet0_stat_up_Branch.Fill()
+            ff_tt_dm0_njet0_stat_down_Branch.Fill()
+            ff_tt_dm0_njet1_stat_up_Branch.Fill()
+            ff_tt_dm0_njet1_stat_down_Branch.Fill()
+            
     ff.Delete()
     ff_file.Close()
 
@@ -440,12 +441,13 @@ def AddFakeFactorWeightings(args):
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
     ReweightFile.Close()
-    
+   
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate and attach fake factor weighting branches.")
     parser.add_argument('File',help="File add the factors to.")
     parser.add_argument('Directory',help="Directory to make fractions from.")
     parser.add_argument('Year',choices=["2016","2017","2018"],help="Running year")
+    parser.add_argument('--DisableUncertainties',help="Dont create the uncertainty branches",action="store_true")
     
     args = parser.parse_args()
     

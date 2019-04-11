@@ -19,7 +19,7 @@ def GenerateControlPlots(TheFile,args):
     TheTree = TreeFile.mt_Selected
 
     TauPtHisto = ROOT.TH1F(FullHistoName+"_TauPt",FullHistoName+"_TauPt",20,20.0,120.0)
-    TauEtaHisto = ROOT.TH1F(FullHistoName+"_TauEta",FullHistoName+"_TauEta",26, -2.3, 2.3)
+    TauEtaHisto = ROOT.TH1F(FullHistoName+"_TauEta",FullHistoName+"_TauEta",45, -2.5, 2.5)
     MuPtHisto  = ROOT.TH1F(FullHistoName+"_MuPt",FullHistoName+"_MuPt",20,20.0,120.0)
     MuEtaHisto = ROOT.TH1F(FullHistoName+"_MuEta",FullHistoName+"_MuEta",26,-2.3,2.3)
     METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",20,0.0,200.0)
@@ -31,7 +31,7 @@ def GenerateControlPlots(TheFile,args):
     mjjHisto = ROOT.TH1F(FullHistoName+"_mjj",FullHistoName+"_mjj",20,0.0,500.0)
 
     TauPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_TauPt",FullHistoName+"_genmatch_low_TauPt",20,20.0,120.0)
-    TauEtaHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_TauEta",FullHistoName+"_genmatch_low_TauEta",26, -2.3, 2.3)
+    TauEtaHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_TauEta",FullHistoName+"_genmatch_low_TauEta",45, -2.5, 2.5)
     MuPtHisto_DYll  = ROOT.TH1F(FullHistoName+"_genmatch_low_MuPt",FullHistoName+"_genmatch_low_MuPt",20,20.0,120.0)
     MuEtaHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MuEta",FullHistoName+"_genmatch_low_MuEta",26,-2.3,2.3)
     METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",20,0.0,200.0)
@@ -43,7 +43,7 @@ def GenerateControlPlots(TheFile,args):
     mjjHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mjj",FullHistoName+"_genmatch_low_mjj",20,0.0,500.0)
 
     TauPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_TauPt",FullHistoName+"_genmatch_tt_TauPt",20,20.0,120.0)
-    TauEtaHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_TauEta",FullHistoName+"_genmatch_tt_TauEta",26, -2.3, 2.3)
+    TauEtaHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_TauEta",FullHistoName+"_genmatch_tt_TauEta",45, -2.5, 2.5)
     MuPtHisto_DYtt  = ROOT.TH1F(FullHistoName+"_genmatch_tt_MuPt",FullHistoName+"_genmatch_tt_MuPt",20,20.0,120.0)
     MuEtaHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MuEta",FullHistoName+"_genmatch_tt_MuEta",26,-2.3,2.3)
     METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",20,0.0,200.0)
@@ -73,7 +73,15 @@ def GenerateControlPlots(TheFile,args):
         TheWeighting = TheTree.FinalWeighting
         if args.UseFakeFactor:
             TheWeighting = TheWeighting*TheTree.Event_Fake_Factor 
-
+        mjjVal = 0
+        if args.Year == "2016":
+            mjjVal = TheTree.mjj
+        elif args.Year == "2017":
+            mjjVal = TheTree.mjjWoNoisyJets
+        elif args.Year == "2018":
+            mjjVal = TheTree.mjj
+        
+        
         TauPtHisto.Fill(TauVector.Pt(),TheWeighting)
         TauEtaHisto.Fill(TauVector.Eta(),TheWeighting)
         MuPtHisto.Fill(MuVector.Pt(),TheWeighting)
@@ -83,7 +91,7 @@ def GenerateControlPlots(TheFile,args):
         mvisHisto.Fill((TauVector+MuVector).M(),TheWeighting)
         NJetsHisto.Fill(TheTree.njets,TheWeighting)
         HiggsPtHisto.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-        mjjHisto.Fill(TheTree.mjj,TheWeighting)
+        mjjHisto.Fill(mjjVal,TheWeighting)
         
         if args.Year == "2018":
             if (TheHisto == "DY" and TheTree.gen_match_2 <5):
@@ -96,7 +104,7 @@ def GenerateControlPlots(TheFile,args):
                 mvisHisto_DYll.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYll.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYll.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYll.Fill(TheTree.mjj,TheWeighting)
+                mjjHisto_DYll.Fill(mjjVal,TheWeighting)
 
             elif(TheHisto == "DY" and TheTree.gen_match_2 ==5):
                 TauPtHisto_DYtt.Fill(TauVector.Pt(),TheWeighting)
@@ -108,7 +116,7 @@ def GenerateControlPlots(TheFile,args):
                 mvisHisto_DYtt.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYtt.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYtt.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYtt.Fill(TheTree.mjj,TheWeighting)
+                mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
         elif args.Year == "2017":
             if (TheHisto == "DY" and TheTree.gen_match_2 <5):
                 TauPtHisto_DYll.Fill(TauVector.Pt(),TheWeighting)
@@ -120,7 +128,7 @@ def GenerateControlPlots(TheFile,args):
                 mvisHisto_DYll.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYll.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYll.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYll.Fill(TheTree.mjj,TheWeighting)
+                mjjHisto_DYll.Fill(mjjVal,TheWeighting)
 
             elif TheHisto == "Embedded":
                 TauPtHisto_DYtt.Fill(TauVector.Pt(),TheWeighting)
@@ -132,6 +140,7 @@ def GenerateControlPlots(TheFile,args):
                 mvisHisto_DYtt.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYtt.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYtt.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
+                mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
     
     OutFile = ROOT.TFile("TemporaryFiles/ControlRegion.root","UPDATE")
     TauPtHisto.Write()
