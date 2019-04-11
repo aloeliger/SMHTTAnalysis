@@ -60,7 +60,7 @@ def ApplyEESandMES(File,args):
     EES_E_UP_Branch = TheTree.Branch("EES_E_UP",EES_E_UP,"EES_E_UP/F")
     EES_E_DOWN_Branch = TheTree.Branch("EES_E_DOWN",EES_E_DOWN,"EES_E_DOWN/F")
     EES_Pt_UP_Branch = TheTree.Branch("EES_Pt_UP",EES_Pt_UP,"EES_Pt_UP/F")
-    EES_Pt_DOWN_Branch = TheTree.Branch("EES_Pt_DOWN".EES_Pt_DOWN,"EES_Pt_DOWN/F")
+    EES_Pt_DOWN_Branch = TheTree.Branch("EES_Pt_DOWN",EES_Pt_DOWN,"EES_Pt_DOWN/F")
 
     MES_E_UP_Branch = TheTree.Branch("MES_E_UP",MES_E_UP,"MES_E_UP/F")
     MES_E_DOWN_Branch = TheTree.Branch("MES_E_DOWN",MES_E_DOWN,"MES_E_DOWN/F")
@@ -77,7 +77,7 @@ def ApplyEESandMES(File,args):
     MES_MET_DOWN_Branch = TheTree.Branch("MES_MET_DOWN",MES_MET_DOWN,"MES_MET_DOWN/F")
     MES_METPhi_DOWN_Branch = TheTree.Branch("MES_METPhi_DOWN",MES_METPhi_DOWN,"MES_METPhi_DOWN/F")
 
-    for i in tqdm(range(TheTree,GetEntries())):
+    for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
         TauVector = ROOT.TLorentzVector()
         TauVector.SetPtEtaPhiM(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,TheTree.m_2)
@@ -122,7 +122,7 @@ def ApplyEESandMES(File,args):
                 #Do not correct anything to do with the MES
                 MES_TauVector = TauVector
                 MES_TauVector_UP = TauVector
-                MES_TauVector_DOWN = TauVecot
+                MES_TauVector_DOWN = TauVector
                 MES_METVector = METVector
                 MES_METVector_UP = METVector
                 MES_METVector_DOWN = METVector
@@ -136,7 +136,7 @@ def ApplyEESandMES(File,args):
                 EES_METVector_DOWN = GetCorrectedMetVector(TauVector, EES_TauVector_DOWN, METVector)
                 
             #MES
-            elif(TheTrre.gen_match_2 == 2 or TheTree.gen_match_2 == 4):
+            elif(TheTree.gen_match_2 == 2 or TheTree.gen_match_2 == 4):
                 if(TheTree.l2_decayMode == 0):
                     if args.NoEnergyCorrect:
                         EnergyCorrectFactor = 0.0
@@ -249,7 +249,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create the muon to tau and electron to tau fake energy scale branches")
     parser.add_argument('year',choices=["2016","2017","2018"])
     parser.add_argument('Files',nargs="+",help="List of the files to run the tool on")
-    parser.add_argument('--NoEnergyCorrect',help="Only store uncertainties, do not save corrected energy branches for the tau")
+    parser.add_argument('--NoEnergyCorrect',help="Only store uncertainties, do not save corrected energy branches for the tau",action="store_true")
 
     args = parser.parse_args()
 

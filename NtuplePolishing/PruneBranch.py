@@ -18,10 +18,11 @@ def PruneBranch(TheFile,args):
             obj = PruneFile.Get(Thing.GetName())
             NewFile.cd()
             if type(obj) == type(ROOT.TTree()):
-                try:
-                    obj.GetBranch(args.Branch).SetStatus(0)
-                except:
-                    print("Didn't find the branch: "+args.Branch+" in: "+obj.GetName())
+                for Branch in args.Branches:
+                    try:                    
+                        obj.GetBranch(Branch).SetStatus(0)
+                    except:
+                        print("Didn't find the branch: "+Branch+" in: "+obj.GetName())
                 obj = obj.CloneTree(-1,"fast")
             obj.Write()
             AlreadyGrabbedItems.append(Thing.GetName())
@@ -31,12 +32,12 @@ def PruneBranch(TheFile,args):
 
 if __name__== "__main__":
     parser = argparse.ArgumentParser(description="Create identical trees without the specified branches")
-    parser.add_argument('Branch',help = "Name of the branch to be pruned from the files")
-    parser.add_argument('Files',nargs="+",help="List of files to remove the selected branch from")
+    parser.add_argument('--Branches',nargs="+",help = "Name of the branch to be pruned from the files",required=True)
+    parser.add_argument('--Files',nargs="+",help="List of files to remove the selected branch from",required=True)
     parser.add_argument('--TauIDNtuple',help="Grab the trees as if it were a Tau ID Setup",action="store_true")
     
     args = parser.parse_args()
     
     for File in args.Files:
-        print("Pruning "+args.Branch+" from "+File)
+        print("Pruning "+str(args.Branches)+" from "+File)
         PruneBranch(File,args)

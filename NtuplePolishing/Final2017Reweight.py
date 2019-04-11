@@ -7,6 +7,7 @@ import argparse
 import AddCrossSectionWeightings
 import AddZPTReweighting
 import AddPileupWeightings
+import AddKITMuSFs
 
 def AddFinalWeights(FileToRun,args):
     print("")
@@ -33,6 +34,11 @@ def AddFinalWeights(FileToRun,args):
         except:
             print("Failed to find pileup weights. Adding them...")
             AddPileupWeightings.AddPileupWeightings(FileToRun,args)
+        try:
+            CheckFile.mt_Selected.MuSF
+        except:
+            print("Failed to find muon scale factors. Adding them...")
+            AddKITMuSFs.AddKITMuSFs(FileToRun,args)
     
     #we actually need to reload the file and the tree now, because it may have changed
     CheckFile.Close()
@@ -67,6 +73,8 @@ def AddFinalWeights(FileToRun,args):
         #if not a data file, pileup reweight it
         if( not args.DisablePileupWeighting and FileName != "Data.root" and FileName != "Embedded.root"):
             Weight = Weight * ReweightFile.mt_Selected.PileupWeight
+        if( not args.DisableMuSFs and FileName != "Data.root" and FileName != "Embedded.root"):
+            Weight = Weight * ReweightFile.mt_Selected.MuSF
 
         #Tau ID weighting
         if FileName != "Embedded.root" and FileName != "Data.root":
@@ -88,7 +96,7 @@ def AddFinalWeights(FileToRun,args):
                 elif(abs(TauVector.Eta())<1.7):
                     Weight = Weight*0.93      
                 elif(abs(TauVector.Eta())<2.3):
-                    Weight = Weight*1.61
+                    Weight = Weight*1.61                
 
         Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
                  and ReweightFile.mt_Selected.filterMu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)
@@ -183,6 +191,7 @@ if __name__=="__main__":
     parser.add_argument('--year',choices=["2016","2017","2018"],help="Change the year of the corrections applied",nargs='?',default = "2017")
     parser.add_argument('--DisablePileupWeighting',help="Disable the pileup weighting",action="store_true")
     parser.add_argument('--UseInclusiveDY',help="Option for using non DY#.root files in cross section weighting",action="store_true")
+    parser.add_argument('--DisableMuSFs',help="Disable the KIT style muon scale factors",action="store_true")
     
     
     args = parser.parse_args()

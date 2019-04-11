@@ -12,7 +12,7 @@ def GenerateTheWeights(File,args):
     elif args.year == "2017":
         TheDataFile = ROOT.TFile("Weightings/2017DataPileupHistogram.root")
     elif args.year == "2018":
-        raise RuntimeError("2018 not implemented yet. Implement me!")
+        TheDataFile = ROOT.TFile("Weightings/2018DataPileupHistogram.root")
     TheFile = ROOT.TFile(File)
     assert(TheDataFile.pileup),"Pileup Histogram for data not provided! Can't be generated!"
     try:
@@ -45,11 +45,8 @@ def AddPileupWeightings(File,args):
     PileupBranch = TheTree.Branch("PileupWeight",PileupWeight,"PileupWeight/F")
 
     for i in tqdm(range(TheTree.GetEntries())):
-        TheTree.GetEntry(i)
-        #print("npu: "+str(TheTree.npu))
-        #print("The Weight: "+str(WeightHisto.GetBinContent(WeightHisto.FindBin(TheTree.npu))))
-        PileupWeight[0] = WeightHisto.GetBinContent(WeightHisto.FindBin(TheTree.npu))
-        #print(PileupWeight[0])
+        TheTree.GetEntry(i)        
+        PileupWeight[0] = WeightHisto.GetBinContent(WeightHisto.FindBin(TheTree.npu))        
         PileupBranch.Fill()
     TheTree.Write('',ROOT.TObject.kOverwrite)
     TheFile.Write()
