@@ -185,6 +185,8 @@ def AddKITMuSFs(File,args):
         elif args.year=="2018":
             if(MuVector.Pt() > 25.0 and TheTree.passMu24):
                 TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+            elif (MuVector.Pt() > 21.0 and MuVector.Pt() < 25.0 and (TheTree.passMu20Tau27 or TheTree.passMu20HPSTau27)):
+                TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
             else:
                 print("WARNING! Something fell through our trigger definitions!")
                 TriggerSF = 1
