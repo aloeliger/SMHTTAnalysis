@@ -49,14 +49,14 @@ def MakeFractions(args):
         EmbeddedFile = ROOT.TFile(args.Directory+"Embedded.root")
         EmbeddedTree = EmbeddedFile.mt_Selected
     
-        ST_t_antitopFile = ROOT.TFile(args.Directory+"ST_t_antitop.root")
-        ST_t_antitopTree = ST_t_antitopFile.mt_Selected
+    ST_t_antitopFile = ROOT.TFile(args.Directory+"ST_t_antitop.root")
+    ST_t_antitopTree = ST_t_antitopFile.mt_Selected
 
-        ST_t_topFile = ROOT.TFile(args.Directory+"ST_t_top.root")
-        ST_t_topTree = ST_t_topFile.mt_Selected
+    ST_t_topFile = ROOT.TFile(args.Directory+"ST_t_top.root")
+    ST_t_topTree = ST_t_topFile.mt_Selected
 
-        ST_tW_antitopFile = ROOT.TFile(args.Directory+"ST_tW_antitop.root")
-        ST_tW_antitopTree = ST_tW_antitopFile.mt_Selected
+    ST_tW_antitopFile = ROOT.TFile(args.Directory+"ST_tW_antitop.root")
+    ST_tW_antitopTree = ST_tW_antitopFile.mt_Selected
 
     ST_tW_topFile = ROOT.TFile(args.Directory+"ST_tW_top.root")
     ST_tW_topTree = ST_tW_topFile.mt_Selected
@@ -139,41 +139,39 @@ def MakeFractions(args):
             TauVector.SetPtEtaPhiM(EmbeddedTree.pt_2,EmbeddedTree.eta_2,EmbeddedTree.phi_2,EmbeddedTree.m_2)
             RealFracHisto.Fill((TauVector+MuVector).M())
      
-    #St->VVT and VVL and VVJ
-    #2018: only have ST_tW_top at the moment
-    if(args.Year == "2017"):
-        for i in tqdm(range(ST_t_antitopTree.GetEntries())):
-            ST_t_antitopTree.GetEntry(i)
-            MuVector = ROOT.TLorentzVector()
-            TauVector = ROOT.TLorentzVector()
-            MuVector.SetPtEtaPhiM(ST_t_antitopTree.pt_1,ST_t_antitopTree.eta_1,ST_t_antitopTree.phi_1,ST_t_antitopTree.m_1)
-            TauVector.SetPtEtaPhiM(ST_t_antitopTree.pt_2,ST_t_antitopTree.eta_2,ST_t_antitopTree.phi_2,ST_t_antitopTree.m_2)
-            if ST_t_antitopTree.gen_match_2 <= 5:
-                RealFracHisto.Fill((TauVector+MuVector).M(),ST_t_antitopTree.FinalWeighting)
-            elif ST_t_antitopTree.gen_match_2 == 6:
-                WFracHisto.Fill((TauVector+MuVector).M(),ST_t_antitopTree.FinalWeighting)
+    #St->VVT and VVL and VVJ    
+    for i in tqdm(range(ST_t_antitopTree.GetEntries())):
+        ST_t_antitopTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(ST_t_antitopTree.pt_1,ST_t_antitopTree.eta_1,ST_t_antitopTree.phi_1,ST_t_antitopTree.m_1)
+        TauVector.SetPtEtaPhiM(ST_t_antitopTree.pt_2,ST_t_antitopTree.eta_2,ST_t_antitopTree.phi_2,ST_t_antitopTree.m_2)
+        if ST_t_antitopTree.gen_match_2 <= 5:
+            RealFracHisto.Fill((TauVector+MuVector).M(),ST_t_antitopTree.FinalWeighting)
+        elif ST_t_antitopTree.gen_match_2 == 6:
+            WFracHisto.Fill((TauVector+MuVector).M(),ST_t_antitopTree.FinalWeighting)
 
-        for i in tqdm(range(ST_t_topTree.GetEntries())):
-            ST_t_topTree.GetEntry(i)
-            MuVector = ROOT.TLorentzVector()
-            TauVector = ROOT.TLorentzVector()
-            MuVector.SetPtEtaPhiM(ST_t_topTree.pt_1,ST_t_topTree.eta_1,ST_t_topTree.phi_1,ST_t_topTree.m_1)
-            TauVector.SetPtEtaPhiM(ST_t_topTree.pt_2,ST_t_topTree.eta_2,ST_t_topTree.phi_2,ST_t_topTree.m_2)
-            if ST_t_topTree.gen_match_2 <= 5:
-                RealFracHisto.Fill((TauVector+MuVector).M(),ST_t_topTree.FinalWeighting)
-            if ST_t_topTree.gen_match_2 == 6:
-                WFracHisto.Fill((TauVector+MuVector).M(),ST_t_topTree.FinalWeighting)
+    for i in tqdm(range(ST_t_topTree.GetEntries())):
+        ST_t_topTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(ST_t_topTree.pt_1,ST_t_topTree.eta_1,ST_t_topTree.phi_1,ST_t_topTree.m_1)
+        TauVector.SetPtEtaPhiM(ST_t_topTree.pt_2,ST_t_topTree.eta_2,ST_t_topTree.phi_2,ST_t_topTree.m_2)
+        if ST_t_topTree.gen_match_2 <= 5:
+            RealFracHisto.Fill((TauVector+MuVector).M(),ST_t_topTree.FinalWeighting)
+        if ST_t_topTree.gen_match_2 == 6:
+            WFracHisto.Fill((TauVector+MuVector).M(),ST_t_topTree.FinalWeighting)
             
-        for i in tqdm(range(ST_tW_antitopTree.GetEntries())):
-            ST_tW_antitopTree.GetEntry(i)
-            MuVector = ROOT.TLorentzVector()
-            TauVector = ROOT.TLorentzVector()
-            MuVector.SetPtEtaPhiM(ST_tW_antitopTree.pt_1,ST_tW_antitopTree.eta_1,ST_tW_antitopTree.phi_1,ST_tW_antitopTree.m_1)
-            TauVector.SetPtEtaPhiM(ST_tW_antitopTree.pt_2,ST_tW_antitopTree.eta_2,ST_tW_antitopTree.phi_2,ST_tW_antitopTree.m_2)
-            if ST_tW_antitopTree.gen_match_2 <= 5:
-                RealFracHisto.Fill((TauVector+MuVector).M(),ST_tW_antitopTree.FinalWeighting)
-            if ST_tW_antitopTree.gen_match_2 == 6:
-                WFracHisto.Fill((TauVector+MuVector).M(),ST_tW_antitopTree.FinalWeighting)
+    for i in tqdm(range(ST_tW_antitopTree.GetEntries())):
+        ST_tW_antitopTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(ST_tW_antitopTree.pt_1,ST_tW_antitopTree.eta_1,ST_tW_antitopTree.phi_1,ST_tW_antitopTree.m_1)
+        TauVector.SetPtEtaPhiM(ST_tW_antitopTree.pt_2,ST_tW_antitopTree.eta_2,ST_tW_antitopTree.phi_2,ST_tW_antitopTree.m_2)
+        if ST_tW_antitopTree.gen_match_2 <= 5:
+            RealFracHisto.Fill((TauVector+MuVector).M(),ST_tW_antitopTree.FinalWeighting)
+        if ST_tW_antitopTree.gen_match_2 == 6:
+            WFracHisto.Fill((TauVector+MuVector).M(),ST_tW_antitopTree.FinalWeighting)
 
     for i in tqdm(range(ST_tW_topTree.GetEntries())):
         ST_tW_topTree.GetEntry(i)
