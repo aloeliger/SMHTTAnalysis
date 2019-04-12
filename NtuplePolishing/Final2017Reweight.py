@@ -82,8 +82,7 @@ def AddFinalWeights(FileToRun,args):
         elif FileName == "Embedded.root":
             Weight = Weight * 0.97
 
-        #I don't know what the heck this correction is:
-        #but Cecile has it
+        #mu to tau fake SFs
         if not args.DisableEtaWeighting:
             if(ReweightFile.mt_Selected.gen_match_2 == 2
                or ReweightFile.mt_Selected.gen_match_2 == 4):
@@ -160,9 +159,9 @@ def AddFinalWeights(FileToRun,args):
         
         #ZPT Weighting
         if not args.DisableZPTReweighting:
-            Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
             Weight_ZPT_DOWN = Weight * ReweightFile.mt_Selected.ZPTWeighting_DOWN
-            Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP       
+            Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP
+            Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
                     
         #ALWAYS
         if FileName == "Data.root":
