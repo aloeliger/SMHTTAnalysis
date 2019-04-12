@@ -6,6 +6,8 @@ import argparse
 import AddCrossSectionWeightings
 import AddPileupWeightings
 import AddKITMuSFs
+import AddZPTReweighting
+import math
 
 def AddFinalWeights(FileToRun, args):
     print("")
@@ -20,6 +22,11 @@ def AddFinalWeights(FileToRun, args):
     except:
         print("Failed to find cross section weightings. Adding them...")
         AddCrossSectionWeightings.AddCrossSectionWeightings(FileToRun,args)
+    try:
+        CheckFile.mt_Selected.ZPTWeighting
+    except:
+        print("Failed to find ZPT weights. Adding them...")
+        AddZPTReweighting.ApplyZPTReweighting(FileToRun,args)
     if FileName != "Data.root" and FileName != "Embedded.root":
         try:
             CheckFile.mt_Selected.PileupWeight
@@ -35,7 +42,14 @@ def AddFinalWeights(FileToRun, args):
 
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
     FinalWeighting = array('f',[0])
+    FinalWeighting_ZPT_DOWN = array('f',[0])
+    FinalWeighting_ZPT_UP = array('f',[0])
+    
     TheBranch = ReweightFile.mt_Selected.Branch('FinalWeighting',FinalWeighting,'FinalWeighitng/F')
+    TheBranch_ZPT_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_DOWN',FinalWeighting_ZPT_DOWN,'FinalWeighitng_ZPT_DOWN/F')
+    TheBranch_ZPT_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_UP',FinalWeighting_ZPT_UP,'FinalWeighting_ZPT_UP/F')
+
+    print("Adding the final weighting...")
     
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
@@ -56,7 +70,7 @@ def AddFinalWeights(FileToRun, args):
             Weight = Weight * ReweightFile.mt_Selected.MuSF
 
         if(FileName != "Data.root" and FileName != "Embedded.root"):
-            Weight = Weight * 0.89 #0.89 tight tau ID
+            Weight = Weight * 0.90 #0.90 tight tau ID
 
         if not args.DisableEtaWeighting:
             if(ReweightFile.mt_Selected.gen_match_2 == 2
@@ -71,12 +85,37 @@ def AddFinalWeights(FileToRun, args):
                      Weight = Weight*1.0      
                  elif(abs(TauVector.Eta())<2.3):
                      Weight = Weight*2.3
+                     
+        #top pt reweighting
+        if not args.DisableTopReweighting:
+            TopFactor = 1.0
+            if(FileName == "TTToHadronic.root"
+               or FileName == "TTToSemiLeptonic.root"
+               or FileName == "TTTo2L2Nu.root"):
+                pttop1 = ReweightFile.mt_Selected.pt_top1
+                if pttop1 > 400:
+                    pttop1 = 400
+                pttop2 = ReweightFile.mt_Selected.pt_top2
+                if pttop2 > 400:
+                    pttop2 = 400
+                topfactor = math.sqrt(math.exp(0.0615-0.0005*pttop1)*math.exp(0.0615-0.0005*pttop2))
+                Weight = Weight * TopFactor
+        
+        if not args.DisableZPTWeighting:
+            Weight_ZPT_DOWN = Weight * ReweightFile.mt_Selected.ZPTWeighting_DOWN
+            Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP
+            Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
 
         #ALWAYS
         if FileName == "Data.root":
             Weight = 1.0
-        FinalWeighting[0] = Weight
+        FinalWeighting[0] = Weight        
+        FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
+        FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP
+        
         TheBranch.Fill()
+        TheBranch_ZPT_DOWN.Fill()
+        TheBranch_ZPT_UP.Fill()
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
@@ -90,6 +129,8 @@ if __name__=="__main__":
     parser.add_argument('--UseInclusiveDY',help="Using only the inclusive DY file",action="store_true")
     parser.add_argument('--DisableMuSFs',help="Disable KIT style mu SFs.",action="store_true")
     parser.add_argument('--DisableEtaWeighting',help="Disable the eta based mu weights.",action="store_true")
+    parser.add_argument('--DisableZPTWeighting',help="Disable the ZPT reweighting",action="store_true")
+    parser.add_argument('--DisableTopReweighting',help="Disable the top pt based reweighting",action="store_true")
     
     args=parser.parse_args()
 
