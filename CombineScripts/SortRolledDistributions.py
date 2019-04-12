@@ -400,13 +400,13 @@ ZeroJet_ZToLeptons_Boson_Reso_met_DOWN_Rolled = TheFile.mt_0jet.Get("DY_0jet_Res
 ZeroJet_ZToLeptons_Boson_Scale_met_UP_Rolled = TheFile.mt_0jet.Get("DY_0jet_Results_Rolled_ResponseUp")
 ZeroJet_ZToLeptons_Boson_Scale_met_DOWN_Rolled = TheFile.mt_0jet.Get("DY_0jet_Results_Rolled_ResponseDown")
 #TTBar Contamination
-ZeroJet_ZToTauTau_TTContamination_UP_Rolled = ZeroJet_ZTauTau_Rolled.Clone()
-ZeroJet_ZToTauTau_TTContamination_DOWN_Rolled = ZeroJet_ZTauTau_Rolled.Clone()
+ZeroJet_ZTauTau_TTContamination_UP_Rolled = ZeroJet_ZTauTau_Rolled.Clone()
+ZeroJet_ZTauTau_TTContamination_DOWN_Rolled = ZeroJet_ZTauTau_Rolled.Clone()
 ZeroJet_TT_TTContamination = TheFile.mt_0jet.Get("TTToHadronic_0jet_Results_Rolled_TTBarContamination")
 ZeroJet_TT_TTContamination.Add(TheFile.mt_0jet.Get("TTTo2L2Nu_0jet_Results_Rolled_TTBarContamination"))
 ZeroJet_TT_TTContamination.Add(TheFile.mt_0jet.Get("TTToSemiLeptonic_0jet_Results_Rolled_TTBarContamination"))
-ZeroJet_ZToTauTau_TTContamination_UP_Rolled.Add(ZeroJet_TT_TTContamination)
-ZeroJet_ZToTauTau_TTContamination_DOWN_Rolled.Add(ZeroJet_TT_TTContamination,-1.0)
+ZeroJet_ZTauTau_TTContamination_UP_Rolled.Add(ZeroJet_TT_TTContamination)
+ZeroJet_ZTauTau_TTContamination_DOWN_Rolled.Add(ZeroJet_TT_TTContamination,-1.0)
 
 #Boosted
 Boosted_Data_Rolled = TheFile.mt_boosted.Get("Data_boosted_Results_Rolled")
@@ -796,13 +796,13 @@ Boosted_ZToLeptons_Boson_Reso_met_DOWN_Rolled = TheFile.mt_boosted.Get("DY_boost
 Boosted_ZToLeptons_Boson_Scale_met_UP_Rolled = TheFile.mt_boosted.Get("DY_boosted_Results_Rolled_ResponseUp")
 Boosted_ZToLeptons_Boson_Scale_met_DOWN_Rolled = TheFile.mt_boosted.Get("DY_boosted_Results_Rolled_ResponseDown")
 #TTBar Contamination
-Boosted_ZToTauTau_TTContamination_UP_Rolled = Boosted_ZTauTau_Rolled.Clone()
-Boosted_ZToTauTau_TTContamination_DOWN_Rolled = Boosted_ZTauTau_Rolled.Clone()
+Boosted_ZTauTau_TTContamination_UP_Rolled = Boosted_ZTauTau_Rolled.Clone()
+Boosted_ZTauTau_TTContamination_DOWN_Rolled = Boosted_ZTauTau_Rolled.Clone()
 Boosted_TT_TTContamination = TheFile.mt_boosted.Get("TTToHadronic_boosted_Results_Rolled_TTBarContamination")
 Boosted_TT_TTContamination.Add(TheFile.mt_boosted.Get("TTTo2L2Nu_boosted_Results_Rolled_TTBarContamination"))
 Boosted_TT_TTContamination.Add(TheFile.mt_boosted.Get("TTToSemiLeptonic_boosted_Results_Rolled_TTBarContamination"))
-Boosted_ZToTauTau_TTContamination_UP_Rolled.Add(Boosted_TT_TTContamination)
-Boosted_ZToTauTau_TTContamination_DOWN_Rolled.Add(Boosted_TT_TTContamination,-1.0)
+Boosted_ZTauTau_TTContamination_UP_Rolled.Add(Boosted_TT_TTContamination)
+Boosted_ZTauTau_TTContamination_DOWN_Rolled.Add(Boosted_TT_TTContamination,-1.0)
 
 #VBF
 VBF_Data_Rolled = TheFile.mt_vbf.Get("Data_vbf_Results_Rolled")
@@ -1193,13 +1193,13 @@ VBF_ZToLeptons_Boson_Reso_met_DOWN_Rolled = TheFile.mt_vbf.Get("DY_vbf_Results_R
 VBF_ZToLeptons_Boson_Scale_met_UP_Rolled = TheFile.mt_vbf.Get("DY_vbf_Results_Rolled_ResponseUp")
 VBF_ZToLeptons_Boson_Scale_met_DOWN_Rolled = TheFile.mt_vbf.Get("DY_vbf_Results_Rolled_ResponseDown")
 #TTBar Contamination
-VBF_ZToTauTau_TTContamination_UP_Rolled = VBF_ZTauTau_Rolled.Clone()
-VBF_ZToTauTau_TTContamination_DOWN_Rolled = VBF_ZTauTau_Rolled.Clone()
+VBF_ZTauTau_TTContamination_UP_Rolled = VBF_ZTauTau_Rolled.Clone()
+VBF_ZTauTau_TTContamination_DOWN_Rolled = VBF_ZTauTau_Rolled.Clone()
 VBF_TT_TTContamination = TheFile.mt_vbf.Get("TTToHadronic_vbf_Results_Rolled_TTBarContamination")
 VBF_TT_TTContamination.Add(TheFile.mt_vbf.Get("TTTo2L2Nu_vbf_Results_Rolled_TTBarContamination"))
 VBF_TT_TTContamination.Add(TheFile.mt_vbf.Get("TTToSemiLeptonic_vbf_Results_Rolled_TTBarContamination"))
-VBF_ZToTauTau_TTContamination_UP_Rolled.Add(VBF_TT_TTContamination)
-VBF_ZToTauTau_TTContamination_DOWN_Rolled.Add(VBF_TT_TTContamination,-1.0)
+VBF_ZTauTau_TTContamination_UP_Rolled.Add(VBF_TT_TTContamination)
+VBF_ZTauTau_TTContamination_DOWN_Rolled.Add(VBF_TT_TTContamination,-1.0)
 
 #Create unrolled distributions
 ZeroJet_Data = UnrollDistributions.Unroll(ZeroJet_Data_Rolled)
@@ -1398,8 +1398,8 @@ ZeroJet_ZToLeptons_Boson_Reso_met_DOWN=UnrollDistributions.Unroll(ZeroJet_ZToLep
 ZeroJet_ZToLeptons_Boson_Scale_met_UP=UnrollDistributions.Unroll(ZeroJet_ZToLeptons_Boson_Scale_met_UP_Rolled)
 ZeroJet_ZToLeptons_Boson_Scale_met_DOWN=UnrollDistributions.Unroll(ZeroJet_ZToLeptons_Boson_Scale_met_DOWN_Rolled)
 #unroll the ttbar contamination
-ZeroJet_ZToTauTau_TTContamination_UP = UnrollDistributions.Unroll(ZeroJet_ZToTauTau_TTContamination_UP_Rolled)
-ZeroJet_ZToTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(ZeroJet_ZToTauTau_TTContamination_DOWN_Rolled)
+ZeroJet_ZTauTau_TTContamination_UP = UnrollDistributions.Unroll(ZeroJet_ZTauTau_TTContamination_UP_Rolled)
+ZeroJet_ZTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(ZeroJet_ZTauTau_TTContamination_DOWN_Rolled)
 
 ZeroJet_Higgs_Upscale = ZeroJet_ggH_htt.Clone()
 ZeroJet_Higgs_Upscale.Add(ZeroJet_qqH_htt)
@@ -1437,8 +1437,8 @@ ZeroJet_ZTauTau_TES_DM1_UP.SetNameTitle("embedded_CMS_scale_emb_t_1prong1pizeroU
 ZeroJet_ZTauTau_TES_DM1_DOWN.SetNameTitle("embedded_CMS_scale_emb_t_1prong1pizeroDown","embedded_CMS_scale_emb_t_1prong1pizeroDown")
 ZeroJet_ZTauTau_TES_DM10_UP.SetNameTitle("embedded_CMS_scale_emb_t_3prongUp","embedded_CMS_scale_emb_t_3prongUp")
 ZeroJet_ZTauTau_TES_DM10_DOWN.SetNameTitle("embedded_CMS_scale_emb_t_3prongDown","embedded_CMS_scale_emb_t_3prongDown")
-ZeroJet_ZToTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
-ZeroJet_ZToTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
+ZeroJet_ZTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
+ZeroJet_ZTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
 
 ZeroJet_ZToLeptons.SetNameTitle("ZL","ZL")
 ZeroJet_ZToLeptons_TES_DM0_UP.SetNameTitle("ZL_CMS_scale_t_1prongUp","ZL_CMS_scale_t_1prongUp")
@@ -1791,8 +1791,8 @@ Boosted_ZToLeptons_Boson_Reso_met_DOWN=UnrollDistributions.Unroll(Boosted_ZToLep
 Boosted_ZToLeptons_Boson_Scale_met_UP=UnrollDistributions.Unroll(Boosted_ZToLeptons_Boson_Scale_met_UP_Rolled)
 Boosted_ZToLeptons_Boson_Scale_met_DOWN=UnrollDistributions.Unroll(Boosted_ZToLeptons_Boson_Scale_met_DOWN_Rolled)
 #unroll the ttbar contamination
-Boosted_ZToTauTau_TTContamination_UP = UnrollDistributions.Unroll(Boosted_ZToTauTau_TTContamination_UP_Rolled)
-Boosted_ZToTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(Boosted_ZToTauTau_TTContamination_DOWN_Rolled)
+Boosted_ZTauTau_TTContamination_UP = UnrollDistributions.Unroll(Boosted_ZTauTau_TTContamination_UP_Rolled)
+Boosted_ZTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(Boosted_ZTauTau_TTContamination_DOWN_Rolled)
 
 Boosted_Higgs_Upscale = Boosted_ggH_htt.Clone()
 Boosted_Higgs_Upscale.Add(Boosted_qqH_htt)
@@ -1830,8 +1830,8 @@ Boosted_ZTauTau_TES_DM1_UP.SetNameTitle("embedded_CMS_scale_emb_t_1prong1pizeroU
 Boosted_ZTauTau_TES_DM1_DOWN.SetNameTitle("embedded_CMS_scale_emb_t_1prong1pizeroDown","embedded_CMS_scale_emb_t_1prong1pizeroDown")
 Boosted_ZTauTau_TES_DM10_UP.SetNameTitle("embedded_CMS_scale_emb_t_3prongUp","embedded_CMS_scale_emb_t_3prongUp")
 Boosted_ZTauTau_TES_DM10_DOWN.SetNameTitle("embedded_CMS_scale_emb_t_3prongDown","embedded_CMS_scale_emb_t_3prongDown")
-Boosted_ZToTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
-Boosted_ZToTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
+Boosted_ZTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
+Boosted_ZTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
 
 Boosted_ZToLeptons.SetNameTitle("ZL","ZL")
 Boosted_ZToLeptons_TES_DM0_UP.SetNameTitle("ZL_CMS_scale_t_1prongUp","ZL_CMS_scale_t_1prongUp")
@@ -2183,8 +2183,8 @@ VBF_ZToLeptons_Boson_Reso_met_DOWN=UnrollDistributions.Unroll(VBF_ZToLeptons_Bos
 VBF_ZToLeptons_Boson_Scale_met_UP=UnrollDistributions.Unroll(VBF_ZToLeptons_Boson_Scale_met_UP_Rolled)
 VBF_ZToLeptons_Boson_Scale_met_DOWN=UnrollDistributions.Unroll(VBF_ZToLeptons_Boson_Scale_met_DOWN_Rolled)
 #unroll the ttbar contamination
-VBF_ZToTauTau_TTContamination_UP= UnrollDistributions.Unroll(VBF_ZToTauTau_TTContamination_UP_Rolled)
-VBF_ZToTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(VBF_ZToTauTau_TTContamination_DOWN_Rolled)
+VBF_ZTauTau_TTContamination_UP= UnrollDistributions.Unroll(VBF_ZTauTau_TTContamination_UP_Rolled)
+VBF_ZTauTau_TTContamination_DOWN = UnrollDistributions.Unroll(VBF_ZTauTau_TTContamination_DOWN_Rolled)
 
 VBF_Higgs_Upscale = VBF_ggH_htt.Clone()
 VBF_Higgs_Upscale.Add(VBF_qqH_htt)
@@ -2250,8 +2250,8 @@ VBF_ZToLeptons_Boson_Reso_met_UP.SetNameTitle("ZL_CMS_htt_boson_reso_metUp","ZL_
 VBF_ZToLeptons_Boson_Reso_met_DOWN.SetNameTitle("ZL_CMS_htt_boson_reso_metDown","ZL_CMS_htt_boson_reso_metDown")
 VBF_ZToLeptons_Boson_Scale_met_UP.SetNameTitle("ZL_CMS_htt_boson_scale_metUp","ZL_CMS_htt_boson_scale_metUp")
 VBF_ZToLeptons_Boson_Scale_met_DOWN.SetNameTitle("ZL_CMS_htt_boson_scale_metDown","ZL_CMS_htt_boson_scale_metDown")
-VBF_ZToTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
-VBF_ZToTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
+VBF_ZTauTau_TTContamination_UP.SetNameTitle("embedded_CMS_htt_emb_ttbarUp","embedded_CMS_htt_emb_ttbarUp")
+VBF_ZTauTau_TTContamination_DOWN.SetNameTitle("embedded_CMS_htt_emb_ttbarDown","embedded_CMS_htt_emb_ttbarDown")
 
 VBF_TT.SetNameTitle("TTL","TTL")
 VBF_TT_TES_DM0_UP.SetNameTitle("TTL_CMS_scale_t_1prongUp","TTL_CMS_scale_t_1prongUp")
@@ -2411,6 +2411,8 @@ ZeroJet_ZTauTau_TES_DM1_UP.Write()
 ZeroJet_ZTauTau_TES_DM1_DOWN.Write()
 ZeroJet_ZTauTau_TES_DM10_UP.Write()
 ZeroJet_ZTauTau_TES_DM10_DOWN.Write()
+ZeroJet_ZTauTau_TTContamination_UP.Write()
+ZeroJet_ZTauTau_TTContamination_DOWN.Write()
 
 ZeroJet_ZToLeptons.Write()
 ZeroJet_ZToLeptons_TES_DM0_UP.Write()
@@ -2594,6 +2596,8 @@ Boosted_ZTauTau_TES_DM1_UP.Write()
 Boosted_ZTauTau_TES_DM1_DOWN.Write()
 Boosted_ZTauTau_TES_DM10_UP.Write()
 Boosted_ZTauTau_TES_DM10_DOWN.Write()
+Boosted_ZTauTau_TTContamination_UP.Write()
+Boosted_ZTauTau_TTContamination_DOWN.Write()
 
 Boosted_ZToLeptons.Write()
 Boosted_ZToLeptons_TES_DM0_UP.Write()
@@ -2777,6 +2781,8 @@ VBF_ZTauTau_TES_DM1_UP.Write()
 VBF_ZTauTau_TES_DM1_DOWN.Write()
 VBF_ZTauTau_TES_DM10_UP.Write()
 VBF_ZTauTau_TES_DM10_DOWN.Write()
+VBF_ZTauTau_TTContamination_UP.Write()
+VBF_ZTauTau_TTContamination_DOWN.Write()
 
 VBF_ZToLeptons.Write()
 VBF_ZToLeptons_TES_DM0_UP.Write()
