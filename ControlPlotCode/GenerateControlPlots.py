@@ -65,8 +65,8 @@ def GenerateControlPlots(TheFile,args):
         METVector.SetPtEtaPhiM(TheTree.met,0.0,TheTree.metphi,0.0)
         MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
         
-        if(TauVector.Pt()<30.0 or MuVector.Pt() < 26.0):
-            continue
+        #if(TauVector.Pt()<30.0 or MuVector.Pt() < 26.0):
+        #    continue
         if(MT > 50.0):
             continue
         
