@@ -14,9 +14,9 @@ def GenerateRolledPlots(File,args):
     TheTree = InputFile.mt_Selected
 
     SampleName = File[File.rfind("/")+1:]
-    SampleName = SampleName.split(".")[0]
-    
-    ResultFile = ROOT.TFile("Results.root","UPDATE")
+    SampleName = SampleName.split(".")[0]        
+
+    ResultFile = ROOT.TFile("Results_"+args.year+".root","UPDATE")
 
     ZeroJetHistoName = SampleName+"_0jet"
     if(args.UseFakeFactor):
@@ -823,6 +823,56 @@ def GenerateRolledPlots(File,args):
         TauVector.SetPtEtaPhiM(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,TheTree.m_2)        
         MetVector.SetPtEtaPhiM(TheTree.met,0,TheTree.metphi,0)
         MT = CalculateMT(MuVector,MetVector)
+        
+        #sort out the jet based variables,
+        #2017 had noisy jets issues, so the variables are slightly different
+        if args.year == "2017":
+            njetsVariable = TheTree.njetsWoNoisyJets
+            mjjVariable = TheTree.mjjWoNoisyJets
+            njets_JetEta0to3UpVariable = TheTree.njetsWoNoisyJets_JetEta0to3Up
+            mjj_JetEta0to3UpVariable = TheTree.mjjWoNoisyJets_JetEta0to3Up
+            njets_JetEta0to3DownVariable = TheTree.njetsWoNoisyJets_JetEta0to3Down
+            mjj_JetEta0to3DownVariable = TheTree.mjjWoNoisyJets_JetEta0to3Down
+            njets_JetRelativeBalUpVariable = TheTree.njetsWoNoisyJets_JetRelativeBalUp
+            mjj_JetRelativeBalUpVariable = TheTree.mjjWoNoisyJets_JetRelativeBalUp
+            njets_JetRelativeBalDownVariable = TheTree.njetsWoNoisyJets_JetRelativeBalDown
+            mjj_JetRelativeBalDownVariable = TheTree.mjjWoNoisyJets_JetRelativeBalDown
+            njets_JetRelativeSampleUpVariable = TheTree.njetsWoNoisyJets_JetRelativeSampleUp
+            mjj_JetRelativeSampleUpVariable = TheTree.mjjWoNoisyJets_JetRelativeSampleUp
+            njets_JetRelativeSampleDownVariable = TheTree.njetsWoNoisyJets_JetRelativeSampleDown
+            mjj_JetRelativeSampleDownVariable = TheTree.mjjWoNoisyJets_JetRelativeSampleDown
+            njets_JetEta3to5UpVariable = TheTree.njetsWoNoisyJets_JetEta3to5Up
+            mjj_JetEta3to5UpVariable = TheTree.mjjWoNoisyJets_JetEta3to5Up
+            njets_JetEta3to5DownVariable = TheTree.njetsWoNoisyJets_JetEta3to5Down
+            mjj_JetEta3to5DownVariable = TheTree.mjjWoNoisyJets_JetEta3to5Down
+            njets_JetEta0to5UpVariable = TheTree.njetsWoNoisyJets_JetEta0to5Up
+            mjj_JetEta0to5UpVariable = TheTree.mjjWoNoisyJets_JetEta0to5Up
+            njets_JetEta0to5DownVariable = TheTree.njetsWoNoisyJets_JetEta0to5Down
+            mjj_JetEta0to5DownVariable = TheTree.mjjWoNoisyJets_JetEta0to5Down
+        elif args.year == "2018":
+            njetsVariable = TheTree.njets
+            mjjVariable = TheTree.mjj
+            njets_JetEta0to3UpVariable = TheTree.njets_JetEta0to3Up
+            mjj_JetEta0to3UpVariable = TheTree.mjj_JetEta0to3Up
+            njets_JetEta0to3DownVariable = TheTree.njets_JetEta0to3Down
+            mjj_JetEta0to3DownVariable = TheTree.mjj_JetEta0to3Down
+            njets_JetRelativeBalUpVariable = TheTree.njets_JetRelativeBalUp
+            mjj_JetRelativeBalUpVariable = TheTree.mjj_JetRelativeBalUp
+            njets_JetRelativeBalDownVariable = TheTree.njets_JetRelativeBalDown
+            mjj_JetRelativeBalDownVariable = TheTree.mjj_JetRelativeBalDown
+            njets_JetRelativeSampleUpVariable = TheTree.njets_JetRelativeSampleUp
+            mjj_JetRelativeSampleUpVariable = TheTree.mjj_JetRelativeSampleUp
+            njets_JetRelativeSampleDownVariable = TheTree.njets_JetRelativeSampleDown
+            mjj_JetRelativeSampleDownVariable = TheTree.mjj_JetRelativeSampleDown
+            njets_JetEta3to5UpVariable = TheTree.njets_JetEta3to5Up
+            mjj_JetEta3to5UpVariable = TheTree.mjj_JetEta3to5Up
+            njets_JetEta3to5DownVariable = TheTree.njets_JetEta3to5Down
+            mjj_JetEta3to5DownVariable = TheTree.mjj_JetEta3to5Down
+            njets_JetEta0to5UpVariable = TheTree.njets_JetEta0to5Up
+            mjj_JetEta0to5UpVariable = TheTree.mjj_JetEta0to5Up
+            njets_JetEta0to5DownVariable = TheTree.njets_JetEta0to5Down
+            mjj_JetEta0to5DownVariable = TheTree.mjj_JetEta0to5Down
+
         if args.UseFakeFactor:
             TheWeight = TheWeight*TheTree.Event_Fake_Factor
 
@@ -830,17 +880,17 @@ def GenerateRolledPlots(File,args):
         #since we don't want to do anything else with these ntuples,
         if args.MakeTTbarContamination:
             if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0 and MT < 50.0):
-                if TheTree.njetsWoNoisyJets == 0:
+                if njetsVariable == 0:
                     ZeroJet_TTBarContamination.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheTree.FinalWeighting*0.1)
-                elif (TheTree.njetsWoNoisyJets >= 2
-                      and TheTree.mjjWoNoisyJets>300):
-                    VBF_TTBarContamination.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*0.1)
+                elif (njetsVariable >= 2
+                      and mjjVariable>300):
+                    VBF_TTBarContamination.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*0.1)
                 else:
                     Boosted_TTBarContamination.Fill(TheTree.m_sv,(TauVector+MuVector+MetVector).Pt(),TheTree.FinalWeighting*0.1)
             continue
             
 
-        if TheTree.njetsWoNoisyJets == 0:
+        if njetsVariable == 0:
             if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0 and MT < 50.0):
                 ZeroJetResultsRolled.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheWeight)
                 #Handle Uncertainties
@@ -1033,50 +1083,50 @@ def GenerateRolledPlots(File,args):
                         ZeroJet_ResponseDown.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheWeight)
                 
         #VBF Category
-        elif (TheTree.njetsWoNoisyJets >= 2
-              and TheTree.mjjWoNoisyJets>300):
+        elif (njetsVariable >= 2
+              and mjjVariable>300):
             if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0):
-                VBFResultsRolled.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                VBFResultsRolled.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                 #Handle Uncertainties
                 if args.UseFakeFactor:
-                    VBF_ff_qcd_syst_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_syst_up)
-                    VBF_ff_qcd_syst_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_syst_down)
-                    VBF_ff_qcd_njet0_mt_stat_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet0_stat_up)
-                    VBF_ff_qcd_njet0_mt_stat_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet0_stat_down)
-                    VBF_ff_qcd_njet1_mt_stat_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet1_stat_up)
-                    VBF_ff_qcd_njet1_mt_stat_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet1_stat_down)
-                    VBF_ff_tt_njet1_stat_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_tt_dm0_njet1_stat_up)
-                    VBF_ff_tt_njet1_stat_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_tt_dm0_njet1_stat_down)
-                    VBF_ff_tt_syst_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_tt_syst_up)
-                    VBF_ff_tt_syst_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_tt_syst_down)
-                    VBF_ff_w_njet0_mt_stat_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet0_stat_up)
-                    VBF_ff_w_njet0_mt_stat_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet0_stat_down)
-                    VBF_ff_w_njet1_mt_stat_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet1_stat_up)
-                    VBF_ff_w_njet1_mt_stat_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet1_stat_down)
-                    VBF_ff_w_syst_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_syst_up)
-                    VBF_ff_w_syst_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*TheTree.ff_w_syst_down)
+                    VBF_ff_qcd_syst_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_syst_up)
+                    VBF_ff_qcd_syst_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_syst_down)
+                    VBF_ff_qcd_njet0_mt_stat_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet0_stat_up)
+                    VBF_ff_qcd_njet0_mt_stat_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet0_stat_down)
+                    VBF_ff_qcd_njet1_mt_stat_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet1_stat_up)
+                    VBF_ff_qcd_njet1_mt_stat_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_qcd_dm0_njet1_stat_down)
+                    VBF_ff_tt_njet1_stat_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_tt_dm0_njet1_stat_up)
+                    VBF_ff_tt_njet1_stat_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_tt_dm0_njet1_stat_down)
+                    VBF_ff_tt_syst_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_tt_syst_up)
+                    VBF_ff_tt_syst_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_tt_syst_down)
+                    VBF_ff_w_njet0_mt_stat_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet0_stat_up)
+                    VBF_ff_w_njet0_mt_stat_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet0_stat_down)
+                    VBF_ff_w_njet1_mt_stat_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet1_stat_up)
+                    VBF_ff_w_njet1_mt_stat_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_dm0_njet1_stat_down)
+                    VBF_ff_w_syst_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_syst_up)
+                    VBF_ff_w_syst_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*TheTree.ff_w_syst_down)
                 if args.MakeDYShape:
-                    VBF_DYShape_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting_ZPT_UP)
-                    VBF_DYShape_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting_ZPT_DOWN)
+                    VBF_DYShape_UP.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting_ZPT_UP)
+                    VBF_DYShape_DOWN.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting_ZPT_DOWN)
                 if args.MakeggHTheoryShape:
-                    VBF_THU_ggH_Mu_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mu_13TeV))
-                    VBF_THU_ggH_Mu_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mu_13TeV))
-                    VBF_THU_ggH_Res_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Res_13TeV))
-                    VBF_THU_ggH_Res_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Res_13TeV))
-                    VBF_THU_ggH_Mig01_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mig01_13TeV))
-                    VBF_THU_ggH_Mig01_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mig01_13TeV))
-                    VBF_THU_ggH_Mig12_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mig12_13TeV))
-                    VBF_THU_ggH_Mig12_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mig12_13TeV))
-                    VBF_THU_ggH_VBF2j_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_VBF2j_13TeV))
-                    VBF_THU_ggH_VBF2j_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_VBF2j_13TeV))
-                    VBF_THU_ggH_VBF3j_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_VBF3j_13TeV))
-                    VBF_THU_ggH_VBF3j_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_VBF3j_13TeV))
-                    VBF_THU_ggH_PT60_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_PT60_13TeV))
-                    VBF_THU_ggH_PT60_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_PT60_13TeV))
-                    VBF_THU_ggH_PT120_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_PT120_13TeV))
-                    VBF_THU_ggH_PT120_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_PT120_13TeV))
-                    VBF_THU_ggH_qmtop_13TeVUp.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_qmtop_13TeV))
-                    VBF_THU_ggH_qmtop_13TeVDown.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_qmtop_13TeV))
+                    VBF_THU_ggH_Mu_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mu_13TeV))
+                    VBF_THU_ggH_Mu_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mu_13TeV))
+                    VBF_THU_ggH_Res_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Res_13TeV))
+                    VBF_THU_ggH_Res_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Res_13TeV))
+                    VBF_THU_ggH_Mig01_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mig01_13TeV))
+                    VBF_THU_ggH_Mig01_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mig01_13TeV))
+                    VBF_THU_ggH_Mig12_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_Mig12_13TeV))
+                    VBF_THU_ggH_Mig12_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_Mig12_13TeV))
+                    VBF_THU_ggH_VBF2j_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_VBF2j_13TeV))
+                    VBF_THU_ggH_VBF2j_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_VBF2j_13TeV))
+                    VBF_THU_ggH_VBF3j_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_VBF3j_13TeV))
+                    VBF_THU_ggH_VBF3j_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_VBF3j_13TeV))
+                    VBF_THU_ggH_PT60_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_PT60_13TeV))
+                    VBF_THU_ggH_PT60_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_PT60_13TeV))
+                    VBF_THU_ggH_PT120_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_PT120_13TeV))
+                    VBF_THU_ggH_PT120_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_PT120_13TeV))
+                    VBF_THU_ggH_qmtop_13TeVUp.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0+TheTree.THU_ggH_qmtop_13TeV))
+                    VBF_THU_ggH_qmtop_13TeVDown.Fill(TheTree.m_sv,mjjVariable,TheTree.FinalWeighting*(1.0-TheTree.THU_ggH_qmtop_13TeV))
             if args.UseTES:
                 CorrectedTauVector_UP = ROOT.TLorentzVector()
                 CorrectedTauVector_DOWN = ROOT.TLorentzVector()
@@ -1095,27 +1145,27 @@ def GenerateRolledPlots(File,args):
                     if((TheTree.l2_decayMode == 0 and CorrectedTauVector_UP.Pt() > 30 and CorrectedMT_UP < 50.0)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30)):                        
-                        VBF_DM0_TES_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)                                        
+                        VBF_DM0_TES_UP.Fill(TheTree.m_sv,mjjVariable,TheWeight)                                        
                     if((TheTree.l2_decayMode == 1 and CorrectedTauVector_UP.Pt() > 30 and CorrectedMT_UP < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30)):                        
-                        VBF_DM1_TES_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)                    
+                        VBF_DM1_TES_UP.Fill(TheTree.m_sv,mjjVariable,TheWeight)                    
                     if((TheTree.l2_decayMode == 10 and CorrectedTauVector_UP.Pt() > 30 and CorrectedMT_UP < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30)):                        
-                        VBF_DM10_TES_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)                        
+                        VBF_DM10_TES_UP.Fill(TheTree.m_sv,mjjVariable,TheWeight)                        
                     if((TheTree.l2_decayMode == 0 and CorrectedTauVector_DOWN.Pt() > 30 and CorrectedMT_DOWN < 50.0)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30)):
-                        VBF_DM0_TES_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)                    
+                        VBF_DM0_TES_DOWN.Fill(TheTree.m_sv,mjjVariable,TheWeight)                    
                     if((TheTree.l2_decayMode == 1 and CorrectedTauVector_DOWN.Pt() > 30 and CorrectedMT_DOWN < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30)):                        
-                        VBF_DM1_TES_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_DM1_TES_DOWN.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                     if((TheTree.l2_decayMode == 10 and CorrectedTauVector_DOWN.Pt() > 30 and CorrectedMT_DOWN < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30)):                        
-                        VBF_DM10_TES_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)                                    
+                        VBF_DM10_TES_DOWN.Fill(TheTree.m_sv,mjjVariable,TheWeight)                                    
             if args.MakeZLShape:
                 #This gets split into EES shifts, and MES shifts            
                 if(TheTree.gen_match_2 == 1 or TheTree.gen_match_2 == 3):
@@ -1158,19 +1208,19 @@ def GenerateRolledPlots(File,args):
                     if((TheTree.l2_decayMode == 0 and CorrectedTauVector_UP.Pt() > 30.0 and CorrectedMT_UP < 50.0)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30.0 and MT < 50.0)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30.0 and MT < 50.0)):
-                        VBF_DM0_ZLShape_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_DM0_ZLShape_UP.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                     if((TheTree.l2_decayMode == 1 and CorrectedTauVector_UP.Pt() > 30.0 and CorrectedMT_UP < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30.0 and MT < 50.0)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30.0 and MT < 50.0)):
-                        VBF_DM1_ZLShape_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_DM1_ZLShape_UP.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                     if((TheTree.l2_decayMode == 0 and CorrectedTauVector_DOWN.Pt() > 30.0 and CorrectedMT_DOWN < 50.0)
                        or (TheTree.l2_decayMode == 1 and TauVector.Pt() > 30.0 and MT < 50.0)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30.0 and MT < 50.0)):
-                        VBF_DM0_ZLShape_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_DM0_ZLShape_DOWN.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                     if((TheTree.l2_decayMode == 1 and CorrectedTauVector_DOWN.Pt() > 30.0 and CorrectedMT_DOWN < 50.0)
                        or (TheTree.l2_decayMode == 0 and TauVector.Pt() > 30.0 and MT < 50.0)
                        or (TheTree.l2_decayMode == 10 and TauVector.Pt() > 30.0 and MT < 50.0)):
-                        VBF_DM1_ZLShape_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_DM1_ZLShape_DOWN.Fill(TheTree.m_sv,mjjVariable,TheWeight)
             if args.MakeRecoilUncertainties:
                 ResolutionCorrectedMetVector_UP = ROOT.TLorentzVector()
                 ResolutionCorrectedMetVector_DOWN = ROOT.TLorentzVector()
@@ -1188,13 +1238,13 @@ def GenerateRolledPlots(File,args):
                 ResponseCorrectedMT_DOWN = CalculateMT(MuVector,ResponseCorrectedMetVector_DOWN)
                 if(TauVector.Pt() > 30.0 and MuVector.Pt() > 26.0):
                     if(ResolutionCorrectedMT_UP < 50.0):
-                        VBF_ResolutionUp.Fill(TheTree.m_sv_ResolutionUp,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_ResolutionUp.Fill(TheTree.m_sv_ResolutionUp,mjjVariable,TheWeight)
                     if(ResolutionCorrectedMT_DOWN < 50.0):
-                        VBF_ResolutionDown.Fill(TheTree.m_sv_ResolutionDown,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_ResolutionDown.Fill(TheTree.m_sv_ResolutionDown,mjjVariable,TheWeight)
                     if(ResponseCorrectedMT_UP < 50.0):
-                        VBF_ResponseUp.Fill(TheTree.m_sv_ResponseUp,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_ResponseUp.Fill(TheTree.m_sv_ResponseUp,mjjVariable,TheWeight)
                     if(ResponseCorrectedMT_DOWN < 50.0):
-                        VBF_ResponseDown.Fill(TheTree.m_sv_ResponseDown,TheTree.mjjWoNoisyJets,TheWeight)
+                        VBF_ResponseDown.Fill(TheTree.m_sv_ResponseDown,mjjVariable,TheWeight)
 #boosted category
         else:
             if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0):
@@ -1430,101 +1480,101 @@ def GenerateRolledPlots(File,args):
                 #define the JetEta0to3_UP area
                 if(MT_JetEta0to3_UP < 50.0):
                     #ZeroJet JetEta0to3_UP
-                    if TheTree.njetsWoNoisyJets_JetEta0to3Up == 0:
+                    if njets_JetEta0to3UpVariable == 0:
                         ZeroJet_JetEta0to3_UP.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta0to3Up >=2
-                          and TheTree.mjjWoNoisyJets_JetEta0to3Up > 300):
-                        VBF_JetEta0to3_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta0to3Up,TheWeight)
+                    elif (njets_JetEta0to3UpVariable >=2
+                          and mjj_JetEta0to3UpVariable > 300):
+                        VBF_JetEta0to3_UP.Fill(TheTree.m_sv,mjj_JetEta0to3UpVariable,TheWeight)
                     else:
                         Boosted_JetEta0to3_UP.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetEta0to3_DOWN area
                 if(MT_JetEta0to3_DOWN < 50.0):
                     #ZeroJet JetEta0to3_DOWN
-                    if TheTree.njetsWoNoisyJets_JetEta0to3Down == 0:
+                    if njets_JetEta0to3DownVariable == 0:
                         ZeroJet_JetEta0to3_DOWN.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta0to3Down >=2
-                          and TheTree.mjjWoNoisyJets_JetEta0to3Down > 300):
-                        VBF_JetEta0to3_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta0to3Down,TheWeight)
+                    elif (njets_JetEta0to3DownVariable >=2
+                          and mjj_JetEta0to3DownVariable > 300):
+                        VBF_JetEta0to3_DOWN.Fill(TheTree.m_sv,mjj_JetEta0to3DownVariable,TheWeight)
                     else:
                         Boosted_JetEta0to3_DOWN.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetRelativeBal_UP area
                 if(MT_JetRelativeBal_UP < 50.0):
                     #ZeroJet JetRelativeBal_UP
-                    if TheTree.njetsWoNoisyJets_JetRelativeBalUp == 0:
+                    if njets_JetRelativeBalUpVariable == 0:
                         ZeroJet_JetRelativeBal_UP.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetRelativeBalUp >=2
-                          and TheTree.mjjWoNoisyJets_JetRelativeBalUp > 300):
-                        VBF_JetRelativeBal_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetRelativeBalUp,TheWeight)
+                    elif (njets_JetRelativeBalUpVariable >=2
+                          and mjj_JetRelativeBalUpVariable > 300):
+                        VBF_JetRelativeBal_UP.Fill(TheTree.m_sv,mjj_JetRelativeBalUpVariable,TheWeight)
                     else:
                         Boosted_JetRelativeBal_UP.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetRelativeBal_DOWN area
                 if(MT_JetRelativeBal_DOWN < 50.0):
                     #ZeroJet JetRelativeBal_DOWN
-                    if TheTree.njetsWoNoisyJets_JetRelativeBalDown == 0:
+                    if njets_JetRelativeBalDownVariable == 0:
                         ZeroJet_JetRelativeBal_DOWN.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetRelativeBalDown >=2
-                          and TheTree.mjjWoNoisyJets_JetRelativeBalDown > 300):
-                        VBF_JetRelativeBal_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetRelativeBalDown,TheWeight)
+                    elif (njets_JetRelativeBalDownVariable >=2
+                          and mjj_JetRelativeBalDownVariable > 300):
+                        VBF_JetRelativeBal_DOWN.Fill(TheTree.m_sv,mjj_JetRelativeBalDownVariable,TheWeight)
                     else:
                         Boosted_JetRelativeBal_DOWN.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetRelativeSample_UP area
                 if(MT_JetRelativeSample_UP < 50.0):
                     #ZeroJet JetRelativeSample_UP
-                    if TheTree.njetsWoNoisyJets_JetRelativeSampleUp == 0:
+                    if njets_JetRelativeSampleUpVariable == 0:
                         ZeroJet_JetRelativeSample_UP.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetRelativeSampleUp >=2
-                          and TheTree.mjjWoNoisyJets_JetRelativeSampleUp > 300):
-                        VBF_JetRelativeSample_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetRelativeSampleUp,TheWeight)
+                    elif (njets_JetRelativeSampleUpVariable >=2
+                          and mjj_JetRelativeSampleUpVariable > 300):
+                        VBF_JetRelativeSample_UP.Fill(TheTree.m_sv,mjj_JetRelativeSampleUpVariable,TheWeight)
                     else:
                         Boosted_JetRelativeSample_UP.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetRelativeSample_DOWN area
                 if(MT_JetRelativeSample_DOWN < 50.0):
                     #ZeroJet JetRelativeSample_DOWN
-                    if TheTree.njetsWoNoisyJets_JetRelativeSampleDown == 0:
+                    if njets_JetRelativeSampleDownVariable == 0:
                         ZeroJet_JetRelativeSample_DOWN.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetRelativeSampleDown >=2
-                          and TheTree.mjjWoNoisyJets_JetRelativeSampleDown > 300):
-                        VBF_JetRelativeSample_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetRelativeSampleDown,TheWeight)
+                    elif (njets_JetRelativeSampleDownVariable >=2
+                          and mjj_JetRelativeSampleDownVariable > 300):
+                        VBF_JetRelativeSample_DOWN.Fill(TheTree.m_sv,mjj_JetRelativeSampleDownVariable,TheWeight)
                     else:
                         Boosted_JetRelativeSample_DOWN.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetEta3to5_UP area
                 if(MT_JetEta3to5_UP < 50.0):
                     #ZeroJet JetEta3to5_UP
-                    if TheTree.njetsWoNoisyJets_JetEta3to5Up == 0:
+                    if njets_JetEta3to5UpVariable == 0:
                         ZeroJet_JetEta3to5_UP.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta3to5Up >=2
-                          and TheTree.mjjWoNoisyJets_JetEta3to5Up > 300):
-                        VBF_JetEta3to5_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta3to5Up,TheWeight)
+                    elif (njets_JetEta3to5UpVariable >=2
+                          and mjj_JetEta3to5UpVariable > 300):
+                        VBF_JetEta3to5_UP.Fill(TheTree.m_sv,mjj_JetEta3to5UpVariable,TheWeight)
                     else:
                         Boosted_JetEta3to5_UP.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetEta3to5_DOWN area
                 if(MT_JetEta3to5_DOWN < 50.0):
                     #ZeroJet JetEta3to5_DOWN
-                    if TheTree.njetsWoNoisyJets_JetEta3to5Down == 0:
+                    if njets_JetEta3to5DownVariable == 0:
                         ZeroJet_JetEta3to5_DOWN.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta3to5Down >=2
-                          and TheTree.mjjWoNoisyJets_JetEta3to5Down > 300):
-                        VBF_JetEta3to5_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta3to5Down,TheWeight)
+                    elif (njets_JetEta3to5DownVariable >=2
+                          and mjj_JetEta3to5DownVariable > 300):
+                        VBF_JetEta3to5_DOWN.Fill(TheTree.m_sv,mjj_JetEta3to5DownVariable,TheWeight)
                     else:
                         Boosted_JetEta3to5_DOWN.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetEta0to5_UP area
                 if(MT_JetEta0to5_UP < 50.0):
                     #ZeroJet JetEta0to5_UP
-                    if TheTree.njetsWoNoisyJets_JetEta0to5Up == 0:
+                    if njets_JetEta0to5UpVariable == 0:
                         ZeroJet_JetEta0to5_UP.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta0to5Up >=2
-                          and TheTree.mjjWoNoisyJets_JetEta0to5Up > 300):
-                        VBF_JetEta0to5_UP.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta0to5Up,TheWeight)
+                    elif (njets_JetEta0to5UpVariable >=2
+                          and mjj_JetEta0to5UpVariable > 300):
+                        VBF_JetEta0to5_UP.Fill(TheTree.m_sv,mjj_JetEta0to5UpVariable,TheWeight)
                     else:
                         Boosted_JetEta0to5_UP.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #define the JetEta0to5_DOWN area
                 if(MT_JetEta0to5_DOWN < 50.0):
                     #ZeroJet JetEta0to5_DOWN
-                    if TheTree.njetsWoNoisyJets_JetEta0to5Down == 0:
+                    if njets_JetEta0to5DownVariable == 0:
                         ZeroJet_JetEta0to5_DOWN.Fill((TauVector+MuVector).M(),TauVector.Pt(),TheWeight)
-                    elif (TheTree.njetsWoNoisyJets_JetEta0to5Down >=2
-                          and TheTree.mjjWoNoisyJets_JetEta0to5Down > 300):
-                        VBF_JetEta0to5_DOWN.Fill(TheTree.m_sv,TheTree.mjjWoNoisyJets_JetEta0to5Down,TheWeight)
+                    elif (njets_JetEta0to5DownVariable >=2
+                          and mjj_JetEta0to5DownVariable > 300):
+                        VBF_JetEta0to5_DOWN.Fill(TheTree.m_sv,mjj_JetEta0to5DownVariable,TheWeight)
                     else:
                         Boosted_JetEta0to5_DOWN.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)                            
 
