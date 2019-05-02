@@ -18,6 +18,12 @@ def GenerateRolledPlots(File,args):
 
     ResultFile = ROOT.TFile("Results_"+args.year+".root","UPDATE")
 
+    m_visBinning = array('d',[50.0,60.0,70.0,80.0,90.0,100.0,110.0,120.0,130.0,140.0,150.0,9000.0])
+    nm_visBins = len(m_visBinning)-1
+
+    m_svBinning = array('d',[50.0,70.0,90.0,110.0,130.0,150.0,170.0,190.0,210.0,230.0,250.0,9000.0])
+    nm_svBins = len(m_svBinning)-1
+
     ZeroJetHistoName = SampleName+"_0jet"
     if(args.UseFakeFactor):
         ZeroJetHistoName = ZeroJetHistoName+"_Fake"
@@ -28,9 +34,8 @@ def GenerateRolledPlots(File,args):
     else:
         mt_0jetDir = ResultFile.mkdir("mt_0jet")
     TauPtBinning = array('d',[30.0, 40.0, 50.0, 60.0, 70.0, 80.0,  2000.0])
-    nTauPtBins = len(TauPtBinning)-1
-    nZeroJetMassBins = int(args.numZeroJetBins)
-    ZeroJetResultsRolled = ROOT.TH2F(ZeroJetHistoName,ZeroJetHistoName,nZeroJetMassBins,50.0,150.0, nTauPtBins,TauPtBinning)
+    nTauPtBins = len(TauPtBinning)-1    
+    ZeroJetResultsRolled = ROOT.TH2F(ZeroJetHistoName,ZeroJetHistoName,nm_visBins,m_visBinning, nTauPtBins,TauPtBinning)
 
     BoostedHistoName = SampleName+"_boosted"
     if(args.UseFakeFactor):
@@ -42,9 +47,8 @@ def GenerateRolledPlots(File,args):
     else:
         mt_boostedDir = ResultFile.mkdir("mt_boosted")
     HiggsPtBinning = array('d',[0.0, 100.0, 170.0, 300.0, 9000.0])
-    nHPtBins = len(HiggsPtBinning)-1
-    nBoostedMassBins=int(args.numBoostedBins)
-    BoostedResultsRolled = ROOT.TH2F(BoostedHistoName,BoostedHistoName,nBoostedMassBins,50.0,250.0,nHPtBins,HiggsPtBinning)
+    nHPtBins = len(HiggsPtBinning)-1    
+    BoostedResultsRolled = ROOT.TH2F(BoostedHistoName,BoostedHistoName,nm_svBins,m_svBinning,nHPtBins,HiggsPtBinning)
 
     VBFHistoName = SampleName+"_vbf"
     if(args.UseFakeFactor):
@@ -56,9 +60,8 @@ def GenerateRolledPlots(File,args):
     else:
         mt_vbfDir = ResultFile.mkdir("mt_vbf")
     mjjBinning = array('d',[300.0, 700.0, 1100.0, 1500.0, 9000.0])
-    nmjjBins = len(mjjBinning)-1
-    nVBFMassBins = int(args.numVBFBins)
-    VBFResultsRolled = ROOT.TH2F(VBFHistoName,VBFHistoName,nVBFMassBins,50.0,250.0,nmjjBins,mjjBinning)
+    nmjjBins = len(mjjBinning)-1    
+    VBFResultsRolled = ROOT.TH2F(VBFHistoName,VBFHistoName,nm_svBins,m_svBinning,nmjjBins,mjjBinning)
 
     #uncertainties
     #fake factor shapes
@@ -66,751 +69,751 @@ def GenerateRolledPlots(File,args):
         #ZeroJet
         ZeroJet_ff_qcd_syst_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_mt_systUp",
                                            ZeroJetHistoName+"_CMS_ff_qcd_mt_systUp",
-                                           nZeroJetMassBins,50.0,150.0,
+                                           nm_visBins,m_visBinning,
                                            nTauPtBins,TauPtBinning)
         ZeroJet_ff_qcd_syst_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_mt_systDown",
                                              ZeroJetHistoName+"_CMS_ff_qcd_mt_systDown",
-                                             nZeroJetMassBins,50.0,150.0,
+                                             nm_visBins,m_visBinning,
                                              nTauPtBins,TauPtBinning)
         ZeroJet_ff_qcd_njet0_mt_stat_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
                                                     ZeroJetHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_ff_qcd_njet0_mt_stat_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
                                                       ZeroJetHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
-                                                      nZeroJetMassBins,50.0,150.0,
+                                                      nm_visBins,m_visBinning,
                                                       nTauPtBins,TauPtBinning)
         ZeroJet_ff_qcd_njet1_mt_stat_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
                                                     ZeroJetHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_ff_qcd_njet1_mt_stat_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
                                                       ZeroJetHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
-                                                      nZeroJetMassBins,50.0,150.0,
+                                                      nm_visBins,m_visBinning,
                                                       nTauPtBins,TauPtBinning)
         ZeroJet_ff_tt_njet1_stat_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_tt_njet1_statUp",
                                                 ZeroJetHistoName+"_CMS_ff_tt_njet1_statUp",
-                                                nZeroJetMassBins,50.0,150.0,
+                                                nm_visBins,m_visBinning,
                                                 nTauPtBins,TauPtBinning)
         ZeroJet_ff_tt_njet1_stat_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_tt_njet1_statDown",
                                                   ZeroJetHistoName+"_CMS_ff_tt_njet1_statDown",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_ff_tt_syst_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_tt_systUp",
                                           ZeroJetHistoName+"_CMS_ff_tt_systUp",
-                                          nZeroJetMassBins,50.0,150.0,
+                                          nm_visBins,m_visBinning,
                                           nTauPtBins,TauPtBinning)
         ZeroJet_ff_tt_syst_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_tt_systDown",
                                             ZeroJetHistoName+"_CMS_ff_tt_systDown",
-                                            nZeroJetMassBins,50.0,150.0,
+                                            nm_visBins,m_visBinning,
                                             nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_njet0_mt_stat_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_njet0_mt_statUp",
                                                   ZeroJetHistoName+"_CMS_ff_w_njet0_mt_statUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_njet0_mt_stat_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_njet0_mt_statDown",
                                                     ZeroJetHistoName+"_CMS_ff_w_njet0_mt_statDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_njet1_mt_stat_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_njet1_mt_statUp",
                                                   ZeroJetHistoName+"_CMS_ff_w_njet1_mt_statUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_njet1_mt_stat_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_njet1_mt_statDown",
                                                     ZeroJetHistoName+"_CMS_ff_w_njet1_mt_statDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_syst_UP = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_systUp",
                                          ZeroJetHistoName+"_CMS_ff_w_systUp",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         ZeroJet_ff_w_syst_DOWN = ROOT.TH2F(ZeroJetHistoName+"_CMS_ff_w_systDown",
                                            ZeroJetHistoName+"_CMS_ff_w_systDown",
-                                           nZeroJetMassBins,50.0,150.0,
+                                           nm_visBins,m_visBinning,
                                            nTauPtBins,TauPtBinning)
         #Boosted
         Boosted_ff_qcd_syst_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_mt_systUp",
                                            BoostedHistoName+"_CMS_ff_qcd_mt_systUp",
-                                           nBoostedMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nHPtBins,HiggsPtBinning)
         Boosted_ff_qcd_syst_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_mt_systDown",
                                              BoostedHistoName+"_CMS_ff_qcd_mt_systDown",
-                                             nBoostedMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nHPtBins,HiggsPtBinning)
         Boosted_ff_qcd_njet0_mt_stat_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
                                                     BoostedHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_ff_qcd_njet0_mt_stat_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
                                                       BoostedHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
-                                                      nBoostedMassBins,50.0,250.0,
+                                                      nm_svBins,m_svBinning,
                                                       nHPtBins,HiggsPtBinning)
         Boosted_ff_qcd_njet1_mt_stat_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
                                                     BoostedHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_ff_qcd_njet1_mt_stat_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
                                                       BoostedHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
-                                                      nBoostedMassBins,50.0,250.0,
+                                                      nm_svBins,m_svBinning,
                                                       nHPtBins,HiggsPtBinning)
         Boosted_ff_tt_njet1_stat_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_tt_njet1_statUp",
                                                 BoostedHistoName+"_CMS_ff_tt_njet1_statUp",
-                                                nBoostedMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nHPtBins,HiggsPtBinning)
         Boosted_ff_tt_njet1_stat_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_tt_njet1_statDown",
                                                   BoostedHistoName+"_CMS_ff_tt_njet1_statDown",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_ff_tt_syst_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_tt_systUp",
                                           BoostedHistoName+"_CMS_ff_tt_systUp",
-                                          nBoostedMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nHPtBins,HiggsPtBinning)
         Boosted_ff_tt_syst_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_tt_systDown",
                                             BoostedHistoName+"_CMS_ff_tt_systDown",
-                                            nBoostedMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nHPtBins,HiggsPtBinning)
         Boosted_ff_w_njet0_mt_stat_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_njet0_mt_statUp",
                                                   BoostedHistoName+"_CMS_ff_w_njet0_mt_statUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_ff_w_njet0_mt_stat_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_njet0_mt_statDown",
                                                     BoostedHistoName+"_CMS_ff_w_njet0_mt_statDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_ff_w_njet1_mt_stat_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_njet1_mt_statUp",
                                                   BoostedHistoName+"_CMS_ff_w_njet1_mt_statUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_ff_w_njet1_mt_stat_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_njet1_mt_statDown",
                                                     BoostedHistoName+"_CMS_ff_w_njet1_mt_statDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_ff_w_syst_UP = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_systUp",
                                          BoostedHistoName+"_CMS_ff_w_systUp",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_ff_w_syst_DOWN = ROOT.TH2F(BoostedHistoName+"_CMS_ff_w_systDown",
                                            BoostedHistoName+"_CMS_ff_w_systDown",
-                                           nBoostedMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nHPtBins,HiggsPtBinning)
         #VBF
         VBF_ff_qcd_syst_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_mt_systUp",
                                        VBFHistoName+"_CMS_ff_qcd_mt_systUp",
-                                       nVBFMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nmjjBins,mjjBinning)
         VBF_ff_qcd_syst_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_mt_systDown",
                                          VBFHistoName+"_CMS_ff_qcd_mt_systDown",
-                                         nVBFMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nmjjBins,mjjBinning)
         VBF_ff_qcd_njet0_mt_stat_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
                                                 VBFHistoName+"_CMS_ff_qcd_njet0_mt_statUp",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_ff_qcd_njet0_mt_stat_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
                                                   VBFHistoName+"_CMS_ff_qcd_njet0_mt_statDown",
-                                                  nVBFMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nmjjBins,mjjBinning)
         VBF_ff_qcd_njet1_mt_stat_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
                                                 VBFHistoName+"_CMS_ff_qcd_njet1_mt_statUp",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_ff_qcd_njet1_mt_stat_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
                                                   VBFHistoName+"_CMS_ff_qcd_njet1_mt_statDown",
-                                                  nVBFMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nmjjBins,mjjBinning)
         VBF_ff_tt_njet1_stat_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_tt_njet1_statUp",
                                             VBFHistoName+"_CMS_ff_tt_njet1_statUp",
-                                            nVBFMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nmjjBins,mjjBinning)
         VBF_ff_tt_njet1_stat_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_tt_njet1_statDown",
                                               VBFHistoName+"_CMS_ff_tt_njet1_statDown",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_ff_tt_syst_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_tt_systUp",
                                       VBFHistoName+"_CMS_ff_tt_systUp",
-                                      nVBFMassBins,50.0,250.0,
+                                      nm_svBins,m_svBinning,
                                       nmjjBins,mjjBinning)
         VBF_ff_tt_syst_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_tt_systDown",
                                         VBFHistoName+"_CMS_ff_tt_systDown",
-                                        nVBFMassBins,50.0,250.0,
+                                        nm_svBins,m_svBinning,
                                         nmjjBins,mjjBinning)
         VBF_ff_w_njet0_mt_stat_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_njet0_mt_statUp",
                                               VBFHistoName+"_CMS_ff_w_njet0_mt_statUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_ff_w_njet0_mt_stat_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_njet0_mt_statDown",
                                                 VBFHistoName+"_CMS_ff_w_njet0_mt_statDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_ff_w_njet1_mt_stat_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_njet1_mt_statUp",
                                               VBFHistoName+"_CMS_ff_w_njet1_mt_statUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_ff_w_njet1_mt_stat_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_njet1_mt_statDown",
                                                 VBFHistoName+"_CMS_ff_w_njet1_mt_statDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_ff_w_syst_UP = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_systUp",
                                      VBFHistoName+"_CMS_ff_w_systUp",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)
         VBF_ff_w_syst_DOWN = ROOT.TH2F(VBFHistoName+"_CMS_ff_w_systDown",
                                        VBFHistoName+"_CMS_ff_w_systDown",
-                                       nVBFMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nmjjBins,mjjBinning)
     #TES shapes
     if args.UseTES:
         ZeroJet_DM0_TES_UP = ROOT.TH2F(ZeroJetHistoName+"_scale_t_1prongUp",
                                        ZeroJetHistoName+"_scale_t_1prongUp",
-                                       nZeroJetMassBins,50.0,150.0,
+                                       nm_visBins,m_visBinning,
                                        nTauPtBins,TauPtBinning)
         ZeroJet_DM1_TES_UP = ROOT.TH2F(ZeroJetHistoName+"_scale_t_1prong1pizeroUp",
                                        ZeroJetHistoName+"_scale_t_1prong1pizeroUp",
-                                       nZeroJetMassBins,50.0,150.0,
+                                       nm_visBins,m_visBinning,
                                        nTauPtBins,TauPtBinning)
         ZeroJet_DM10_TES_UP = ROOT.TH2F(ZeroJetHistoName+"_scale_t_3prongUp",
                                         ZeroJetHistoName+"_scale_t_3prongUp",
-                                        nZeroJetMassBins,50.0,150.0,
+                                        nm_visBins,m_visBinning,
                                         nTauPtBins,TauPtBinning)
         ZeroJet_DM0_TES_DOWN = ROOT.TH2F(ZeroJetHistoName+"_scale_t_1prongDown",
                                          ZeroJetHistoName+"_scale_t_1prongDown",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         ZeroJet_DM1_TES_DOWN = ROOT.TH2F(ZeroJetHistoName+"_scale_t_1prong1pizeroDown",
                                          ZeroJetHistoName+"_scale_t_1prong1pizeroDown",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                        nTauPtBins,TauPtBinning)
         ZeroJet_DM10_TES_DOWN = ROOT.TH2F(ZeroJetHistoName+"_scale_t_3prongDown",
                                           ZeroJetHistoName+"_scale_t_3prongDown",
-                                          nZeroJetMassBins,50.0,150.0,
+                                          nm_visBins,m_visBinning,
                                           nTauPtBins,TauPtBinning)
         
         Boosted_DM0_TES_UP = ROOT.TH2F(BoostedHistoName+"_scale_t_1prongUp",
                                        BoostedHistoName+"_scale_t_1prongUp",
-                                       nBoostedMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nHPtBins,HiggsPtBinning)
         Boosted_DM1_TES_UP = ROOT.TH2F(BoostedHistoName+"_scale_t_1prong1pizeroUp",
                                        BoostedHistoName+"_scale_t_1prong1pizeroUp",
-                                       nBoostedMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nHPtBins,HiggsPtBinning)
         Boosted_DM10_TES_UP = ROOT.TH2F(BoostedHistoName+"_scale_t_3prongUp",
                                         BoostedHistoName+"_scale_t_3prongUp",
-                                        nBoostedMassBins,50.0,250.0,
+                                        nm_svBins,m_svBinning,
                                         nHPtBins,HiggsPtBinning)
         Boosted_DM0_TES_DOWN = ROOT.TH2F(BoostedHistoName+"_scale_t_1prongDown",
                                          BoostedHistoName+"_scale_t_1prongDown",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_DM1_TES_DOWN = ROOT.TH2F(BoostedHistoName+"_scale_t_1prong1pizeroDown",
                                          BoostedHistoName+"_scale_t_1prong1pizeroDown",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_DM10_TES_DOWN = ROOT.TH2F(BoostedHistoName+"_scale_t_3prongDown",
                                           BoostedHistoName+"_scale_t_3prongDown",
-                                          nBoostedMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nHPtBins,HiggsPtBinning)
         VBF_DM0_TES_UP = ROOT.TH2F(VBFHistoName+"_scale_t_1prongUp",
                                    VBFHistoName+"_scale_t_1prongUp",
-                                   nVBFMassBins,50.0,250.0,
+                                   nm_svBins,m_svBinning,
                                    nmjjBins,mjjBinning)
         VBF_DM1_TES_UP = ROOT.TH2F(VBFHistoName+"_scale_t_1prong1pizeroUp",
                                    VBFHistoName+"_scale_t_1prong1pizeroUp",
-                                   nVBFMassBins,50.0,250.0,
+                                   nm_svBins,m_svBinning,
                                    nmjjBins,mjjBinning)
         VBF_DM10_TES_UP = ROOT.TH2F(VBFHistoName+"_scale_t_3prongUp",
                                     VBFHistoName+"_scale_t_3prongUp",
-                                    nVBFMassBins,50.0,250.0,
+                                    nm_svBins,m_svBinning,
                                     nmjjBins,mjjBinning)
         VBF_DM0_TES_DOWN = ROOT.TH2F(VBFHistoName+"_scale_t_1prongDown",
                                      VBFHistoName+"_scale_t_1prongDown",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)
         VBF_DM1_TES_DOWN = ROOT.TH2F(VBFHistoName+"_scale_t_1prong1pizeroDown",
                                      VBFHistoName+"_scale_t_1prong1pizeroDown",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)
         VBF_DM10_TES_DOWN = ROOT.TH2F(VBFHistoName+"_scale_t_3prongDown",
                                       VBFHistoName+"_scale_t_3prongDown",
-                                      nVBFMassBins,50.0,250.0,
+                                      nm_svBins,m_svBinning,
                                       nmjjBins,mjjBinning)
     #Create the JES uncertainties
     if args.UseJES:
         ZeroJet_JetEta0to3_UP = ROOT.TH2F(ZeroJetHistoName+"_JetEta0to3Up",
                                           ZeroJetHistoName+"_JetEta0to3Up",
-                                          nZeroJetMassBins,50.0,150.0,
+                                          nm_visBins,m_visBinning,
                                           nTauPtBins,TauPtBinning)
         ZeroJet_JetEta0to3_DOWN = ROOT.TH2F(ZeroJetHistoName+"_JetEta0to3Down",
                                             ZeroJetHistoName+"_JetEta0to3Down",
-                                            nZeroJetMassBins,50.0,150.0,
+                                            nm_visBins,m_visBinning,
                                             nTauPtBins,TauPtBinning)
         ZeroJet_JetRelativeBal_UP = ROOT.TH2F(ZeroJetHistoName+"_JetRelativeBalUp",
                                               ZeroJetHistoName+"_JetRelativeBalUp",
-                                              nZeroJetMassBins,50.0,150.0,
+                                              nm_visBins,m_visBinning,
                                               nTauPtBins,TauPtBinning)
         ZeroJet_JetRelativeBal_DOWN = ROOT.TH2F(ZeroJetHistoName+"_JetRelativeBalDown",
                                                 ZeroJetHistoName+"_JetRelativeBalDown",
-                                                nZeroJetMassBins,50.0,150.0,
+                                                nm_visBins,m_visBinning,
                                                 nTauPtBins,TauPtBinning)
         ZeroJet_JetRelativeSample_UP = ROOT.TH2F(ZeroJetHistoName+"_JetRelativeSampleUp",
                                                  ZeroJetHistoName+"_JetRelativeSampleUp",
-                                                 nZeroJetMassBins,50.0,150.0,
+                                                 nm_visBins,m_visBinning,
                                                  nTauPtBins,TauPtBinning)
         ZeroJet_JetRelativeSample_DOWN = ROOT.TH2F(ZeroJetHistoName+"_JetRelativeSampleDown",
                                                    ZeroJetHistoName+"_JetRelativeSampleDown",
-                                                   nZeroJetMassBins,50.0,150.0,
+                                                   nm_visBins,m_visBinning,
                                                    nTauPtBins,TauPtBinning)
         ZeroJet_JetEta3to5_UP = ROOT.TH2F(ZeroJetHistoName+"_JetEta3to5Up",
                                           ZeroJetHistoName+"_JetEta3to5Up",
-                                          nZeroJetMassBins,50.0,150.0,
+                                          nm_visBins,m_visBinning,
                                           nTauPtBins,TauPtBinning)
         ZeroJet_JetEta3to5_DOWN = ROOT.TH2F(ZeroJetHistoName+"_JetEta3to5Down",
                                             ZeroJetHistoName+"_JetEta3to5Down",
-                                            nZeroJetMassBins,50.0,150.0,
+                                            nm_visBins,m_visBinning,
                                             nTauPtBins,TauPtBinning)
         ZeroJet_JetEta0to5_UP = ROOT.TH2F(ZeroJetHistoName+"_JetEta0to5Up",
                                           ZeroJetHistoName+"_JetEta0to5Up",
-                                          nZeroJetMassBins,50.0,150.0,
+                                          nm_visBins,m_visBinning,
                                           nTauPtBins,TauPtBinning)
         ZeroJet_JetEta0to5_DOWN = ROOT.TH2F(ZeroJetHistoName+"_JetEta0to5Down",
                                             ZeroJetHistoName+"_JetEta0to5Down",
-                                            nZeroJetMassBins,50.0,150.0,
+                                            nm_visBins,m_visBinning,
                                             nTauPtBins,TauPtBinning)
         Boosted_JetEta0to3_UP = ROOT.TH2F(BoostedHistoName+"_JetEta0to3Up",
                                           BoostedHistoName+"_JetEta0to3Up",
-                                          nBoostedMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nHPtBins,HiggsPtBinning)
         Boosted_JetEta0to3_DOWN = ROOT.TH2F(BoostedHistoName+"_JetEta0to3Down",
                                             BoostedHistoName+"_JetEta0to3Down",
-                                            nBoostedMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nHPtBins,HiggsPtBinning)
         Boosted_JetRelativeBal_UP = ROOT.TH2F(BoostedHistoName+"_JetRelativeBalUp",
                                               BoostedHistoName+"_JetRelativeBalUp",
-                                              nBoostedMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nHPtBins,HiggsPtBinning)
         Boosted_JetRelativeBal_DOWN = ROOT.TH2F(BoostedHistoName+"_JetRelativeBalDown",
                                                 BoostedHistoName+"_JetRelativeBalDown",
-                                                nBoostedMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nHPtBins,HiggsPtBinning)
         Boosted_JetRelativeSample_UP = ROOT.TH2F(BoostedHistoName+"_JetRelativeSampleUp",
                                                  BoostedHistoName+"_JetRelativeSampleUp",
-                                                 nBoostedMassBins,50.0,250.0,
+                                                 nm_svBins,m_svBinning,
                                                  nHPtBins,HiggsPtBinning)
         Boosted_JetRelativeSample_DOWN = ROOT.TH2F(BoostedHistoName+"_JetRelativeSampleDown",
                                                    BoostedHistoName+"_JetRelativeSampleDown",
-                                                   nBoostedMassBins,50.0,250.0,
+                                                   nm_svBins,m_svBinning,
                                                    nHPtBins,HiggsPtBinning)
         Boosted_JetEta3to5_UP = ROOT.TH2F(BoostedHistoName+"_JetEta3to5Up",
                                           BoostedHistoName+"_JetEta3to5Up",
-                                          nBoostedMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nHPtBins,HiggsPtBinning)
         Boosted_JetEta3to5_DOWN = ROOT.TH2F(BoostedHistoName+"_JetEta3to5Down",
                                             BoostedHistoName+"_JetEta3to5Down",
-                                            nBoostedMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nHPtBins,HiggsPtBinning)
         Boosted_JetEta0to5_UP = ROOT.TH2F(BoostedHistoName+"_JetEta0to5Up",
                                           BoostedHistoName+"_JetEta0to5Up",
-                                          nBoostedMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nHPtBins,HiggsPtBinning)
         Boosted_JetEta0to5_DOWN = ROOT.TH2F(BoostedHistoName+"_JetEta0to5Down",
                                             BoostedHistoName+"_JetEta0to5Down",
-                                            nBoostedMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nHPtBins,HiggsPtBinning)
         VBF_JetEta0to3_UP = ROOT.TH2F(VBFHistoName+"_JetEta0to3Up",
                                       VBFHistoName+"_JetEta0to3Up",
-                                      nVBFMassBins,50.0,250.0,
+                                      nm_svBins,m_svBinning,
                                       nmjjBins,mjjBinning)
         VBF_JetEta0to3_DOWN = ROOT.TH2F(VBFHistoName+"_JetEta0to3Down",
                                         VBFHistoName+"_JetEta0to3Down",
-                                        nVBFMassBins,50.0,250.0,
+                                        nm_svBins,m_svBinning,
                                         nmjjBins,mjjBinning)
         VBF_JetRelativeBal_UP = ROOT.TH2F(VBFHistoName+"_JetRelativeBalUp",
                                           VBFHistoName+"_JetRelativeBalUp",
-                                          nVBFMassBins,50.0,250.0,
+                                          nm_svBins,m_svBinning,
                                           nmjjBins,mjjBinning)
         VBF_JetRelativeBal_DOWN = ROOT.TH2F(VBFHistoName+"_JetRelativeBalDown",
                                             VBFHistoName+"_JetRelativeBalDown",
-                                            nVBFMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nmjjBins,mjjBinning)
         VBF_JetRelativeSample_UP = ROOT.TH2F(VBFHistoName+"_JetRelativeSampleUp",
                                              VBFHistoName+"_JetRelativeSampleUp",
-                                             nVBFMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nmjjBins,mjjBinning)
         VBF_JetRelativeSample_DOWN = ROOT.TH2F(VBFHistoName+"_JetRelativeSampleDown",
                                                VBFHistoName+"_JetRelativeSampleDown",
-                                               nVBFMassBins,50.0,250.0,
+                                               nm_svBins,m_svBinning,
                                                nmjjBins,mjjBinning)
         VBF_JetEta3to5_UP = ROOT.TH2F(VBFHistoName+"_JetEta3to5Up",
                                       VBFHistoName+"_JetEta3to5Up",
-                                      nVBFMassBins,50.0,250.0,
+                                      nm_svBins,m_svBinning,
                                       nmjjBins,mjjBinning)
         VBF_JetEta3to5_DOWN = ROOT.TH2F(VBFHistoName+"_JetEta3to5Down",
                                         VBFHistoName+"_JetEta3to5Down",
-                                        nVBFMassBins,50.0,250.0,
+                                        nm_svBins,m_svBinning,
                                         nmjjBins,mjjBinning)
         VBF_JetEta0to5_UP = ROOT.TH2F(VBFHistoName+"_JetEta0to5Up",
                                       VBFHistoName+"_JetEta0to5Up",
-                                      nVBFMassBins,50.0,250.0,
+                                      nm_svBins,m_svBinning,
                                       nmjjBins,mjjBinning)
         VBF_JetEta0to5_DOWN = ROOT.TH2F(VBFHistoName+"_JetEta0to5Down",
                                         VBFHistoName+"_JetEta0to5Down",
-                                        nVBFMassBins,50.0,250.0,
+                                        nm_svBins,m_svBinning,
                                         nmjjBins,mjjBinning)
         #DYShape
     if args.MakeDYShape:
         ZeroJet_DYShape_UP = ROOT.TH2F(ZeroJetHistoName+"_DYShapeUp",
                                        ZeroJetHistoName+"_DYShapeUp",
-                                       nZeroJetMassBins,50.0,150.0,
+                                       nm_visBins,m_visBinning,
                                        nTauPtBins,TauPtBinning)
         ZeroJet_DYShape_DOWN = ROOT.TH2F(ZeroJetHistoName+"_DYShapeDown",
                                          ZeroJetHistoName+"_DYShapeDown",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         Boosted_DYShape_UP = ROOT.TH2F(BoostedHistoName+"_DYShapeUp",
                                        BoostedHistoName+"_DYShapeUp",
-                                       nBoostedMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nHPtBins,HiggsPtBinning)
         Boosted_DYShape_DOWN = ROOT.TH2F(BoostedHistoName+"_DYShapeDown",
                                          BoostedHistoName+"_DYShapeDown",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         VBF_DYShape_UP = ROOT.TH2F(VBFHistoName+"_DYShapeUp",
                                    VBFHistoName+"_DYShapeUp",
-                                   nVBFMassBins,50.0,250.0,
+                                   nm_svBins,m_svBinning,
                                    nmjjBins,mjjBinning)
         VBF_DYShape_DOWN = ROOT.TH2F(VBFHistoName+"_DYShapeDown",
                                      VBFHistoName+"_DYShapeDown",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)    
     if args.MakeZLShape:
         ZeroJet_DM0_ZLShape_UP = ROOT.TH2F(ZeroJetHistoName+"_DM0_ZLShapeUp",
                                            ZeroJetHistoName+"_DM0_ZLShapeUp",
-                                           nZeroJetMassBins,50.0,150.0,
+                                           nm_visBins,m_visBinning,
                                            nTauPtBins,TauPtBinning)
         ZeroJet_DM0_ZLShape_DOWN = ROOT.TH2F(ZeroJetHistoName+"_DM0_ZLShapeDown",
                                              ZeroJetHistoName+"_DM0_ZLShapeDown",
-                                             nZeroJetMassBins,50.0,150.0,
+                                             nm_visBins,m_visBinning,
                                              nTauPtBins,TauPtBinning)
         ZeroJet_DM1_ZLShape_UP = ROOT.TH2F(ZeroJetHistoName+"_DM1_ZLShapeUp",
                                            ZeroJetHistoName+"_DM1_ZLShapeUp",
-                                           nZeroJetMassBins,50.0,150.0,
+                                           nm_visBins,m_visBinning,
                                            nTauPtBins,TauPtBinning)
         ZeroJet_DM1_ZLShape_DOWN = ROOT.TH2F(ZeroJetHistoName+"_DM1_ZLShapeDown",
                                              ZeroJetHistoName+"_DM1_ZLShapeDown",
-                                             nZeroJetMassBins,50.0,150.0,
+                                             nm_visBins,m_visBinning,
                                              nTauPtBins,TauPtBinning)
         Boosted_DM0_ZLShape_UP = ROOT.TH2F(BoostedHistoName+"_DM0_ZLShapeUp",
                                            BoostedHistoName+"_DM0_ZLShapeUp",
-                                           nBoostedMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nHPtBins,HiggsPtBinning)
         Boosted_DM0_ZLShape_DOWN = ROOT.TH2F(BoostedHistoName+"_DM0_ZLShapeDown",
                                              BoostedHistoName+"_DM0_ZLShapeDown",
-                                             nBoostedMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nHPtBins,HiggsPtBinning)
         Boosted_DM1_ZLShape_UP = ROOT.TH2F(BoostedHistoName+"_DM1_ZLShapeUp",
                                            BoostedHistoName+"_DM1_ZLShapeUp",
-                                           nBoostedMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nHPtBins,HiggsPtBinning)
         Boosted_DM1_ZLShape_DOWN = ROOT.TH2F(BoostedHistoName+"_DM1_ZLShapeDown",
                                              BoostedHistoName+"_DM1_ZLShapeDown",
-                                             nBoostedMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nHPtBins,HiggsPtBinning)
         VBF_DM0_ZLShape_UP = ROOT.TH2F(VBFHistoName+"_DM0_ZLShapeUp",
                                        VBFHistoName+"_DM0_ZLShapeUp",
-                                       nVBFMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nmjjBins,mjjBinning)
         VBF_DM0_ZLShape_DOWN = ROOT.TH2F(VBFHistoName+"_DM0_ZLShapeDown",
                                          VBFHistoName+"_DM0_ZLShapeDown",
-                                         nVBFMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nmjjBins,mjjBinning)
         VBF_DM1_ZLShape_UP = ROOT.TH2F(VBFHistoName+"_DM1_ZLShapeUp",
                                        VBFHistoName+"_DM1_ZLShapeUp",
-                                       nVBFMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nmjjBins,mjjBinning)
         VBF_DM1_ZLShape_DOWN = ROOT.TH2F(VBFHistoName+"_DM1_ZLShapeDown",
                                          VBFHistoName+"_DM1_ZLShapeDown",
-                                         nVBFMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nmjjBins,mjjBinning)
     if args.MakeggHTheoryShape:
         #zero jet shapes, 18 total
         ZeroJet_THU_ggH_Mu_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mu_13TeVUp",
                                                ZeroJetHistoName+"_THU_ggH_Mu_13TeVUp",
-                                               nZeroJetMassBins,50.0,150.0,
+                                               nm_visBins,m_visBinning,
                                                nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Mu_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mu_13TeVDown",
                                                ZeroJetHistoName+"_THU_ggH_Mu_13TeVDown",
-                                               nZeroJetMassBins,50.0,150.0,
+                                               nm_visBins,m_visBinning,
                                                nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Res_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Res_13TeVUp",
                                                 ZeroJetHistoName+"_THU_ggH_Res_13TeVUp",
-                                                nZeroJetMassBins,50.0,150.0,
+                                                nm_visBins,m_visBinning,
                                                 nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Res_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Res_13TeVDown",
                                                   ZeroJetHistoName+"_THU_ggH_Res_13TeVDown",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Mig01_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mig01_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_Mig01_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Mig01_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mig01_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_Mig01_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Mig12_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mig12_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_Mig12_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_Mig12_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_Mig12_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_Mig12_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_VBF2j_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_VBF2j_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_VBF2j_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_VBF2j_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_VBF2j_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_VBF2j_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_VBF3j_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_VBF3j_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_VBF3j_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_VBF3j_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_VBF3j_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_VBF3j_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_PT60_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_PT60_13TeVUp",
                                                  ZeroJetHistoName+"_THU_ggH_PT60_13TeVUp",
-                                                 nZeroJetMassBins,50.0,150.0,
+                                                 nm_visBins,m_visBinning,
                                                  nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_PT60_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_PT60_13TeVDown",
                                                    ZeroJetHistoName+"_THU_ggH_PT60_13TeVDown",
-                                                   nZeroJetMassBins,50.0,150.0,
+                                                   nm_visBins,m_visBinning,
                                                    nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_PT120_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_PT120_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_PT120_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_PT120_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_PT120_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_PT120_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_qmtop_13TeVUp = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_qmtop_13TeVUp",
                                                   ZeroJetHistoName+"_THU_ggH_qmtop_13TeVUp",
-                                                  nZeroJetMassBins,50.0,150.0,
+                                                  nm_visBins,m_visBinning,
                                                   nTauPtBins,TauPtBinning)
         ZeroJet_THU_ggH_qmtop_13TeVDown = ROOT.TH2F(ZeroJetHistoName+"_THU_ggH_qmtop_13TeVDown",
                                                     ZeroJetHistoName+"_THU_ggH_qmtop_13TeVDown",
-                                                    nZeroJetMassBins,50.0,150.0,
+                                                    nm_visBins,m_visBinning,
                                                     nTauPtBins,TauPtBinning)
         #boosted shapes, 18 total
         Boosted_THU_ggH_Mu_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mu_13TeVUp",
                                                BoostedHistoName+"_THU_ggH_Mu_13TeVUp",
-                                               nBoostedMassBins,50.0,250.0,
+                                               nm_svBins,m_svBinning,
                                                nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Mu_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mu_13TeVDown",
                                                  BoostedHistoName+"_THU_ggH_Mu_13TeVDown",
-                                                 nBoostedMassBins,50.0,250.0,
+                                                 nm_svBins,m_svBinning,
                                                  nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Res_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Res_13TeVUp",
                                                 BoostedHistoName+"_THU_ggH_Res_13TeVUp",
-                                                nBoostedMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Res_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Res_13TeVDown",
                                                   BoostedHistoName+"_THU_ggH_Res_13TeVDown",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Mig01_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mig01_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_Mig01_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Mig01_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mig01_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_Mig01_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Mig12_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mig12_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_Mig12_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_Mig12_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_Mig12_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_Mig12_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_VBF2j_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_VBF2j_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_VBF2j_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_VBF2j_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_VBF2j_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_VBF2j_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_VBF3j_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_VBF3j_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_VBF3j_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_VBF3j_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_VBF3j_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_VBF3j_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_PT60_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_PT60_13TeVUp",
                                                  BoostedHistoName+"_THU_ggH_PT60_13TeVUp",
-                                                 nBoostedMassBins,50.0,250.0,
+                                                 nm_svBins,m_svBinning,
                                                  nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_PT60_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_PT60_13TeVDown",
                                                    BoostedHistoName+"_THU_ggH_PT60_13TeVDown",
-                                                   nBoostedMassBins,50.0,250.0,
+                                                   nm_svBins,m_svBinning,
                                                    nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_PT120_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_PT120_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_PT120_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_PT120_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_PT120_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_PT120_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_qmtop_13TeVUp = ROOT.TH2F(BoostedHistoName+"_THU_ggH_qmtop_13TeVUp",
                                                   BoostedHistoName+"_THU_ggH_qmtop_13TeVUp",
-                                                  nBoostedMassBins,50.0,250.0,
+                                                  nm_svBins,m_svBinning,
                                                   nHPtBins,HiggsPtBinning)
         Boosted_THU_ggH_qmtop_13TeVDown = ROOT.TH2F(BoostedHistoName+"_THU_ggH_qmtop_13TeVDown",
                                                     BoostedHistoName+"_THU_ggH_qmtop_13TeVDown",
-                                                    nBoostedMassBins,50.0,250.0,
+                                                    nm_svBins,m_svBinning,
                                                     nHPtBins,HiggsPtBinning)
         #VBF shapes, 18 total
         VBF_THU_ggH_Mu_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mu_13TeVUp",
                                            VBFHistoName+"_THU_ggH_Mu_13TeVUp",
-                                           nVBFMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nmjjBins,mjjBinning)
         VBF_THU_ggH_Mu_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mu_13TeVDown",
                                              VBFHistoName+"_THU_ggH_Mu_13TeVDown",
-                                             nVBFMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nmjjBins,mjjBinning)
         VBF_THU_ggH_Res_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_Res_13TeVUp",
                                             VBFHistoName+"_THU_ggH_Res_13TeVUp",
-                                            nVBFMassBins,50.0,250.0,
+                                            nm_svBins,m_svBinning,
                                             nmjjBins,mjjBinning)
         VBF_THU_ggH_Res_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_Res_13TeVDown",
                                               VBFHistoName+"_THU_ggH_Res_13TeVDown",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_Mig01_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mig01_13TeVUp",
                                               VBFHistoName+"_THU_ggH_Mig01_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_Mig01_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mig01_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_Mig01_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_THU_ggH_Mig12_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mig12_13TeVUp",
                                               VBFHistoName+"_THU_ggH_Mig12_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_Mig12_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_Mig12_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_Mig12_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_THU_ggH_VBF2j_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_VBF2j_13TeVUp",
                                               VBFHistoName+"_THU_ggH_VBF2j_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_VBF2j_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_VBF2j_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_VBF2j_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_THU_ggH_VBF3j_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_VBF3j_13TeVUp",
                                               VBFHistoName+"_THU_ggH_VBF3j_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_VBF3j_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_VBF3j_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_VBF3j_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_THU_ggH_PT60_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_PT60_13TeVUp",
                                              VBFHistoName+"_THU_ggH_PT60_13TeVUp",
-                                             nVBFMassBins,50.0,250.0,
+                                             nm_svBins,m_svBinning,
                                              nmjjBins,mjjBinning)
         VBF_THU_ggH_PT60_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_PT60_13TeVDown",
                                                VBFHistoName+"_THU_ggH_PT60_13TeVDown",
-                                               nVBFMassBins,50.0,250.0,
+                                               nm_svBins,m_svBinning,
                                                nmjjBins,mjjBinning)
         VBF_THU_ggH_PT120_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_PT120_13TeVUp",
                                               VBFHistoName+"_THU_ggH_PT120_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_PT120_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_PT120_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_PT120_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
         VBF_THU_ggH_qmtop_13TeVUp = ROOT.TH2F(VBFHistoName+"_THU_ggH_qmtop_13TeVUp",
                                               VBFHistoName+"_THU_ggH_qmtop_13TeVUp",
-                                              nVBFMassBins,50.0,250.0,
+                                              nm_svBins,m_svBinning,
                                               nmjjBins,mjjBinning)
         VBF_THU_ggH_qmtop_13TeVDown = ROOT.TH2F(VBFHistoName+"_THU_ggH_qmtop_13TeVDown",
                                                 VBFHistoName+"_THU_ggH_qmtop_13TeVDown",
-                                                nVBFMassBins,50.0,250.0,
+                                                nm_svBins,m_svBinning,
                                                 nmjjBins,mjjBinning)
     if args.MakeRecoilUncertainties:
         ZeroJet_ResolutionUp = ROOT.TH2F(ZeroJetHistoName+"_ResolutionUp",
                                          ZeroJetHistoName+"_ResolutionUp",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         ZeroJet_ResolutionDown = ROOT.TH2F(ZeroJetHistoName+"_ResolutionDown",
                                          ZeroJetHistoName+"_ResolutionDown",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         ZeroJet_ResponseUp = ROOT.TH2F(ZeroJetHistoName+"_ResponseUp",
                                          ZeroJetHistoName+"_ResponseUp",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         ZeroJet_ResponseDown = ROOT.TH2F(ZeroJetHistoName+"_ResponseDown",
                                          ZeroJetHistoName+"_ResponseDown",
-                                         nZeroJetMassBins,50.0,150.0,
+                                         nm_visBins,m_visBinning,
                                          nTauPtBins,TauPtBinning)
         Boosted_ResolutionUp = ROOT.TH2F(BoostedHistoName+"_ResolutionUp",
                                          BoostedHistoName+"_ResolutionUp",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_ResolutionDown = ROOT.TH2F(BoostedHistoName+"_ResolutionDown",
                                          BoostedHistoName+"_ResolutionDown",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_ResponseUp = ROOT.TH2F(BoostedHistoName+"_ResponseUp",
                                          BoostedHistoName+"_ResponseUp",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         Boosted_ResponseDown = ROOT.TH2F(BoostedHistoName+"_ResponseDown",
                                          BoostedHistoName+"_ResponseDown",
-                                         nBoostedMassBins,50.0,250.0,
+                                         nm_svBins,m_svBinning,
                                          nHPtBins,HiggsPtBinning)
         VBF_ResolutionUp = ROOT.TH2F(VBFHistoName+"_ResolutionUp",
                                      VBFHistoName+"_ResolutionUp",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)
         VBF_ResolutionDown = ROOT.TH2F(VBFHistoName+"_ResolutionDown",
                                        VBFHistoName+"_ResolutionDown",
-                                       nVBFMassBins,50.0,250.0,
+                                       nm_svBins,m_svBinning,
                                        nmjjBins,mjjBinning)
         VBF_ResponseUp = ROOT.TH2F(VBFHistoName+"_ResponseUp",
                                    VBFHistoName+"_ResponseUp",
-                                   nVBFMassBins,50.0,250.0,
+                                   nm_svBins,m_svBinning,
                                    nmjjBins,mjjBinning)
         VBF_ResponseDown = ROOT.TH2F(VBFHistoName+"_ResponseDown",
                                      VBFHistoName+"_ResponseDown",
-                                     nVBFMassBins,50.0,250.0,
+                                     nm_svBins,m_svBinning,
                                      nmjjBins,mjjBinning)
     if args.MakeTTbarContamination:
         ZeroJet_TTBarContamination = ROOT.TH2F(ZeroJetHistoName+"_TTBarContamination",
                                                ZeroJetHistoName+"_TTBarContamination",
-                                               nZeroJetMassBins,50.0,150.0,
+                                               nm_visBins,m_visBinning,
                                                nTauPtBins,TauPtBinning)
         Boosted_TTBarContamination = ROOT.TH2F(BoostedHistoName+"_TTBarContamination",
                                                BoostedHistoName+"_TTBarContamination",
-                                               nBoostedMassBins,50.0,250.0,
+                                               nm_svBins,m_svBinning,
                                                nHPtBins,HiggsPtBinning)
         VBF_TTBarContamination = ROOT.TH2F(VBFHistoName+"_TTBarContamination",
                                            VBFHistoName+"_TTBarContamination",
-                                           nVBFMassBins,50.0,250.0,
+                                           nm_svBins,m_svBinning,
                                            nmjjBins,mjjBinning)
 
     for i in tqdm(range(TheTree.GetEntries())):
@@ -879,7 +882,7 @@ def GenerateRolledPlots(File,args):
         #special thing for the ttbar contamination. 
         #since we don't want to do anything else with these ntuples,
         if args.MakeTTbarContamination:
-            if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0 and MT < 50.0):
+            if(TauVector.Pt()>30.0 and MuVector.Pt() > 21.0 and MT < 50.0):
                 if njetsVariable == 0:
                     ZeroJet_TTBarContamination.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheTree.FinalWeighting*0.1)
                 elif (njetsVariable >= 2
@@ -891,7 +894,7 @@ def GenerateRolledPlots(File,args):
             
 
         if njetsVariable == 0:
-            if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0 and MT < 50.0):
+            if(TauVector.Pt()>30.0 and MuVector.Pt() > 21.0 and MT < 50.0):
                 ZeroJetResultsRolled.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheWeight)
                 #Handle Uncertainties
                 if args.UseFakeFactor:
@@ -1072,7 +1075,7 @@ def GenerateRolledPlots(File,args):
                 ResolutionCorrectedMT_DOWN = CalculateMT(MuVector,ResolutionCorrectedMetVector_DOWN)
                 ResponseCorrectedMT_UP = CalculateMT(MuVector,ResponseCorrectedMetVector_UP)
                 ResponseCorrectedMT_DOWN = CalculateMT(MuVector,ResponseCorrectedMetVector_DOWN)
-                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 26.0):
+                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 21.0):
                     if(ResolutionCorrectedMT_UP < 50.0):
                         ZeroJet_ResolutionUp.Fill((MuVector+TauVector).M(),TauVector.Pt(),TheWeight)
                     if(ResolutionCorrectedMT_DOWN < 50.0):
@@ -1085,7 +1088,7 @@ def GenerateRolledPlots(File,args):
         #VBF Category
         elif (njetsVariable >= 2
               and mjjVariable>300):
-            if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0):
+            if(TauVector.Pt()>30.0 and MuVector.Pt() > 21.0):
                 VBFResultsRolled.Fill(TheTree.m_sv,mjjVariable,TheWeight)
                 #Handle Uncertainties
                 if args.UseFakeFactor:
@@ -1236,7 +1239,7 @@ def GenerateRolledPlots(File,args):
                 ResolutionCorrectedMT_DOWN = CalculateMT(MuVector,ResolutionCorrectedMetVector_DOWN)
                 ResponseCorrectedMT_UP = CalculateMT(MuVector,ResponseCorrectedMetVector_UP)
                 ResponseCorrectedMT_DOWN = CalculateMT(MuVector,ResponseCorrectedMetVector_DOWN)
-                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 26.0):
+                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 21.0):
                     if(ResolutionCorrectedMT_UP < 50.0):
                         VBF_ResolutionUp.Fill(TheTree.m_sv_ResolutionUp,mjjVariable,TheWeight)
                     if(ResolutionCorrectedMT_DOWN < 50.0):
@@ -1247,7 +1250,7 @@ def GenerateRolledPlots(File,args):
                         VBF_ResponseDown.Fill(TheTree.m_sv_ResponseDown,mjjVariable,TheWeight)
 #boosted category
         else:
-            if(TauVector.Pt()>30.0 and MuVector.Pt() > 26.0):
+            if(TauVector.Pt()>30.0 and MuVector.Pt() > 21.0):
                 BoostedResultsRolled.Fill(TheTree.m_sv,(MuVector+TauVector+MetVector).Pt(),TheWeight)
                 #Handle Uncertainties
                 if args.UseFakeFactor:
@@ -1429,7 +1432,7 @@ def GenerateRolledPlots(File,args):
                 ResolutionCorrectedMT_DOWN = CalculateMT(MuVector,ResolutionCorrectedMetVector_DOWN)
                 ResponseCorrectedMT_UP = CalculateMT(MuVector,ResponseCorrectedMetVector_UP)
                 ResponseCorrectedMT_DOWN = CalculateMT(MuVector,ResponseCorrectedMetVector_DOWN)
-                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 26.0):
+                if(TauVector.Pt() > 30.0 and MuVector.Pt() > 21.0):
                     if(ResolutionCorrectedMT_UP < 50.0):
                         Boosted_ResolutionUp.Fill(TheTree.m_sv_ResolutionUp,(TauVector+MuVector+ResolutionCorrectedMetVector_UP).Pt(),TheWeight)
                     if(ResolutionCorrectedMT_DOWN < 50.0):
@@ -1476,7 +1479,7 @@ def GenerateRolledPlots(File,args):
             
             #now we split up and define the various categories,
             #first things first, everything must pass basic tau whatever
-            if(TauVector.Pt() > 30.0 and MuVector.Pt() > 26.0):
+            if(TauVector.Pt() > 30.0 and MuVector.Pt() > 21.0):
                 #define the JetEta0to3_UP area
                 if(MT_JetEta0to3_UP < 50.0):
                     #ZeroJet JetEta0to3_UP
@@ -1810,9 +1813,6 @@ if __name__=="__main__":
     parser.add_argument('--UseFakeFactor',help = "Use the file's fake factor weighting when making plots for this file.", action="store_true")
     parser.add_argument('--UseTES',help="Create the TES Uncertainty plots on these files",action="store_true")
     parser.add_argument('--UseJES',help="Create the JES Uncertainty plots on these files", action="store_true")
-    parser.add_argument('--numZeroJetBins',nargs="?",help="Number of bins in zero jet category (m_vis 50-150)",default="20")
-    parser.add_argument('--numBoostedBins',nargs="?",help="Number of bins in boosted category (m_sv 50-250)",default = "20")
-    parser.add_argument('--numVBFBins',nargs="?",help="Number of bins in VBF category (m_sv 50-250)",default="20")
     parser.add_argument('--MakeDYShape',help="Make the DY shape using the UP-DOWN ZPT weights",action="store_true")
     parser.add_argument('--MakeZLShape',help="Make the ZL shape using EES and MES uncertainties",action="store_true")
     parser.add_argument('--MakeggHTheoryShape',help="Make the ggH Theory Uncertainty shape", action = "store_true")
