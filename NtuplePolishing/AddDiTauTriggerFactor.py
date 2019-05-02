@@ -69,7 +69,7 @@ def getDiTauScaleFactor(pt,eta,phi,central_or_shift,diTauMC_,diTauEtaPhiMC_,diTa
     return sf
 
 def AddDiTauTriggerFactor(File,args):
-    print("Setting up file and tree...")
+    #print("Setting up file and tree...")
     TheFile = ROOT.TFile(File,"UPDATE")
     TheTree = TheFile.mt_Selected
     
@@ -82,11 +82,11 @@ def AddDiTauTriggerFactor(File,args):
     mTauEtaPhiAvgData_ = fTyler.Get("muTau_tight_AVG_DATA")
     mTauEtaPhiAvgMC_ = fTyler.Get("muTau_tight_AVG_MC")
 
-    print("Branching...")
+    #print("Branching...")
     DiTauTriggerWeight = array("f",[0.])
     DiTauTriggerBranch = TheTree.Branch("DiTauTriggerWeight", DiTauTriggerWeight,"DiTauTriggerWeight/F")
 
-    print("Adding Scale Factors...")
+    #print("Adding Scale Factors...")
     for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
         DiTauTriggerWeight[0] = getDiTauScaleFactor(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,0,mTauMC_,mTauEtaPhiMC_,mTauEtaPhiAvgMC_,mTauData_,mTauEtaPhiData_,mTauEtaPhiAvgData_)        

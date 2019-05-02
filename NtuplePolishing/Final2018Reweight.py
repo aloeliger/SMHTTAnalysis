@@ -110,12 +110,14 @@ def AddFinalWeights(FileToRun, args):
         if FileName == "Data.root":
             Weight = 1.0
         FinalWeighting[0] = Weight        
-        FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
-        FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP
+        if not args.DisableZPTWeighting:
+            FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
+            FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP
         
         TheBranch.Fill()
-        TheBranch_ZPT_DOWN.Fill()
-        TheBranch_ZPT_UP.Fill()
+        if not args.DisableZPTWeighting:
+            TheBranch_ZPT_DOWN.Fill()
+            TheBranch_ZPT_UP.Fill()
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()

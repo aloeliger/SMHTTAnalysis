@@ -304,7 +304,12 @@ def MakeFractions(args):
 
 def AddFakeFactorWeightings(args):
     print("Adding Fake Factors to "+args.File)
-    ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data/SM2017/tight/vloose/mt/fakeFactors.root")
+    if args.Year == "2017":
+        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data/SM2017/tight/vloose/mt/fakeFactors.root")
+    elif args.Year == "2018":
+        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2018/SM2018/tight/vloose/mt/fakeFactors.root")
+    elif args.Year == "2016":
+        raise RuntimeError("2016 not implemented yet. Implement me!")
     ff = ff_file.Get('ff_comb')
 
     ReweightFile = ROOT.TFile(args.File,"UPDATE")

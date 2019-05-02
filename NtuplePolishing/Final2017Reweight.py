@@ -8,6 +8,7 @@ import AddCrossSectionWeightings
 import AddZPTReweighting
 import AddPileupWeightings
 import AddKITMuSFs
+import AddMCTriggerScaleFactors
 
 def AddFinalWeights(FileToRun,args):
     print("")
@@ -39,6 +40,11 @@ def AddFinalWeights(FileToRun,args):
         except:
             print("Failed to find muon scale factors. Adding them...")
             AddKITMuSFs.AddKITMuSFs(FileToRun,args)
+        try:
+            CheckFile.mt_Selected.TriggerSF
+        except:
+            print("Failed to find MC trigger scale factors. Adding them...")
+            AddMCTriggerScaleFactors.AddMCTriggerScaleFactors(FileToRun,args)
     
     #we actually need to reload the file and the tree now, because it may have changed
     CheckFile.Close()
@@ -87,7 +93,7 @@ def AddFinalWeights(FileToRun,args):
             if(ReweightFile.mt_Selected.gen_match_2 == 2
                or ReweightFile.mt_Selected.gen_match_2 == 4):
                 if(abs(TauVector.Eta())<0.4):
-                    Weight = Weight * 1.17
+                   Weight = Weight * 1.17
                 elif(abs(TauVector.Eta())<0.8):
                     Weight = Weight * 1.29
                 elif(abs(TauVector.Eta())<1.2):
@@ -102,17 +108,19 @@ def AddFinalWeights(FileToRun,args):
         Trigger27 = (ReweightFile.mt_Selected.passMu27 and ReweightFile.mt_Selected.matchMu27_1 
                  and ReweightFile.mt_Selected.filterMu27_1 and ReweightFile.mt_Selected.pt_1 > 28.0)
         Trigger2027 = (ReweightFile.mt_Selected.passMu20Tau27 and ReweightFile.mt_Selected.matchMu20Tau27_1 
-                   and ReweightFile.mt_Selected.filterMu20Tau27_1                    
-                   and ReweightFile.mt_Selected.filterMu20Tau27_2
-                   and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
-                   and ReweightFile.mt_Selected.pt_1 < 25
-                   and abs(ReweightFile.mt_Selected.eta_2 < 2.1))
+                       and ReweightFile.mt_Selected.filterMu20Tau27_1                    
+                       and ReweightFile.mt_Selected.filterMu20Tau27_2
+                       and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
+                       and ReweightFile.mt_Selected.pt_1 < 25
+                       and abs(ReweightFile.mt_Selected.eta_1) < 2.1
+                       and abs(ReweightFile.mt_Selected.eta_2) < 2.1)
     #no tau trigger matching in embedded
         if(FileName == "Embedded.root"):
             Trigger2027 = (ReweightFile.mt_Selected.passMu20Tau27 and ReweightFile.mt_Selected.matchMu20Tau27_1 
                            and ReweightFile.mt_Selected.filterMu20Tau27_1
                            and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
                            and ReweightFile.mt_Selected.pt_1 < 25
+                           and abs(ReweightFile.mt_Selected.eta_1) < 2.1
                            and abs(ReweightFile.mt_Selected.eta_2 < 2.1))
             
         #Embedded trigger whatever
@@ -141,6 +149,9 @@ def AddFinalWeights(FileToRun,args):
                 Weight = Weight*FirstWorkSpace.function("m_id_embed_kit_ratio").getVal()
                 if(Trigger24 or Trigger27):
                     Weight = Weight*FirstWorkSpace.function("m_trg24_27_embed_kit_ratio").getVal()
+                else:
+                    Weight = Weight*FirstWorkSpace.function("m_trg_MuTau_Mu20Leg_kit_ratio_embed").getVal()
+                    Weight = Weight*FirstWorkSpace.function("mt_emb_LooseChargedIsoPFTau27_kit_ratio").getVal()
                 
         #Top pT reweighting
         if not args.DisableTopReweighting:
@@ -162,6 +173,10 @@ def AddFinalWeights(FileToRun,args):
             Weight_ZPT_DOWN = Weight * ReweightFile.mt_Selected.ZPTWeighting_DOWN
             Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP
             Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
+
+        #MC Trigger Scale Factors
+        if (not args.DisableMCTriggerSFs and not(FileName == "Data.root" or FileName == "Embedded.root")):
+            Weight = Weight * ReweightFile.mt_Selected.TriggerSF
                     
         #ALWAYS
         if FileName == "Data.root":
@@ -191,11 +206,10 @@ if __name__=="__main__":
     parser.add_argument('--DisablePileupWeighting',help="Disable the pileup weighting",action="store_true")
     parser.add_argument('--UseInclusiveDY',help="Option for using non DY#.root files in cross section weighting",action="store_true")
     parser.add_argument('--DisableMuSFs',help="Disable the KIT style muon scale factors",action="store_true")
+    parser.add_argument('--DisableMCTriggerSFs',help="Disable The MC tirgger SFs",action="store_true")
     
     
-    args = parser.parse_args()
-
-    print(args.year)
+    args = parser.parse_args()    
     
     for File in args.Files:        
         AddFinalWeights(File,args)
