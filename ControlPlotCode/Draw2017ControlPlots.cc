@@ -1073,4 +1073,110 @@ void Draw2017ControlPlots()
 
   Legend_mjj->Draw();
   CanvasTen->SaveAs("FinalPlots/mjj.png");
+
+  //trigger
+  TCanvas* CanvasEleven = new TCanvas("CanvasEleven","trigger",550,550);
+  CanvasEleven->SetTickx();
+  CanvasEleven->SetTicky();
+
+  gStyle->SetOptStat(0);
+  TH1F* Data_trigger = (TH1F*) HistoFile->Get("Data_2017_trigger");
+  TH1F* Data_Fake_trigger = (TH1F*) HistoFile->Get("Data_2017_Fake__trigger");
+  TH1F* DYTT_trigger = (TH1F*) HistoFile->Get("Embedded_2017_genmatch_tt_trigger");
+  TH1F* DYMM_trigger = (TH1F*) HistoFile->Get("DY_2017_genmatch_low_trigger");
+  TH1F* TTToHadronic_trigger = (TH1F*) HistoFile->Get("TTToHadronic_2017_trigger");
+  TH1F* TTTo2L2Nu_trigger = (TH1F*) HistoFile->Get("TTTo2L2Nu_2017_trigger");
+  TH1F* TTToSemiLeptonic_trigger = (TH1F*) HistoFile->Get("TTToSemiLeptonic_2017_trigger");  
+  TH1F* WW_trigger = (TH1F*) HistoFile->Get("WW_2017_trigger");
+  TH1F* WZ_trigger = (TH1F*) HistoFile->Get("WZ_2017_trigger");
+  TH1F* ZZ_trigger = (TH1F*) HistoFile->Get("ZZ_2017_trigger");
+  TH1F* ST_tW_top_trigger = (TH1F*) HistoFile->Get("ST_tW_top_2017_trigger");
+  TH1F* ggH_trigger = (TH1F*) HistoFile->Get("ggH_2017_trigger");
+  TH1F* VBF_trigger = (TH1F*) HistoFile->Get("VBF_2017_trigger");
+  TH1F* WHPlus_trigger = (TH1F*) HistoFile->Get("WHPlus_2017_trigger");
+  TH1F* WHMinus_trigger = (TH1F*) HistoFile->Get("WHMinus_2017_trigger");
+  TH1F* ZH_trigger = (TH1F*) HistoFile->Get("ZH_2017_trigger");
+
+  TH1F* TTFinal_trigger = (TH1F*) TTToHadronic_trigger->Clone();
+  TTFinal_trigger->Add(TTTo2L2Nu_trigger);
+  TTFinal_trigger->Add(TTToSemiLeptonic_trigger);
+
+  TH1F* VVFinal_trigger = (TH1F*) WW_trigger->Clone();
+  VVFinal_trigger->Add(WZ_trigger);
+  VVFinal_trigger->Add(ZZ_trigger);
+  VVFinal_trigger->Add(ST_tW_top_trigger);
+  
+  TH1F* VHFinal_trigger = (TH1F*) WHPlus_trigger->Clone();
+  VHFinal_trigger->Add(WHMinus_trigger);
+  VHFinal_trigger->Add(ZH_trigger);
+
+  TH1F* Other_trigger = (TH1F*) VHFinal_trigger->Clone();
+  Other_trigger->Add(ggH_trigger);
+  Other_trigger->Add(VBF_trigger);
+  Other_trigger->Add(VVFinal_trigger);
+
+  TH1F* AllHiggs_trigger = (TH1F*) VHFinal_trigger->Clone();
+  AllHiggs_trigger->Add(ggH_trigger);
+  AllHiggs_trigger->Add(VBF_trigger);
+
+  Data_trigger->SetMarkerStyle(20);
+  Data_trigger->Sumw2();
+  
+  Data_Fake_trigger->SetLineColor(kBlack);
+  Data_Fake_trigger->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    
+  DYTT_trigger->SetLineColor(kBlack);
+  DYTT_trigger->SetFillColor(TColor::GetColor("#ffcc66"));
+
+  DYMM_trigger->SetLineColor(kBlack);
+  DYMM_trigger->SetFillColor(TColor::GetColor("#4496c8"));
+  
+  TTFinal_trigger->SetLineColor(kBlack);
+  TTFinal_trigger->SetFillColor(TColor::GetColor("#9999cc"));
+
+  Other_trigger->SetLineColor(kBlack);
+  Other_trigger->SetFillColor(TColor::GetColor("#12cadd"));
+  
+  AllHiggs_trigger->SetLineColor(kRed);
+  AllHiggs_trigger->Scale(30);
+
+  std::cout<<"Fake Background Integral: "<<Data_Fake_trigger->Integral()<<std::endl;
+
+  THStack* BackgroundStack_trigger = new THStack("BackgroundStack_trigger","BackgroundStack_trigger");  
+  BackgroundStack_trigger->Add(Data_Fake_trigger,"hist");
+  BackgroundStack_trigger->Add(TTFinal_trigger,"hist");
+  BackgroundStack_trigger->Add(Other_trigger,"hist");
+  BackgroundStack_trigger->Add(DYMM_trigger,"hist");
+  BackgroundStack_trigger->Add(DYTT_trigger,"hist");
+
+  TH1F* BackgroundStack_trigger_Errors = MakeStackErrors(BackgroundStack_trigger);
+
+  TPad* PlotPad_trigger = MakeRatioPlot(CanvasEleven,BackgroundStack_trigger, Data_trigger, "trigger",0.7,1.3);
+  PlotPad_trigger->SetTickx();
+  PlotPad_trigger->SetTicky();
+
+  BackgroundStack_trigger->SetMaximum(max(BackgroundStack_trigger->GetMaximum(),Data_trigger->GetMaximum()));
+  
+  BackgroundStack_trigger->Draw();
+  BackgroundStack_trigger_Errors->Draw("SAME e2");
+  BackgroundStack_trigger->SetTitle("trigger");
+  Data_trigger->Draw("SAME e1");
+  AllHiggs_trigger->Draw("SAME HIST");
+  BackgroundStack_trigger->GetYaxis()->SetTitle("Events");
+  BackgroundStack_trigger->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_trigger->GetXaxis()->SetLabelSize(0.0);
+
+  CMS_lumi(PlotPad_trigger,0,33);
+
+  TLegend* Legend_trigger = new TLegend(0.61,0.41,0.88,0.68);  
+  Legend_trigger->AddEntry(Data_trigger,"Observed","pe");
+  Legend_trigger->AddEntry(DYTT_trigger,"DY #rightarrow #tau#tau","f");
+  Legend_trigger->AddEntry(Other_trigger,"Other","f");
+  Legend_trigger->AddEntry(DYMM_trigger,"DY #rightarrow ll","f");
+  Legend_trigger->AddEntry(TTFinal_trigger,"t#bar{t}","f");
+  Legend_trigger->AddEntry(Data_Fake_trigger,"Fakes","f");
+  Legend_trigger->AddEntry(AllHiggs_trigger,"All Higgs (#times 30)","l");
+
+  Legend_trigger->Draw();
+  CanvasEleven->SaveAs("FinalPlots/trigger.png");
 }

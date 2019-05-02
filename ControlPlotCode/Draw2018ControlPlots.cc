@@ -213,7 +213,7 @@ void Draw2018ControlPlots()
 
   CMS_lumi(PlotPad_MuEta,0,33);
 
-  TLegend* Legend_MuEta = new TLegend(0.61,0.41,0.88,0.68);      
+  TLegend* Legend_MuEta = new TLegend(0.1,0.70,0.30,0.9);      
   Legend_MuEta->AddEntry(Data_MuEta,"Observed","pe");
   Legend_MuEta->AddEntry(DYTT_MuEta,"DY #rightarrow #tau#tau","f");
   Legend_MuEta->AddEntry(Other_MuEta,"Other","f");
@@ -425,7 +425,7 @@ void Draw2018ControlPlots()
 
   CMS_lumi(PlotPad_TauEta,0,33);
 
-  TLegend* Legend_TauEta = new TLegend(0.61,0.41,0.88,0.68);
+  TLegend* Legend_TauEta = new TLegend(0.1,0.7,0.3,0.9);
   Legend_TauEta->AddEntry(Data_TauEta,"Observed","pe");
   Legend_TauEta->AddEntry(DYTT_TauEta,"DY #rightarrow #tau#tau","f");
   Legend_TauEta->AddEntry(Other_TauEta,"Other","f");
@@ -637,7 +637,7 @@ void Draw2018ControlPlots()
 
   CMS_lumi(PlotPad_METPhi,0,33);
 
-  TLegend* Legend_METPhi = new TLegend(0.61,0.41,0.88,0.68);
+  TLegend* Legend_METPhi = new TLegend(0.1,0.7,0.3,0.9);
   Legend_METPhi->AddEntry(Data_METPhi,"Observed","pe");
   Legend_METPhi->AddEntry(DYTT_METPhi,"DY #rightarrow #tau#tau","f");
   Legend_METPhi->AddEntry(Other_METPhi,"Other","f");
@@ -1072,4 +1072,216 @@ void Draw2018ControlPlots()
 
   Legend_mjj->Draw();
   CanvasTen->SaveAs("FinalPlots/mjj.png");
+
+  //jeta_1 histo
+  TCanvas* CanvasEleven = new TCanvas("CanvasEleven","j1eta",550,550);
+  CanvasEleven->SetTickx();
+  CanvasEleven->SetTicky();
+
+  gStyle->SetOptStat(0);
+  TH1F* Data_j1eta = (TH1F*) HistoFile->Get("Data_2018_j1eta");
+  TH1F* Data_Fake_j1eta = (TH1F*) HistoFile->Get("Data_2018_Fake__j1eta");
+  TH1F* DYTT_j1eta = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_j1eta");
+  TH1F* DYMM_j1eta = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_j1eta");
+  TH1F* TTToHadronic_j1eta = (TH1F*) HistoFile->Get("TTToHadronic_2018_j1eta");
+  TH1F* TTTo2L2Nu_j1eta = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_j1eta");
+  TH1F* TTToSemiLeptonic_j1eta = (TH1F*) HistoFile->Get("TTToSemiLeptonic_2018_j1eta");  
+  TH1F* WW_j1eta = (TH1F*) HistoFile->Get("WW_2018_j1eta");
+  TH1F* WZ_j1eta = (TH1F*) HistoFile->Get("WZ_2018_j1eta");
+  TH1F* ZZ_j1eta = (TH1F*) HistoFile->Get("ZZ_2018_j1eta");
+  TH1F* ST_tW_top_j1eta = (TH1F*) HistoFile->Get("ST_tW_top_2018_j1eta");
+  TH1F* ggH_j1eta = (TH1F*) HistoFile->Get("ggH_2018_j1eta");
+  TH1F* VBF_j1eta = (TH1F*) HistoFile->Get("VBF_2018_j1eta");
+  TH1F* WHPlus_j1eta = (TH1F*) HistoFile->Get("WHPlus_2018_j1eta");
+  TH1F* WHMinus_j1eta = (TH1F*) HistoFile->Get("WHMinus_2018_j1eta");
+  TH1F* ZH_j1eta = (TH1F*) HistoFile->Get("ZH_2018_j1eta");
+
+  TH1F* TTFinal_j1eta = (TH1F*) TTToHadronic_j1eta->Clone();
+  TTFinal_j1eta->Add(TTTo2L2Nu_j1eta);
+  TTFinal_j1eta->Add(TTToSemiLeptonic_j1eta);
+
+  TH1F* VVFinal_j1eta = (TH1F*) WW_j1eta->Clone();
+  VVFinal_j1eta->Add(WZ_j1eta);
+  VVFinal_j1eta->Add(ZZ_j1eta);
+  VVFinal_j1eta->Add(ST_tW_top_j1eta);
+  
+  TH1F* VHFinal_j1eta = (TH1F*) WHPlus_j1eta->Clone();
+  VHFinal_j1eta->Add(WHMinus_j1eta);
+  VHFinal_j1eta->Add(ZH_j1eta);
+
+  TH1F* Other_j1eta = (TH1F*) VHFinal_j1eta->Clone();
+  Other_j1eta->Add(ggH_j1eta);
+  Other_j1eta->Add(VBF_j1eta);
+  Other_j1eta->Add(VVFinal_j1eta);
+
+  TH1F* AllHiggs_j1eta = (TH1F*) VHFinal_j1eta->Clone();
+  AllHiggs_j1eta->Add(ggH_j1eta);
+  AllHiggs_j1eta->Add(VBF_j1eta);
+
+  Data_j1eta->SetMarkerStyle(20);
+  Data_j1eta->Sumw2();
+  
+  Data_Fake_j1eta->SetLineColor(kBlack);
+  Data_Fake_j1eta->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    
+  DYTT_j1eta->SetLineColor(kBlack);
+  DYTT_j1eta->SetFillColor(TColor::GetColor("#ffcc66"));
+
+  DYMM_j1eta->SetLineColor(kBlack);
+  DYMM_j1eta->SetFillColor(TColor::GetColor("#4496c8"));
+  
+  TTFinal_j1eta->SetLineColor(kBlack);
+  TTFinal_j1eta->SetFillColor(TColor::GetColor("#9999cc"));
+
+  Other_j1eta->SetLineColor(kBlack);
+  Other_j1eta->SetFillColor(TColor::GetColor("#12cadd"));
+  
+  AllHiggs_j1eta->SetLineColor(kRed);
+  AllHiggs_j1eta->Scale(30);
+
+  std::cout<<"Fake Background Integral: "<<Data_Fake_j1eta->Integral()<<std::endl;
+
+  THStack* BackgroundStack_j1eta = new THStack("BackgroundStack_j1eta","BackgroundStack_j1eta");  
+  BackgroundStack_j1eta->Add(Data_Fake_j1eta,"hist");
+  BackgroundStack_j1eta->Add(TTFinal_j1eta,"hist");
+  BackgroundStack_j1eta->Add(Other_j1eta,"hist");
+  BackgroundStack_j1eta->Add(DYMM_j1eta,"hist");
+  BackgroundStack_j1eta->Add(DYTT_j1eta,"hist");
+
+  TH1F* BackgroundStack_j1eta_Errors = MakeStackErrors(BackgroundStack_j1eta);
+
+  TPad* PlotPad_j1eta = MakeRatioPlot(CanvasEleven,BackgroundStack_j1eta, Data_j1eta, "#eta_{j_{1}}",0.7,1.3);
+  PlotPad_j1eta->SetTickx();
+  PlotPad_j1eta->SetTicky();
+
+  BackgroundStack_j1eta->SetMaximum(max(BackgroundStack_j1eta->GetMaximum(),Data_j1eta->GetMaximum()));
+  
+  BackgroundStack_j1eta->Draw();
+  BackgroundStack_j1eta_Errors->Draw("SAME e2");
+  BackgroundStack_j1eta->SetTitle("#eta_{j_{1}}");
+  Data_j1eta->Draw("SAME e1");
+  AllHiggs_j1eta->Draw("SAME HIST");
+  BackgroundStack_j1eta->GetYaxis()->SetTitle("Events");
+  BackgroundStack_j1eta->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_j1eta->GetXaxis()->SetLabelSize(0.0);
+
+  CMS_lumi(PlotPad_j1eta,0,33);
+
+  TLegend* Legend_j1eta = new TLegend(0.61,0.41,0.88,0.68);  
+  Legend_j1eta->AddEntry(Data_j1eta,"Observed","pe");
+  Legend_j1eta->AddEntry(DYTT_j1eta,"DY #rightarrow #tau#tau","f");
+  Legend_j1eta->AddEntry(Other_j1eta,"Other","f");
+  Legend_j1eta->AddEntry(DYMM_j1eta,"DY #rightarrow ll","f");
+  Legend_j1eta->AddEntry(TTFinal_j1eta,"t#bar{t}","f");
+  Legend_j1eta->AddEntry(Data_Fake_j1eta,"Fakes","f");
+  Legend_j1eta->AddEntry(AllHiggs_j1eta,"All Higgs (#times 30)","l");
+
+  Legend_j1eta->Draw();
+  CanvasEleven->SaveAs("FinalPlots/j1eta.png");
+  
+  //trigger histo
+  TCanvas* CanvasTwelve = new TCanvas("CanvasTwelve","trigger",550,550);
+  CanvasTwelve->SetTickx();
+  CanvasTwelve->SetTicky();
+
+  gStyle->SetOptStat(0);
+  TH1F* Data_trigger = (TH1F*) HistoFile->Get("Data_2018_trigger");
+  TH1F* Data_Fake_trigger = (TH1F*) HistoFile->Get("Data_2018_Fake__trigger");
+  TH1F* DYTT_trigger = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_trigger");
+  TH1F* DYMM_trigger = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_trigger");
+  TH1F* TTToHadronic_trigger = (TH1F*) HistoFile->Get("TTToHadronic_2018_trigger");
+  TH1F* TTTo2L2Nu_trigger = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_trigger");
+  TH1F* TTToSemiLeptonic_trigger = (TH1F*) HistoFile->Get("TTToSemiLeptonic_2018_trigger");  
+  TH1F* WW_trigger = (TH1F*) HistoFile->Get("WW_2018_trigger");
+  TH1F* WZ_trigger = (TH1F*) HistoFile->Get("WZ_2018_trigger");
+  TH1F* ZZ_trigger = (TH1F*) HistoFile->Get("ZZ_2018_trigger");
+  TH1F* ST_tW_top_trigger = (TH1F*) HistoFile->Get("ST_tW_top_2018_trigger");
+  TH1F* ggH_trigger = (TH1F*) HistoFile->Get("ggH_2018_trigger");
+  TH1F* VBF_trigger = (TH1F*) HistoFile->Get("VBF_2018_trigger");
+  TH1F* WHPlus_trigger = (TH1F*) HistoFile->Get("WHPlus_2018_trigger");
+  TH1F* WHMinus_trigger = (TH1F*) HistoFile->Get("WHMinus_2018_trigger");
+  TH1F* ZH_trigger = (TH1F*) HistoFile->Get("ZH_2018_trigger");
+
+  TH1F* TTFinal_trigger = (TH1F*) TTToHadronic_trigger->Clone();
+  TTFinal_trigger->Add(TTTo2L2Nu_trigger);
+  TTFinal_trigger->Add(TTToSemiLeptonic_trigger);
+
+  TH1F* VVFinal_trigger = (TH1F*) WW_trigger->Clone();
+  VVFinal_trigger->Add(WZ_trigger);
+  VVFinal_trigger->Add(ZZ_trigger);
+  VVFinal_trigger->Add(ST_tW_top_trigger);
+  
+  TH1F* VHFinal_trigger = (TH1F*) WHPlus_trigger->Clone();
+  VHFinal_trigger->Add(WHMinus_trigger);
+  VHFinal_trigger->Add(ZH_trigger);
+
+  TH1F* Other_trigger = (TH1F*) VHFinal_trigger->Clone();
+  Other_trigger->Add(ggH_trigger);
+  Other_trigger->Add(VBF_trigger);
+  Other_trigger->Add(VVFinal_trigger);
+
+  TH1F* AllHiggs_trigger = (TH1F*) VHFinal_trigger->Clone();
+  AllHiggs_trigger->Add(ggH_trigger);
+  AllHiggs_trigger->Add(VBF_trigger);
+
+  Data_trigger->SetMarkerStyle(20);
+  Data_trigger->Sumw2();
+  
+  Data_Fake_trigger->SetLineColor(kBlack);
+  Data_Fake_trigger->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    
+  DYTT_trigger->SetLineColor(kBlack);
+  DYTT_trigger->SetFillColor(TColor::GetColor("#ffcc66"));
+
+  DYMM_trigger->SetLineColor(kBlack);
+  DYMM_trigger->SetFillColor(TColor::GetColor("#4496c8"));
+  
+  TTFinal_trigger->SetLineColor(kBlack);
+  TTFinal_trigger->SetFillColor(TColor::GetColor("#9999cc"));
+
+  Other_trigger->SetLineColor(kBlack);
+  Other_trigger->SetFillColor(TColor::GetColor("#12cadd"));
+  
+  AllHiggs_trigger->SetLineColor(kRed);
+  AllHiggs_trigger->Scale(30);
+
+  std::cout<<"Fake Background Integral: "<<Data_Fake_trigger->Integral()<<std::endl;
+
+  THStack* BackgroundStack_trigger = new THStack("BackgroundStack_trigger","BackgroundStack_trigger");  
+  BackgroundStack_trigger->Add(Data_Fake_trigger,"hist");
+  BackgroundStack_trigger->Add(TTFinal_trigger,"hist");
+  BackgroundStack_trigger->Add(Other_trigger,"hist");
+  BackgroundStack_trigger->Add(DYMM_trigger,"hist");
+  BackgroundStack_trigger->Add(DYTT_trigger,"hist");
+
+  TH1F* BackgroundStack_trigger_Errors = MakeStackErrors(BackgroundStack_trigger);
+
+  TPad* PlotPad_trigger = MakeRatioPlot(CanvasTwelve,BackgroundStack_trigger, Data_trigger, "trigger",0.7,1.3);
+  PlotPad_trigger->SetTickx();
+  PlotPad_trigger->SetTicky();
+
+  BackgroundStack_trigger->SetMaximum(max(BackgroundStack_trigger->GetMaximum(),Data_trigger->GetMaximum()));
+  
+  BackgroundStack_trigger->Draw();
+  BackgroundStack_trigger_Errors->Draw("SAME e2");
+  BackgroundStack_trigger->SetTitle("trigger");
+  Data_trigger->Draw("SAME e1");
+  AllHiggs_trigger->Draw("SAME HIST");
+  BackgroundStack_trigger->GetYaxis()->SetTitle("Events");
+  BackgroundStack_trigger->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_trigger->GetXaxis()->SetLabelSize(0.0);
+
+  CMS_lumi(PlotPad_trigger,0,33);
+
+  TLegend* Legend_trigger = new TLegend(0.61,0.41,0.88,0.68);  
+  Legend_trigger->AddEntry(Data_trigger,"Observed","pe");
+  Legend_trigger->AddEntry(DYTT_trigger,"DY #rightarrow #tau#tau","f");
+  Legend_trigger->AddEntry(Other_trigger,"Other","f");
+  Legend_trigger->AddEntry(DYMM_trigger,"DY #rightarrow ll","f");
+  Legend_trigger->AddEntry(TTFinal_trigger,"t#bar{t}","f");
+  Legend_trigger->AddEntry(Data_Fake_trigger,"Fakes","f");
+  Legend_trigger->AddEntry(AllHiggs_trigger,"All Higgs (#times 30)","l");
+
+  Legend_trigger->Draw();
+  CanvasTwelve->SaveAs("FinalPlots/trigger.png");
 }
