@@ -4,19 +4,25 @@ from tqdm import tqdm
 import argparse
 import math
 
-def GenerateControlPlots(TheFile,args):
+def GenerateControlPlots(TheFile,OutFile,args):
     #Let's start with 6 possible control plots
     # Tau pt, Tau Eta, Mu Pt, Mu Eta, MET, MET phi.
     TheHisto = TheFile[TheFile.rfind("/")+1:]    
     TheHisto = TheHisto.split(".")[0]
     FullHistoName = TheHisto+"_"+args.Year
-    if args.UseFakeFactor:
+    UseFakeFactor = False
+    try:
+        if TheFile in args.UseFakeFactorOnFiles:
+            UseFakeFactor = True
+    except:
+        pass
+    if UseFakeFactor:
         FullHistoName=FullHistoName+"_Fake_"
     
     print("Histogram Name: "+FullHistoName)
 
     TreeFile = ROOT.TFile(TheFile)
-    TheTree = TreeFile.mt_Selected
+    TheTree = TreeFile.mt_Selected    
 
     TauPtHisto = ROOT.TH1F(FullHistoName+"_TauPt",FullHistoName+"_TauPt",20,0.0,200.0)
     TauEtaHisto = ROOT.TH1F(FullHistoName+"_TauEta",FullHistoName+"_TauEta",45, -2.5, 2.5)
@@ -29,6 +35,7 @@ def GenerateControlPlots(TheFile,args):
     HiggsPtHisto = ROOT.TH1F(FullHistoName+"_HiggsPt",FullHistoName+"_HiggsPt",20,20.0,120.0)
     mjjHisto = ROOT.TH1F(FullHistoName+"_mjj",FullHistoName+"_mjj",20,0.0,500.0)
     LeadingJetEtaHisto = ROOT.TH1F(FullHistoName+"_j1eta",FullHistoName+"_j1eta", 100, -5.0, 5.0)
+    LeadingJetPtHisto = ROOT.TH1F(FullHistoName+"_j1pt",FullHistoName+"_j1pt",100,0.0,200.0)
     TriggerHisto = ROOT.TH1F(FullHistoName+"_trigger",FullHistoName+"_trigger",3,0.0,3.0)
 
     TauPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_TauPt",FullHistoName+"_genmatch_low_TauPt",20,0.0,200.0)
@@ -42,6 +49,7 @@ def GenerateControlPlots(TheFile,args):
     HiggsPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_HiggsPt",FullHistoName+"_genmatch_low_HiggsPt",20,20.0,120.0)
     mjjHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mjj",FullHistoName+"_genmatch_low_mjj",20,0.0,500.0)
     LeadingJetEtaHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_j1eta",FullHistoName+"_genmatch_low_j1eta", 100, -5.0, 5.0)
+    LeadingJetPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_j1pt",FullHistoName+"_genmatch_low_j1pt",100,0.0,200.0)
     TriggerHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_trigger",FullHistoName+"_genmatch_low_trigger",3,0.0,3.0)
 
     TauPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_TauPt",FullHistoName+"_genmatch_tt_TauPt",20,0.0,200.0)
@@ -55,6 +63,7 @@ def GenerateControlPlots(TheFile,args):
     HiggsPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_HiggsPt",FullHistoName+"_genmatch_tt_HiggsPt",20,20.0,120.0)
     mjjHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_mjj",FullHistoName+"_genmatch_tt_mjj",20,0.0,500.0)
     LeadingJetEtaHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_j1eta",FullHistoName+"_genmatch_tt_j1eta", 100, -5.0, 5.0)
+    LeadingJetPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_j1pt",FullHistoName+"_genmatch_tt_j1pt",100,0.0,200.0)
     TriggerHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_trigger",FullHistoName+"_genmatch_tt_trigger",3,0.0,3.0)
 
     for i in tqdm(range(TheTree.GetEntries())):
@@ -112,18 +121,12 @@ def GenerateControlPlots(TheFile,args):
                                and TheTree.pt_1 > 21 and TheTree.pt_2 > 31 
                                and TheTree.pt_1 < 25
                                and abs(TheTree.eta_2 < 2.1))
-        
-        #if(TauVector.Pt()<30.0 or MuVector.Pt() < 26.0):
-        #    continue
-        #if (abs(TheTree.eta_1) > 2.1 or Trigger2027):
-        #    continue
         if(MT > 50.0):
             continue
         
         TheWeighting = TheTree.FinalWeighting
-        if args.UseFakeFactor:
-            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor 
-        mjjVal = 0
+        if UseFakeFactor:
+            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor
         if args.Year == "2016":
             mjjVal = TheTree.mjj
             njetsVal = TheTree.njets
@@ -132,10 +135,8 @@ def GenerateControlPlots(TheFile,args):
             njetsVal = TheTree.njetsWoNoisyJets
         elif args.Year == "2018":
             mjjVal = TheTree.mjj
-            njetsVal = TheTree.njets
-        if njetsVal < 2 and mjjVal < 300:
-            continue
-                
+            njetsVal = TheTree.njets        
+        
         TauPtHisto.Fill(TauVector.Pt(),TheWeighting)
         TauEtaHisto.Fill(TauVector.Eta(),TheWeighting)
         MuPtHisto.Fill(MuVector.Pt(),TheWeighting)
@@ -148,6 +149,7 @@ def GenerateControlPlots(TheFile,args):
         mjjHisto.Fill(mjjVal,TheWeighting)
         if njetsVal > 0:
             LeadingJetEtaHisto.Fill(TheTree.jeta_1,TheWeighting)
+            LeadingJetPtHisto.Fill(TheTree.jpt_1,TheWeighting)
                 
         if Trigger24:
             TriggerHisto.Fill(0,TheWeighting)
@@ -170,6 +172,7 @@ def GenerateControlPlots(TheFile,args):
                 mjjHisto_DYll.Fill(mjjVal,TheWeighting)
                 if njetsVal > 0:
                     LeadingJetEtaHisto_DYll.Fill(TheTree.jeta_1,TheWeighting)
+                    LeadingJetPtHisto_DYll.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
                     TriggerHisto_DYll.Fill(0,TheWeighting)
                 if Trigger2027:
@@ -188,8 +191,11 @@ def GenerateControlPlots(TheFile,args):
                 mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
                 if njetsVal > 0:
                     LeadingJetEtaHisto_DYtt.Fill(TheTree.jeta_1,TheWeighting)
+                    LeadingJetPtHisto_DYtt.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
                     TriggerHisto_DYtt.Fill(0,TheWeighting)
+                if Trigger27:
+                    TriggerHisto_DYtt.Fill(1,TheWeighting)
                 if Trigger2027:
                     TriggerHisto_DYtt.Fill(2,TheWeighting)
             
@@ -207,6 +213,7 @@ def GenerateControlPlots(TheFile,args):
                 mjjHisto_DYll.Fill(mjjVal,TheWeighting)
                 if njetsVal > 0:
                     LeadingJetEtaHisto_DYll.Fill(TheTree.jeta_1,TheWeighting)
+                    LeadingJetPtHisto_DYll.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
                     TriggerHisto_DYll.Fill(0,TheWeighting)
                 if Trigger27:
@@ -227,14 +234,15 @@ def GenerateControlPlots(TheFile,args):
                 mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
                 if njetsVal > 0:
                     LeadingJetEtaHisto_DYtt.Fill(TheTree.jeta_1,TheWeighting)
+                    LeadingJetPtHisto_DYtt.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
                     TriggerHisto_DYtt.Fill(0,TheWeighting)
                 if Trigger27:
                     TriggerHisto_DYtt.Fill(1,TheWeighting)
                 if Trigger2027:
                     TriggerHisto_DYtt.Fill(2,TheWeighting)
-    
-    OutFile = ROOT.TFile("TemporaryFiles/ControlRegion.root","UPDATE")
+
+    OutFile.cd()
     TauPtHisto.Write()
     TauEtaHisto.Write()
     MuPtHisto.Write()
@@ -246,6 +254,7 @@ def GenerateControlPlots(TheFile,args):
     HiggsPtHisto.Write()
     mjjHisto.Write()
     LeadingJetEtaHisto.Write()
+    LeadingJetPtHisto.Write()
     TriggerHisto.Write()
 
     if args.Year == "2018":        
@@ -261,6 +270,7 @@ def GenerateControlPlots(TheFile,args):
             HiggsPtHisto_DYll.Write()
             mjjHisto_DYll.Write()
             LeadingJetEtaHisto_DYll.Write()
+            LeadingJetPtHisto_DYll.Write()
             TriggerHisto_DYll.Write()
             
             TauPtHisto_DYtt.Write()
@@ -274,6 +284,7 @@ def GenerateControlPlots(TheFile,args):
             HiggsPtHisto_DYtt.Write()
             mjjHisto_DYtt.Write()
             LeadingJetEtaHisto_DYtt.Write()
+            LeadingJetPtHisto_DYtt.Write()
             TriggerHisto_DYtt.Write()
 
     if args.Year == "2017":
@@ -290,6 +301,7 @@ def GenerateControlPlots(TheFile,args):
             HiggsPtHisto_DYtt.Write()
             mjjHisto_DYtt.Write()
             LeadingJetEtaHisto_DYtt.Write()
+            LeadingJetPtHisto_DYtt.Write()
             TriggerHisto_DYtt.Write()
 
         elif TheHisto == "DY":
@@ -304,17 +316,19 @@ def GenerateControlPlots(TheFile,args):
             HiggsPtHisto_DYll.Write()
             mjjHisto_DYll.Write()
             LeadingJetEtaHisto_DYll.Write()
+            LeadingJetPtHisto_DYll.Write()
             TriggerHisto_DYll.Write()
-    OutFile.Write()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate control plots.")
     parser.add_argument('Year',choices=["2016","2017","2018"],help="Select which year's plots to generate.")
     parser.add_argument('Files',nargs="+",help="List of files to generate control plots from.")
-    parser.add_argument('--UseFakeFactor',help="Use the file's fake factor weightings when making plots for this file.",action="store_true")
+    parser.add_argument('--UseFakeFactorOnFiles',nargs="+",help="Use the file's fake factor weightings when making plots for these files.")
     
     args = parser.parse_args()
+
+    OutFile = ROOT.TFile("TemporaryFiles/ControlRegion_"+args.Year+".root","RECREATE")
         
     for File in args.Files:
         print("Making control plots for: "+File)
-        GenerateControlPlots(File,args)
+        GenerateControlPlots(File,OutFile,args)

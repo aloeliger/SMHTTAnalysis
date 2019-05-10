@@ -12,7 +12,7 @@ void Draw2018ControlPlots()
   extraText = "Preliminary";
   lumi_sqrtS = "60 fb^{-1}, 13 TeV";
   
-  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion.root","READ");
+  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion_2018.root","READ");
 
   TCanvas* CanvasOne = new TCanvas("CanvasOne","MuPt",550,550);
   CanvasOne->SetTickx();
@@ -1284,4 +1284,110 @@ void Draw2018ControlPlots()
 
   Legend_trigger->Draw();
   CanvasTwelve->SaveAs("FinalPlots/trigger.png");
+
+  //leading jet pt
+  TCanvas* CanvasThirteen = new TCanvas("CanvasThirteen","j1pt",550,550);
+  CanvasThirteen->SetTickx();
+  CanvasThirteen->SetTicky();
+
+  gStyle->SetOptStat(0);
+  TH1F* Data_j1pt = (TH1F*) HistoFile->Get("Data_2018_j1pt");
+  TH1F* Data_Fake_j1pt = (TH1F*) HistoFile->Get("Data_2018_Fake__j1pt");
+  TH1F* DYTT_j1pt = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_j1pt");
+  TH1F* DYMM_j1pt = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_j1pt");
+  TH1F* TTToHadronic_j1pt = (TH1F*) HistoFile->Get("TTToHadronic_2018_j1pt");
+  TH1F* TTTo2L2Nu_j1pt = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_j1pt");
+  TH1F* TTToSemiLeptonic_j1pt = (TH1F*) HistoFile->Get("TTToSemiLeptonic_2018_j1pt");  
+  TH1F* WW_j1pt = (TH1F*) HistoFile->Get("WW_2018_j1pt");
+  TH1F* WZ_j1pt = (TH1F*) HistoFile->Get("WZ_2018_j1pt");
+  TH1F* ZZ_j1pt = (TH1F*) HistoFile->Get("ZZ_2018_j1pt");
+  TH1F* ST_tW_top_j1pt = (TH1F*) HistoFile->Get("ST_tW_top_2018_j1pt");
+  TH1F* ggH_j1pt = (TH1F*) HistoFile->Get("ggH_2018_j1pt");
+  TH1F* VBF_j1pt = (TH1F*) HistoFile->Get("VBF_2018_j1pt");
+  TH1F* WHPlus_j1pt = (TH1F*) HistoFile->Get("WHPlus_2018_j1pt");
+  TH1F* WHMinus_j1pt = (TH1F*) HistoFile->Get("WHMinus_2018_j1pt");
+  TH1F* ZH_j1pt = (TH1F*) HistoFile->Get("ZH_2018_j1pt");
+
+  TH1F* TTFinal_j1pt = (TH1F*) TTToHadronic_j1pt->Clone();
+  TTFinal_j1pt->Add(TTTo2L2Nu_j1pt);
+  TTFinal_j1pt->Add(TTToSemiLeptonic_j1pt);
+
+  TH1F* VVFinal_j1pt = (TH1F*) WW_j1pt->Clone();
+  VVFinal_j1pt->Add(WZ_j1pt);
+  VVFinal_j1pt->Add(ZZ_j1pt);
+  VVFinal_j1pt->Add(ST_tW_top_j1pt);
+  
+  TH1F* VHFinal_j1pt = (TH1F*) WHPlus_j1pt->Clone();
+  VHFinal_j1pt->Add(WHMinus_j1pt);
+  VHFinal_j1pt->Add(ZH_j1pt);
+
+  TH1F* Other_j1pt = (TH1F*) VHFinal_j1pt->Clone();
+  Other_j1pt->Add(ggH_j1pt);
+  Other_j1pt->Add(VBF_j1pt);
+  Other_j1pt->Add(VVFinal_j1pt);
+
+  TH1F* AllHiggs_j1pt = (TH1F*) VHFinal_j1pt->Clone();
+  AllHiggs_j1pt->Add(ggH_j1pt);
+  AllHiggs_j1pt->Add(VBF_j1pt);
+
+  Data_j1pt->SetMarkerStyle(20);
+  Data_j1pt->Sumw2();
+  
+  Data_Fake_j1pt->SetLineColor(kBlack);
+  Data_Fake_j1pt->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    
+  DYTT_j1pt->SetLineColor(kBlack);
+  DYTT_j1pt->SetFillColor(TColor::GetColor("#ffcc66"));
+
+  DYMM_j1pt->SetLineColor(kBlack);
+  DYMM_j1pt->SetFillColor(TColor::GetColor("#4496c8"));
+  
+  TTFinal_j1pt->SetLineColor(kBlack);
+  TTFinal_j1pt->SetFillColor(TColor::GetColor("#9999cc"));
+
+  Other_j1pt->SetLineColor(kBlack);
+  Other_j1pt->SetFillColor(TColor::GetColor("#12cadd"));
+  
+  AllHiggs_j1pt->SetLineColor(kRed);
+  AllHiggs_j1pt->Scale(30);
+
+  std::cout<<"Fake Background Integral: "<<Data_Fake_j1pt->Integral()<<std::endl;
+
+  THStack* BackgroundStack_j1pt = new THStack("BackgroundStack_j1pt","BackgroundStack_j1pt");  
+  BackgroundStack_j1pt->Add(Data_Fake_j1pt,"hist");
+  BackgroundStack_j1pt->Add(TTFinal_j1pt,"hist");
+  BackgroundStack_j1pt->Add(Other_j1pt,"hist");
+  BackgroundStack_j1pt->Add(DYMM_j1pt,"hist");
+  BackgroundStack_j1pt->Add(DYTT_j1pt,"hist");
+
+  TH1F* BackgroundStack_j1pt_Errors = MakeStackErrors(BackgroundStack_j1pt);
+
+  TPad* PlotPad_j1pt = MakeRatioPlot(CanvasThirteen,BackgroundStack_j1pt, Data_j1pt, "j1pt",0.7,1.3);
+  PlotPad_j1pt->SetTickx();
+  PlotPad_j1pt->SetTicky();
+
+  BackgroundStack_j1pt->SetMaximum(max(BackgroundStack_j1pt->GetMaximum(),Data_j1pt->GetMaximum()));
+  
+  BackgroundStack_j1pt->Draw();
+  BackgroundStack_j1pt_Errors->Draw("SAME e2");
+  BackgroundStack_j1pt->SetTitle("j1pt");
+  Data_j1pt->Draw("SAME e1");
+  AllHiggs_j1pt->Draw("SAME HIST");
+  BackgroundStack_j1pt->GetYaxis()->SetTitle("Events");
+  BackgroundStack_j1pt->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_j1pt->GetXaxis()->SetLabelSize(0.0);
+
+  CMS_lumi(PlotPad_j1pt,0,33);
+
+  TLegend* Legend_j1pt = new TLegend(0.61,0.41,0.88,0.68);  
+  Legend_j1pt->AddEntry(Data_j1pt,"Observed","pe");
+  Legend_j1pt->AddEntry(DYTT_j1pt,"DY #rightarrow #tau#tau","f");
+  Legend_j1pt->AddEntry(Other_j1pt,"Other","f");
+  Legend_j1pt->AddEntry(DYMM_j1pt,"DY #rightarrow ll","f");
+  Legend_j1pt->AddEntry(TTFinal_j1pt,"t#bar{t}","f");
+  Legend_j1pt->AddEntry(Data_Fake_j1pt,"Fakes","f");
+  Legend_j1pt->AddEntry(AllHiggs_j1pt,"All Higgs (#times 30)","l");
+
+  Legend_j1pt->Draw();
+  CanvasThirteen->SaveAs("FinalPlots/j1pt.png");
 }

@@ -5140,7 +5140,7 @@ Boosted_Other.SetFillColor(ROOT.TColor.GetColor("#12cadd"))
 
 VBF_Other = VBF_Diboson_L.Clone()
 if args.year == "2018":
-    VBF_Other.Add(VBF_Diboson_L)
+    VBF_Other.Add(VBF_Diboson_T)
 VBF_Other.Add(VBF_ggH_htt)
 VBF_Other.Add(VBF_qqH_htt)
 VBF_Other.Add(VBF_WH_htt)

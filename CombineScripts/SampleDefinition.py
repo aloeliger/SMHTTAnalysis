@@ -200,6 +200,8 @@ class Sample():
         TheEventDump['HiggsPt'] = HiggsPt        
         #STXS variables.
         TheEventDump['Higgs_jjPt'] = Higgs_jjPt
+        #jet variables
+        TheEventDump['LeadingJetPt'] = JetOneVector.Pt()
         
         #Create the weight
         if self.NominallyFake:
@@ -503,6 +505,18 @@ class Sample():
             'JetEta0to5Up': (TauVector+MuVector+MetVector_JetEta0to5_UP+JetOneVector_JetEta0to5_UP+JetTwoVector_JetEta0to5_UP).Pt(),
             'JetEta0to5Down': (TauVector+MuVector+MetVector_JetEta0to5_DOWN+JetOneVector_JetEta0to5_DOWN+JetTwoVector_JetEta0to5_DOWN).Pt(),
             }
+        LeadingJetPtDictionary = {
+            'JetEta0to3Up': JetOneVector_JetEta0to3_UP.Pt(),
+            'JetEta0to3Down': JetOneVector_JetEta0to3_DOWN.Pt(),
+            'JetRelativeBalUp': JetOneVector_JetRelativeBal_UP.Pt(),
+            'JetRelativeBalDown': JetOneVector_JetRelativeBal_DOWN.Pt(),
+            'JetRelativeSampleUp': JetOneVector_JetRelativeSample_UP.Pt(),
+            'JetRelativeSampleDown': JetOneVector_JetRelativeSample_DOWN.Pt(),
+            'JetEta3to5Up': JetOneVector_JetEta3to5_UP.Pt(),
+            'JetEta3to5Down': JetOneVector_JetEta3to5_DOWN.Pt(),
+            'JetEta0to5Up': JetOneVector_JetEta0to5_UP.Pt(),
+            'JetEta0to5Down': JetOneVector_JetEta0to5_DOWN.Pt()
+            }
 
         if args.year == "2017":
             njetsDictionary = {
@@ -563,7 +577,8 @@ class Sample():
             JESDump['njets'] = njetsDictionary[Shape]
             JESDump['mjj'] = mjjDictionary[Shape]
             JESDump['HiggsPt'] = HiggsPtDictionary[Shape]
-            JESDump['Higs_jjPt'] = HiggsjjPtDictionary[Shape]
+            JESDump['Higgs_jjPt'] = HiggsjjPtDictionary[Shape]
+            JESDump['LeadingJetPt'] = LeadingJetPtDictionary[Shape]
 
             JESCategories = self.ClassifyEvent(JESDump,AnalysisCategories)
 

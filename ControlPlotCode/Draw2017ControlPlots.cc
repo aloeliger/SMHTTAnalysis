@@ -12,7 +12,7 @@ void Draw2017ControlPlots()
   extraText = "Preliminary";
   lumi_sqrtS = "41.5 fb^{-1}, 13 TeV";
   
-  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion.root","READ");
+  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion_2017.root","READ");
 
   TCanvas* CanvasOne = new TCanvas("CanvasOne","MuPt",550,550);
   CanvasOne->SetTickx();
