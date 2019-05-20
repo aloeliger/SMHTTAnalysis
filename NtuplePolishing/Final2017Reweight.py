@@ -7,8 +7,7 @@ import argparse
 import AddCrossSectionWeightings
 import AddZPTReweighting
 import AddPileupWeightings
-import AddKITMuSFs
-import AddMCTriggerScaleFactors
+import AddKITMuAndTriggerSFs
 
 def AddFinalWeights(FileToRun,args):
     print("")
@@ -36,15 +35,15 @@ def AddFinalWeights(FileToRun,args):
             print("Failed to find pileup weights. Adding them...")
             AddPileupWeightings.AddPileupWeightings(FileToRun,args)
         try:
-            CheckFile.mt_Selected.MuSF
+            CheckFile.mt_Selected.MuAndTriggerSF
         except:
             print("Failed to find muon scale factors. Adding them...")
-            AddKITMuSFs.AddKITMuSFs(FileToRun,args)
-        try:
-            CheckFile.mt_Selected.TriggerSF
-        except:
-            print("Failed to find MC trigger scale factors. Adding them...")
-            AddMCTriggerScaleFactors.AddMCTriggerScaleFactors(FileToRun,args)
+            AddKITMuAndTriggerSFs.AddKITMuAndTriggerSFs(FileToRun,args)
+        #try:
+        #    CheckFile.mt_Selected.TriggerSF
+        #except:
+        #    print("Failed to find MC trigger scale factors. Adding them...")
+        #    AddMCTriggerScaleFactors.AddMCTriggerScaleFactors(FileToRun,args)
     
     #we actually need to reload the file and the tree now, because it may have changed
     CheckFile.Close()
@@ -79,8 +78,9 @@ def AddFinalWeights(FileToRun,args):
         #if not a data file, pileup reweight it
         if( not args.DisablePileupWeighting and FileName != "Data.root" and FileName != "Embedded.root"):
             Weight = Weight * ReweightFile.mt_Selected.PileupWeight
-        if( not args.DisableMuSFs and FileName != "Data.root" and FileName != "Embedded.root"):
-            Weight = Weight * ReweightFile.mt_Selected.MuSF
+        #possible overlap on trigger SFs?
+        if( not args.DisableMuAndTriggerSFs and FileName != "Data.root" and FileName != "Embedded.root"):
+            Weight = Weight * ReweightFile.mt_Selected.MuAndTriggerSF
 
         #Tau ID weighting
         if FileName != "Embedded.root" and FileName != "Data.root":
@@ -175,8 +175,8 @@ def AddFinalWeights(FileToRun,args):
             Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
 
         #MC Trigger Scale Factors
-        if (not args.DisableMCTriggerSFs and not(FileName == "Data.root" or FileName == "Embedded.root")):
-            Weight = Weight * ReweightFile.mt_Selected.TriggerSF
+        #if (not args.DisableMCTriggerSFs and not(FileName == "Data.root" or FileName == "Embedded.root")):
+        #    Weight = Weight * ReweightFile.mt_Selected.TriggerSF
                     
         #ALWAYS
         if FileName == "Data.root":
@@ -199,14 +199,14 @@ if __name__=="__main__":
     parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
     parser.add_argument('--DisableGenWeighting',help="Disable genweighting",action="store_true")
     parser.add_argument('--DisableEtaWeighting',help="Disable the Eta based reweighting",action="store_true")
+
     parser.add_argument('--DisableEmbeddingReconstructionWeighting',help="Disable Embedded track and trigger based weights",action="store_true")
     parser.add_argument('--DisableTopReweighting',help="Disable top reweighting",action="store_true")
     parser.add_argument('--DisableZPTReweighting',help="Disable Z Pt reweighting",action="store_true")
     parser.add_argument('--year',choices=["2016","2017","2018"],help="Change the year of the corrections applied",nargs='?',default = "2017")
     parser.add_argument('--DisablePileupWeighting',help="Disable the pileup weighting",action="store_true")
     parser.add_argument('--UseInclusiveDY',help="Option for using non DY#.root files in cross section weighting",action="store_true")
-    parser.add_argument('--DisableMuSFs',help="Disable the KIT style muon scale factors",action="store_true")
-    parser.add_argument('--DisableMCTriggerSFs',help="Disable The MC tirgger SFs",action="store_true")
+    parser.add_argument('--DisableMuAndTriggerSFs',help="Disable the KIT style muon scale factors",action="store_true")    
     
     
     args = parser.parse_args()    

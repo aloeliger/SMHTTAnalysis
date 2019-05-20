@@ -1,7 +1,10 @@
 import ROOT
 import argparse
+import getSF
+import os
 from tqdm import tqdm
 from array import array
+import AddDiTauTriggerFactor
 
 #based on lepton efficiences (interface) class present at https://github.com/CMS-HTT
 class KITMuSF:
@@ -137,40 +140,67 @@ class KITMuSF:
             SF=1
         return SF
 
-def AddKITMuSFs(File,args):
+def AddKITMuAndTriggerSFs(File,args):
+    if args.year=="2017":
+        CheckFile = ROOT.TFile(File)
+        try:
+            CheckFile.mt_Selected.DiTauTriggerWeight
+        except:
+            print("Failed to find ditau trigger factors. Adding them...")
+            AddDiTauTriggerFactor.AddDiTauTriggerFactor(File,args)
+        CheckFile.Close()
+
     TheFile = ROOT.TFile(File,"UPDATE")
     TheTree = TheFile.mt_Selected
 
-    MuSF = array('f',[0.])
-    MuSF_Branch = TheTree.Branch("MuSF",MuSF,"MuSF/F")
+    MuAndTriggerSF = array('f',[0.])
+    MuAndTriggerSF_Branch = TheTree.Branch("MuAndTriggerSF",MuAndTriggerSF,"MuAndTriggerSF/F")
     
     IDIso = KITMuSF()
     if args.year == "2016":
-        raise RuntimeError("2016 not implemented yet. Implement me!")
+        IDIso.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2016BtoH/Muon_IdIso_IsoLt0p15_2016BtoH_eff.root")
+        IsoMu22SF = KITMuSF()
+        IsoMu22SF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2016BtoH/Muon_Mu22OR_eta2p1_eff.root")
+        CrossTriggerSF = KITMuSF()
+        CrossTriggerSF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2016BtoH/Muon_Mu19leg_2016BtoH_eff.root")
+        TauLegFactor = SFReader("triggerSF/mu-tau/trigger_sf_mt.root",interpolate=False)
 
     elif args.year == "2017":
-        IDIso.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2017/Muon_IdIso_IsoLt0.15_eff_RerecoFall17.root")
+        IDIso.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2017/Muon_IdIso_IsoLt0.15_eff_RerecoFall17.root")
         IsoMu24or27SF = KITMuSF()
-        IsoMu24or27SF.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2017/Muon_IsoMu24orIsoMu27.root")        
+        IsoMu24or27SF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2017/Muon_IsoMu24orIsoMu27.root")        
         CrossTriggerSF = KITMuSF()
-        CrossTriggerSF.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2017/Muon_MuTau_IsoMu20.root")
+        CrossTriggerSF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2017/Muon_MuTau_IsoMu20.root")
 
     elif args.year == "2018":
-        IDIso.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IdIso.root")
+        IDIso.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IdIso.root")
         IsoMu24or27SF = KITMuSF()
-        IsoMu24or27SF.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IsoMu24orIsoMu27.root")
+        IsoMu24or27SF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IsoMu24orIsoMu27.root")
         CrossTriggerSF = KITMuSF()
-        CrossTriggerSF.init_ScaleFactors("../../LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IsoMu20.root")
+        CrossTriggerSF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2018/Muon_Run2018_IsoMu20.root")
         
 
     for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
+        TauVector = ROOT.TLorentzVector()
+        TauVector.SetPtEtaPhiM(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,TheTree.m_2)
         MuVector = ROOT.TLorentzVector()
         MuVector.SetPtEtaPhiM(TheTree.pt_1,TheTree.eta_1,TheTree.phi_1,TheTree.m_1)
         IDIsoSF = IDIso.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
         #decide which trigger we're using
         if args.year=="2016":
-            pass
+            if (MuVector.Pt() > 23.0 and abs(MuVector.Eta())<2.1
+                and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
+                     or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
+                TriggerSF = IsoMu22SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+            elif (MuVector.Pt() > 20.0 and TauVector.Pt() > 21.0 
+                  and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
+                      or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
+                TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+                TriggerSF = TriggerSF * TauLegFactor.getSF(TauVector.Pt(),TauVector.Eta(), Tau_isocut="TightIso",genuine=(TheTree.gen_match_2 == 6),tau_dm = TheTree.l2_decayMode)
+            else:
+                print("WARNING! Something fell through our trigger definitions!")
+                TriggerSF = 1
         elif args.year=="2017":
             if(MuVector.Pt() < 25.0 and TheTree.passMu20Tau27):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
@@ -178,6 +208,7 @@ def AddKITMuSFs(File,args):
                 TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
             elif(MuVector.Pt() >28.0 and (TheTree.passMu24 or TheTree.passMu27)):
                 TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+                TriggerSF = TriggerSF*TheTree.DiTauTriggerWeight
             else:
                 print("WARNING! Something fell through our trigger definitions!")
                 TriggerSF = 1
@@ -191,8 +222,8 @@ def AddKITMuSFs(File,args):
                 print("WARNING! Something fell through our trigger definitions!")
                 TriggerSF = 1
 
-        MuSF[0] = IDIsoSF * TriggerSF
-        MuSF_Branch.Fill()
+        MuAndTriggerSF[0] = IDIsoSF * TriggerSF
+        MuAndTriggerSF_Branch.Fill()
     TheFile.cd()
     TheTree.Write('',ROOT.TObject.kOverwrite)
     TheFile.Write()
@@ -206,5 +237,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     for File in args.Files:
-        print("Processing KIT style mu SFs for "+str(File))
-        AddKITMuSFs(File,args)
+        print("Processing KIT style mu and trigger SFs for "+str(File))
+        AddKITMuAndTriggerSFs(File,args)

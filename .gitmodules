@@ -7,3 +7,7 @@
 [submodule "TauIDCode"]
 	path = TauIDCode
 	url = https://github.com/aloeliger/TauIDCode
+[submodule "NtuplePolishing/triggerSF"]
+	path = NtuplePolishing/triggerSF
+	url = https://github.com/rmanzoni/triggerSF
+	branch = moriond17
