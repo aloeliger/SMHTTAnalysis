@@ -11,3 +11,6 @@
 	path = NtuplePolishing/triggerSF
 	url = https://github.com/rmanzoni/triggerSF
 	branch = moriond17
+[submodule "ScriptsAndMacros"]
+	path = ScriptsAndMacros
+	url = git@github.com:aloeliger/ScriptsAndMacros.git
