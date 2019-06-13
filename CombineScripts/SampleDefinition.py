@@ -68,8 +68,12 @@ class Sample():
                     self.InitializeggHTheoryShapes(Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins)
                 elif Shape == "Recoil":
                     self.InitializeRecoilShapes(Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins)
+                elif Shape == "UES":
+                    self.InitializeUESShapes(Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins)
                 elif Shape == "TTbarContamination":
-                    pass
+                    self.InitializeTTbarContaminationShapes(Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins)
+                elif Shape == "TTbarShape":
+                    self.InitializeTTbarShapes(Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins)
                 else:
                     raise RuntimeError("Undefined shape present: "+Shape)
     #the next few functions just break down and make a bunch of different shapes:
@@ -128,7 +132,7 @@ class Sample():
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_ResUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_ResUp"+"_"+Cat,self.Name+"_THU_ggH_ResUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_ResDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_ResDown"+"_"+Cat,self.Name+"_THU_ggH_ResDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_Mig01Up"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_Mig01Up"+"_"+Cat,self.Name+"_THU_ggH_Mig01Up"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_Mig01Down"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_Mig01Down+"+"_"+Cat,self.Name+"_THU_ggH_Mig01Down"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_Mig01Down"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_Mig01Down"+"_"+Cat,self.Name+"_THU_ggH_Mig01Down"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_Mig12Up"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_Mig12Up"+"_"+Cat,self.Name+"_THU_ggH_Mig12Up"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_Mig12Down"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_Mig12Down"+"_"+Cat,self.Name+"_THU_ggH_Mig12Down"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_THU_ggH_VBF2jUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_THU_ggH_VBF2jUp"+"_"+Cat,self.Name+"_THU_ggH_VBF2jUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
@@ -147,9 +151,17 @@ class Sample():
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_htt_boson_scale_metUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_htt_boson_scale_metUp"+"_"+Cat,self.Name+"_CMS_htt_boson_scale_metUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_htt_boson_scale_metDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_htt_boson_scale_metDown"+"_"+Cat,self.Name+"_CMS_htt_boson_scale_metDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         
+    def InitializeUESShapes(self,Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins):        
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_scale_met_unclusteredUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_scale_met_unclusteredUp"+"_"+Cat,self.Name+"_CMS_scale_met_unclusteredUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)        
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_scale_met_unclusteredDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_scale_met_unclusteredDown"+"_"+Cat,self.Name+"_CMS_scale_met_unclusteredDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        
     #oh geez, oh geez. How are we going to handle this?
-    def InitializeTTbarContaminationErrors(self,Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins):
-        pass
+    def InitializeTTbarContaminationShapes(self,Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins):
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_htt_emb_ttbar"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_htt_emb_ttbar"+"_"+Cat,self.Name+"_CMS_htt_emb_ttbar"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)        
+
+    def InitializeTTbarShapes(self,Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins):
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_htt_ttbarShapeUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_htt_ttbarShapeUp"+"_"+Cat,self.Name+"_CMS_htt_ttbarShapeUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)        
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_htt_ttbarShapeDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_htt_ttbarShapeDown"+"_"+Cat,self.Name+"_CMS_htt_ttbarShapeDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)        
 
     #Okay, this will create the nominal event dump to a dictionary
     #from this dictionary, the analysis category can look 
@@ -169,14 +181,8 @@ class Sample():
 
         MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
         HiggsPt = (TauVector+MuVector+METVector).Pt()
-        Higgs_jjPt = (TauVector+MuVector+METVector+JetOneVector+JetTwoVector).Pt()
-        if args.year == "2017":
-            njetsVariable = TheEvent.njetsWoNoisyJets
-            mjjVariable = TheEvent.mjjWoNoisyJets
-        elif args.year == "2018":
-            njetsVariable = TheEvent.njets
-            mjjVariable = TheEvent.mjj
-        elif args.year == "2016":
+        Higgs_jjPt = (TauVector+MuVector+METVector+JetOneVector+JetTwoVector).Pt()        
+        if args.year == "2016":
             raise RuntimeError("2016 not implemented yet! Implement me!")
         
         TheEventDump = {}
@@ -191,8 +197,8 @@ class Sample():
         TheEventDump['TauM'] = TauVector.M()
         #category variables
         TheEventDump['MT'] = MT
-        TheEventDump['njets'] = njetsVariable
-        TheEventDump['mjj'] = mjjVariable
+        TheEventDump['njets'] = TheEvent.njets
+        TheEventDump['mjj'] = TheEvent.mjj
         #reco variables
         TheEventDump['m_vis'] = (TauVector+MuVector).M()
         TheEventDump['m_sv'] = TheEvent.m_sv
@@ -255,6 +261,10 @@ class Sample():
                 self.ProcessRecoilUncertainties(AnalysisCategories,args)
             elif Shape == "TTbarContamination":
                 self.ProcessTTbarContaminationUncertainties(AnalysisCategories,args)
+            elif Shape == "UES":
+                self.ProcessMETUESUncertainties(AnalysisCategories,args)
+            elif Shape == "TTbarShape":
+                self.ProcessTTbarShapeUncertainties(AnalysisCategories,args)
             else:
                 raise RuntimeError("Undefined Shape attempted: "+Shape)
             
@@ -279,7 +289,7 @@ class Sample():
                               'CMS_ff_w_systUp':self.EventChain.ff_w_syst_up,
                               'CMS_ff_w_systDown':self.EventChain.ff_w_syst_down}
         for Shape in FFChangeDictionary:
-            NewDump = NominalDump
+            NewDump = NominalDump.copy()
             NewDump['Weight'] = self.EventChain.FinalWeighting*FFChangeDictionary[Shape]
             NewCategories = self.ClassifyEvent(NewDump,AnalysisCategories)
             
@@ -306,7 +316,7 @@ class Sample():
         CorrectedTauVector_DOWN = ROOT.TLorentzVector()
         CorrectedTauVector_UP.SetPtEtaPhiE(self.EventChain.TES_Pt_UP,self.EventChain.eta_2,self.EventChain.phi_2,self.EventChain.TES_E_UP)
         CorrectedTauVector_DOWN.SetPtEtaPhiE(self.EventChain.TES_Pt_DOWN,self.EventChain.eta_2,self.EventChain.phi_2,self.EventChain.TES_E_DOWN)
-
+        
         CorrectedMetVector_UP = ROOT.TLorentzVector()
         CorrectedMetVector_DOWN = ROOT.TLorentzVector()
         CorrectedMetVector_UP.SetPtEtaPhiM(self.EventChain.TES_MET_UP,0.0,self.EventChain.TES_METPhi_UP,0.0)
@@ -319,13 +329,13 @@ class Sample():
         # we classify each of them
         # and then use each to fill Corresponding histograms?        
 
-        DM0_UP_Dump = NominalDump
-        DM1_UP_Dump = NominalDump
-        DM10_UP_Dump = NominalDump
-        DM0_DOWN_Dump = NominalDump
-        DM1_DOWN_Dump = NominalDump
-        DM10_DOWN_Dump = NominalDump
-        if self.EventChain.l2_decayMode == 0:
+        DM0_UP_Dump = NominalDump.copy()
+        DM1_UP_Dump = NominalDump.copy()
+        DM10_UP_Dump = NominalDump.copy()
+        DM0_DOWN_Dump = NominalDump.copy()
+        DM1_DOWN_Dump = NominalDump.copy()
+        DM10_DOWN_Dump = NominalDump.copy()
+        if self.EventChain.l2_decayMode == 0:            
             DM0_UP_Dump['TauPt'] = CorrectedTauVector_UP.Pt()
             DM0_UP_Dump['TauEta'] = CorrectedTauVector_UP.Eta()
             DM0_UP_Dump['TauPhi'] = CorrectedTauVector_UP.Phi()
@@ -371,8 +381,7 @@ class Sample():
             DM10_DOWN_Dump['HiggsPt'] = (CorrectedTauVector_DOWN + CorrectedMetVector_DOWN + MuVector).Pt()
             DM10_DOWN_Dump['Higgs_jjPt'] = (CorrectedTauVector_DOWN+MuVector+CorrectedMetVector_DOWN + JetOneVector+JetTwoVector).Pt()
         else:
-            print("Warning! Non-Old DM found!")
-        
+            print("Warning! Non-Old DM found!")                
         DM0_UP_Categories = self.ClassifyEvent(DM0_UP_Dump,AnalysisCategories)
         DM0_DOWN_Categories = self.ClassifyEvent(DM0_DOWN_Dump,AnalysisCategories)
         DM1_UP_Categories = self.ClassifyEvent(DM1_UP_Dump,AnalysisCategories)
@@ -400,7 +409,8 @@ class Sample():
         
         TauVector = ROOT.TLorentzVector()
         TauVector.SetPtEtaPhiM(self.EventChain.pt_2,self.EventChain.eta_2,self.EventChain.phi_2,self.EventChain.m_2)
-
+        
+        #Forgot to set these!!!
         MetVector_JetEta0to3_UP = ROOT.TLorentzVector()
         MetVector_JetEta0to3_DOWN = ROOT.TLorentzVector()
         MetVector_JetRelativeBal_UP = ROOT.TLorentzVector()
@@ -411,6 +421,17 @@ class Sample():
         MetVector_JetEta3to5_DOWN = ROOT.TLorentzVector()
         MetVector_JetEta0to5_UP = ROOT.TLorentzVector()
         MetVector_JetEta0to5_DOWN = ROOT.TLorentzVector()
+
+        MetVector_JetEta0to3_UP.SetPtEtaPhiM(self.EventChain.met_JetEta0to3Up,0.0,self.EventChain.metphi_JetEta0to3Up,0.0)
+        MetVector_JetEta0to3_DOWN.SetPtEtaPhiM(self.EventChain.met_JetEta0to3Down,0.0,self.EventChain.metphi_JetEta0to3Down,0.0)
+        MetVector_JetRelativeBal_UP.SetPtEtaPhiM(self.EventChain.met_JetRelativeBalUp,0.0,self.EventChain.metphi_JetRelativeBalUp,0.0)
+        MetVector_JetRelativeBal_DOWN.SetPtEtaPhiM(self.EventChain.met_JetRelativeBalDown,0.0,self.EventChain.metphi_JetRelativeBalDown,0.0)
+        MetVector_JetRelativeSample_UP.SetPtEtaPhiM(self.EventChain.met_JetRelativeSampleUp,0.0,self.EventChain.metphi_JetRelativeSampleUp,0.0)
+        MetVector_JetRelativeSample_DOWN.SetPtEtaPhiM(self.EventChain.met_JetRelativeSampleDown,0.0,self.EventChain.metphi_JetRelativeSampleDown,0.0)
+        MetVector_JetEta3to5_UP.SetPtEtaPhiM(self.EventChain.met_JetEta3to5Up,0.0,self.EventChain.metphi_JetEta3to5Up,0.0)
+        MetVector_JetEta3to5_DOWN.SetPtEtaPhiM(self.EventChain.met_JetEta3to5Down,0.0,self.EventChain.metphi_JetEta3to5Down,0.0)
+        MetVector_JetEta0to5_UP.SetPtEtaPhiM(self.EventChain.met_JetEta0to5Up,0.0,self.EventChain.metphi_JetEta0to5Up,0.0)
+        MetVector_JetEta0to5_DOWN.SetPtEtaPhiM(self.EventChain.met_JetEta0to5Down,0.0,self.EventChain.metphi_JetEta0to5Down,0.0)
 
         JetOneVector_JetEta0to3_UP = ROOT.TLorentzVector()
         JetOneVector_JetEta0to3_DOWN = ROOT.TLorentzVector()
@@ -516,63 +537,36 @@ class Sample():
             'JetEta3to5Down': JetOneVector_JetEta3to5_DOWN.Pt(),
             'JetEta0to5Up': JetOneVector_JetEta0to5_UP.Pt(),
             'JetEta0to5Down': JetOneVector_JetEta0to5_DOWN.Pt()
-            }
+            }            
+        njetsDictionary = {
+            'JetEta0to3Up': self.EventChain.njets_JetEta0to3Up,
+            'JetEta0to3Down': self.EventChain.njets_JetEta0to3Down,
+            'JetRelativeBalUp': self.EventChain.njets_JetRelativeBalUp,
+            'JetRelativeBalDown': self.EventChain.njets_JetRelativeBalDown,
+            'JetRelativeSampleUp': self.EventChain.njets_JetRelativeSampleUp,
+            'JetRelativeSampleDown': self.EventChain.njets_JetRelativeSampleDown,
+            'JetEta3to5Up': self.EventChain.njets_JetEta3to5Down,
+            'JetEta3to5Down': self.EventChain.njets_JetEta3to5Down,
+            'JetEta0to5Up': self.EventChain.njets_JetEta0to5Up,
+            'JetEta0to5Down': self.EventChain.njets_JetEta0to5Down,
+        }
+        mjjDictionary  = {
+            'JetEta0to3Up': self.EventChain.mjj_JetEta0to3Up,
+            'JetEta0to3Down': self.EventChain.mjj_JetEta0to3Down,
+            'JetRelativeBalUp': self.EventChain.mjj_JetRelativeBalUp,
+            'JetRelativeBalDown': self.EventChain.mjj_JetRelativeBalDown,
+            'JetRelativeSampleUp': self.EventChain.mjj_JetRelativeSampleUp,
+            'JetRelativeSampleDown': self.EventChain.mjj_JetRelativeSampleDown,
+            'JetEta3to5Up': self.EventChain.mjj_JetEta3to5Down,
+            'JetEta3to5Down': self.EventChain.mjj_JetEta3to5Down,
+            'JetEta0to5Up': self.EventChain.mjj_JetEta0to5Up,
+            'JetEta0to5Down': self.EventChain.mjj_JetEta0to5Down,
+        }
+        if args.year == "2016":
+            raise RuntimeError("2016 not implemented yet! Implement me")                            
 
-        if args.year == "2017":
-            njetsDictionary = {
-                'JetEta0to3Up': self.EventChain.njetsWoNoisyJets_JetEta0to3Up,
-                'JetEta0to3Down': self.EventChain.njetsWoNoisyJets_JetEta0to3Down,
-                'JetRelativeBalUp': self.EventChain.njetsWoNoisyJets_JetRelativeBalUp,
-                'JetRelativeBalDown': self.EventChain.njetsWoNoisyJets_JetRelativeBalDown,
-                'JetRelativeSampleUp': self.EventChain.njetsWoNoisyJets_JetRelativeSampleUp,
-                'JetRelativeSampleDown': self.EventChain.njetsWoNoisyJets_JetRelativeSampleDown,
-                'JetEta3to5Up': self.EventChain.njetsWoNoisyJets_JetEta3to5Down,
-                'JetEta3to5Down': self.EventChain.njetsWoNoisyJets_JetEta3to5Down,
-                'JetEta0to5Up': self.EventChain.njetsWoNoisyJets_JetEta0to5Up,
-                'JetEta0to5Down': self.EventChain.njetsWoNoisyJets_JetEta0to5Down,
-                }
-            mjjDictionary  = {
-                'JetEta0to3Up': self.EventChain.mjjWoNoisyJets_JetEta0to3Up,
-                'JetEta0to3Down': self.EventChain.mjjWoNoisyJets_JetEta0to3Down,
-                'JetRelativeBalUp': self.EventChain.mjjWoNoisyJets_JetRelativeBalUp,
-                'JetRelativeBalDown': self.EventChain.mjjWoNoisyJets_JetRelativeBalDown,
-                'JetRelativeSampleUp': self.EventChain.mjjWoNoisyJets_JetRelativeSampleUp,
-                'JetRelativeSampleDown': self.EventChain.mjjWoNoisyJets_JetRelativeSampleDown,
-                'JetEta3to5Up': self.EventChain.mjjWoNoisyJets_JetEta3to5Down,
-                'JetEta3to5Down': self.EventChain.mjjWoNoisyJets_JetEta3to5Down,
-                'JetEta0to5Up': self.EventChain.mjjWoNoisyJets_JetEta0to5Up,
-                'JetEta0to5Down': self.EventChain.mjjWoNoisyJets_JetEta0to5Down,
-                }
-        elif args.year == "2018":
-            njetsDictionary = {
-                'JetEta0to3Up': self.EventChain.njets_JetEta0to3Up,
-                'JetEta0to3Down': self.EventChain.njets_JetEta0to3Down,
-                'JetRelativeBalUp': self.EventChain.njets_JetRelativeBalUp,
-                'JetRelativeBalDown': self.EventChain.njets_JetRelativeBalDown,
-                'JetRelativeSampleUp': self.EventChain.njets_JetRelativeSampleUp,
-                'JetRelativeSampleDown': self.EventChain.njets_JetRelativeSampleDown,
-                'JetEta3to5Up': self.EventChain.njets_JetEta3to5Down,
-                'JetEta3to5Down': self.EventChain.njets_JetEta3to5Down,
-                'JetEta0to5Up': self.EventChain.njets_JetEta0to5Up,
-                'JetEta0to5Down': self.EventChain.njets_JetEta0to5Down,
-                }
-            mjjDictionary  = {
-                'JetEta0to3Up': self.EventChain.mjj_JetEta0to3Up,
-                'JetEta0to3Down': self.EventChain.mjj_JetEta0to3Down,
-                'JetRelativeBalUp': self.EventChain.mjj_JetRelativeBalUp,
-                'JetRelativeBalDown': self.EventChain.mjj_JetRelativeBalDown,
-                'JetRelativeSampleUp': self.EventChain.mjj_JetRelativeSampleUp,
-                'JetRelativeSampleDown': self.EventChain.mjj_JetRelativeSampleDown,
-                'JetEta3to5Up': self.EventChain.mjj_JetEta3to5Down,
-                'JetEta3to5Down': self.EventChain.mjj_JetEta3to5Down,
-                'JetEta0to5Up': self.EventChain.mjj_JetEta0to5Up,
-                'JetEta0to5Down': self.EventChain.mjj_JetEta0to5Down,
-                }
-        elif args.year == "2016":
-            raise RuntimeError("2016 not implemented yet! Implement me")
-        
         for Shape in MTDictionary:
-            JESDump = NominalDump
+            JESDump = NominalDump.copy()
             JESDump['MT'] = MTDictionary[Shape]
             JESDump['njets'] = njetsDictionary[Shape]
             JESDump['mjj'] = mjjDictionary[Shape]
@@ -586,17 +580,17 @@ class Sample():
                 self.MasterCategoryDictionary[Category][self.Name+"_CMS_"+Shape+"_"+Category].Fill(JESDump[AnalysisCategories[Category].ReconstructionVar],JESDump[AnalysisCategories[Category].RollingVar],JESDump['Weight'])
     def ProcessDYShapeUncertainties(self,AnalysisCategories,args):
         NominalDump = self.GetEventDump(self.EventChain,args)
-        ZPT_Up_Dump = NominalDump
+        ZPT_Up_Dump = NominalDump.copy()
         ZPT_Up_Dump['Weight'] = self.EventChain.FinalWeighting_ZPT_UP
-        ZPT_Down_Dump = NominalDump
-        ZPT_Down_Dump['Weight'] = self.EventChain.FinalWeighting_ZPT_DOWN
+        ZPT_Down_Dump = NominalDump.copy()
+        ZPT_Down_Dump['Weight'] = self.EventChain.FinalWeighting_ZPT_DOWN   
 
         UP_Categories = self.ClassifyEvent(ZPT_Up_Dump,AnalysisCategories)
         DOWN_Categories = self.ClassifyEvent(ZPT_Down_Dump,AnalysisCategories)
         for Category in UP_Categories:
             self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_dyShapeUp_"+Category].Fill(ZPT_Up_Dump[AnalysisCategories[Category].ReconstructionVar],ZPT_Up_Dump[AnalysisCategories[Category].RollingVar],ZPT_Up_Dump['Weight'])
         for Category in DOWN_Categories:
-            self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_dyShapeUp_"+Category].Fill(ZPT_Down_Dump[AnalysisCategories[Category].ReconstructionVar],ZPT_Down_Dump[AnalysisCategories[Category].RollingVar],ZPT_Down_Dump['Weight'])
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_dyShapeDown_"+Category].Fill(ZPT_Down_Dump[AnalysisCategories[Category].ReconstructionVar],ZPT_Down_Dump[AnalysisCategories[Category].RollingVar],ZPT_Down_Dump['Weight'])
 
     def ProcessZLShapeUncertainties(self,AnalysisCategories,args):
         NominalDump = self.GetEventDump(self.EventChain,args)
@@ -651,8 +645,8 @@ class Sample():
             CorrectedMT_DOWN = math.sqrt(2.0*MuVector.Pt()*CorrectedMetVector_DOWN.Pt()*(1.0-math.cos(MuVector.DeltaPhi(CorrectedMetVector_DOWN))))
 
         #set up the dumps
-        ZLDumpUp = NominalDump
-        ZLDumpDown = NominalDump
+        ZLDumpUp = NominalDump.copy()
+        ZLDumpDown = NominalDump.copy()
 
         ZLDumpUp['TauPt'] = CorrectedTauVector_UP.Pt()
         ZLDumpUp['TauEta'] = CorrectedTauVector_UP.Eta()
@@ -721,7 +715,7 @@ class Sample():
             'THU_ggH_qmtopDown':self.EventChain.FinalWeighting*(1.0-self.EventChain.THU_ggH_qmtop_13TeV)
             }
         for Shape in ggHDictionary:
-            ggHDump = NominalDump
+            ggHDump = NominalDump.copy()
             ggHDump['Weight'] = ggHDictionary[Shape]
             
             ggHCategories = self.ClassifyEvent(ggHDump,AnalysisCategories)
@@ -729,6 +723,7 @@ class Sample():
                 self.MasterCategoryDictionary[Category][self.Name+"_"+Shape+"_"+Category].Fill(ggHDump[AnalysisCategories[Category].ReconstructionVar],ggHDump[AnalysisCategories[Category].RollingVar],ggHDump['Weight'])
         
     def ProcessRecoilUncertainties(self,AnalysisCategories,args):
+        #print("Processing recoil")
         NominalDump = self.GetEventDump(self.EventChain,args)
         
         MuVector = ROOT.TLorentzVector()
@@ -752,6 +747,12 @@ class Sample():
         ResponseCorrectedMetVector_UP.SetPtEtaPhiM(self.EventChain.met_responseUp,0.0,self.EventChain.metphi_responseUp,0.0)
         ResponseCorrectedMetVector_DOWN.SetPtEtaPhiM(self.EventChain.met_responseDown,0.0,self.EventChain.metphi_responseDown,0.0)
 
+        #print("Resolution MT")
+        #print("self.EventChain.met_resolutionUp: "+str(self.EventChain.met_resolutionUp))
+        #print("self.EventChain.metphi_resolutionUp: "+str(self.EventChain.metphi_resolutionUp))
+        #print("self.EventChain.met: "+str(self.EventChain.met))
+        #print("MuVector.Pt(): "+str(MuVector.Pt()))
+        
         ResolutionCorrectedMT_UP = math.sqrt(2.0*MuVector.Pt()*ResolutionCorrectedMetVector_UP.Pt()*(1.0-math.cos(MuVector.DeltaPhi(ResolutionCorrectedMetVector_UP))))
         ResolutionCorrectedMT_DOWN = math.sqrt(2.0*MuVector.Pt()*ResolutionCorrectedMetVector_DOWN.Pt()*(1.0-math.cos(MuVector.DeltaPhi(ResolutionCorrectedMetVector_DOWN))))
         ResponseCorrectedMT_UP = math.sqrt(2.0*MuVector.Pt()*ResponseCorrectedMetVector_UP.Pt()*(1.0-math.cos(MuVector.DeltaPhi(ResponseCorrectedMetVector_UP))))
@@ -766,11 +767,11 @@ class Sample():
         ResolutionCorrectedHiggsjjPt_DOWN = (TauVector+MuVector+ResolutionCorrectedMetVector_DOWN+JetOneVector+JetTwoVector).Pt()
         ResponseCorrectedHiggsjjPt_UP = (TauVector+MuVector+ResponseCorrectedMetVector_UP+JetOneVector+JetTwoVector).Pt()
         ResponseCorrectedHiggsjjPt_DOWN = (TauVector+MuVector+ResponseCorrectedMetVector_DOWN+JetOneVector+JetTwoVector).Pt()
-
-        ResolutionUpDump = NominalDump
-        ResolutionDownDump = NominalDump
-        ResponseUpDump = NominalDump
-        ResponseDownDump = NominalDump
+        
+        ResolutionUpDump = NominalDump.copy()
+        ResolutionDownDump = NominalDump.copy()
+        ResponseUpDump = NominalDump.copy()
+        ResponseDownDump = NominalDump.copy()
         
         ResolutionUpDump['MT'] = ResolutionCorrectedMT_UP
         ResolutionUpDump['HiggsPt'] = ResolutionCorrectedHiggsPt_UP
@@ -784,7 +785,7 @@ class Sample():
         ResponseDownDump['MT'] = ResponseCorrectedMT_DOWN
         ResponseDownDump['HiggsPt'] = ResponseCorrectedHiggsPt_DOWN
         ResponseDownDump['Higgs_jjPt'] = ResponseCorrectedHiggsjjPt_DOWN
-
+        
         ResolutionUpCategories = self.ClassifyEvent(ResolutionUpDump,AnalysisCategories)
         ResolutionDownCategories = self.ClassifyEvent(ResolutionDownDump,AnalysisCategories)
         ResponseUpCategories = self.ClassifyEvent(ResponseUpDump,AnalysisCategories)
@@ -800,7 +801,76 @@ class Sample():
             self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_boson_scale_metDown_"+Category].Fill(ResponseDownDump[AnalysisCategories[Category].ReconstructionVar],ResponseDownDump[AnalysisCategories[Category].RollingVar],ResponseDownDump['Weight'])
 
     def ProcessTTbarContaminationUncertainties(self,AnalysisCategories,args):
-        raise RuntimeError('TTBar contamination uncertainties not implemented yet! Implement me!')
+        NominalDump = self.GetEventDump(self.EventChain,args)
+
+        TTBarContaminationCats = self.ClassifyEvent(NominalDump,AnalysisCategories)
+        
+        for Category in TTBarContaminationCats:
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_emb_ttbar_"+Category].Fill(NominalDump[AnalysisCategories[Category].ReconstructionVar],NominalDump[AnalysisCategories[Category].RollingVar],NominalDump['Weight'])
+
+    def ProcessMETUESUncertainties(self,AnalysisCategories,args):
+        NominalDump = self.GetEventDump(self.EventChain,args)
+
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        METVector = ROOT.TLorentzVector()
+        JetOneVector = ROOT.TLorentzVector()
+        JetTwoVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(self.EventChain.pt_1,self.EventChain.eta_1,self.EventChain.phi_1,self.EventChain.m_1)
+        TauVector.SetPtEtaPhiM(self.EventChain.pt_2,self.EventChain.eta_2,self.EventChain.phi_2,self.EventChain.m_2)
+        METVector.SetPtEtaPhiM(self.EventChain.met,0.0,self.EventChain.metphi,0.0)
+        JetOneVector.SetPtEtaPhiM(self.EventChain.jpt_1,self.EventChain.jeta_1,self.EventChain.jphi_1,0.0)
+        JetTwoVector.SetPtEtaPhiM(self.EventChain.jpt_2,self.EventChain.jeta_2,self.EventChain.jphi_2,0.0)
+
+        MetVector_UES_UP = ROOT.TLorentzVector()
+        MetVector_UES_DOWN = ROOT.TLorentzVector()
+
+        MetVector_UES_UP.SetPtEtaPhiM(self.EventChain.met_UESUp,0.0,self.EventChain.metphi_UESUp,0.0)
+        MetVector_UES_DOWN.SetPtEtaPhiM(self.EventChain.met_UESDown,0.0,self.EventChain.metphi_UESDown,0.0)
+
+        MT_UES_UP = math.sqrt(2.0*MuVector.Pt()*MetVector_UES_UP.Pt()*(1.0-math.cos(MuVector.DeltaPhi(MetVector_UES_UP))))
+        MT_UES_DOWN = math.sqrt(2.0*MuVector.Pt()*MetVector_UES_DOWN.Pt()*(1.0-math.cos(MuVector.DeltaPhi(MetVector_UES_DOWN))))
+
+        HiggsPt_UES_UP = (TauVector+MuVector+MetVector_UES_UP).Pt()
+        HiggsPt_UES_DOWN = (TauVector+MuVector+MetVector_UES_DOWN).Pt()
+
+        HiggsjjPt_UP = (TauVector+MuVector+MetVector_UES_UP+JetOneVector+JetTwoVector).Pt()
+        HiggsjjPt_DOWN = (TauVector+MuVector+MetVector_UES_DOWN+JetOneVector+JetTwoVector).Pt()
+
+        UESUpDump = NominalDump.copy()
+        UESDownDump = NominalDump.copy()
+
+        UESUpDump['MT'] = MT_UES_UP
+        UESUpDump['HiggsPt'] = HiggsPt_UES_UP
+        UESUpDump['Higgs_jjPt'] = HiggsjjPt_UP
+        UESUpDump['m_sv'] = self.EventChain.m_sv_UESUp
+
+        UESDownDump['MT'] = MT_UES_DOWN
+        UESDownDump['HiggsPt'] = HiggsPt_UES_DOWN
+        UESDownDump['Higgs_jjPt'] = HiggsjjPt_DOWN
+        UESDownDump['m_sv'] = self.EventChain.m_sv_UESDown
+
+        UESUpCategories = self.ClassifyEvent(UESUpDump,AnalysisCategories)
+        UESDownCategories = self.ClassifyEvent(UESDownDump,AnalysisCategories)
+
+        for Category in UESUpCategories:            
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_scale_met_unclusteredUp_"+Category].Fill(UESUpDump[AnalysisCategories[Category].ReconstructionVar],UESUpDump[AnalysisCategories[Category].RollingVar],UESUpDump['Weight'])
+        for Category in UESDownCategories:
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_scale_met_unclusteredDown_"+Category].Fill(UESDownDump[AnalysisCategories[Category].ReconstructionVar],UESDownDump[AnalysisCategories[Category].RollingVar],UESDownDump['Weight'])
+
+    def ProcessTTbarShapeUncertainties(self,AnalysisCategories,args):
+        NominalDump = self.GetEventDump(self.EventChain,args)
+        TTbar_Up_Dump = NominalDump.copy()
+        TTbar_Up_Dump['Weight'] = self.EventChain.FinalWeighting_TOP_UP
+        TTbar_Down_Dump = NominalDump.copy()
+        TTbar_Down_Dump['Weight'] = self.EventChain.FinalWeighting_TOP_DOWN
+
+        UpCategories = self.ClassifyEvent(TTbar_Up_Dump,AnalysisCategories)
+        DownCategories = self.ClassifyEvent(TTbar_Down_Dump,AnalysisCategories)
+        for Category in UpCategories:
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_ttbarShapeUp_"+Category].Fill(TTbar_Up_Dump[AnalysisCategories[Category].ReconstructionVar],TTbar_Up_Dump[AnalysisCategories[Category].RollingVar],TTbar_Up_Dump['Weight'])
+        for Category in DownCategories:
+            self.MasterCategoryDictionary[Category][self.Name+"_CMS_htt_ttbarShapeDown_"+Category].Fill(TTbar_Down_Dump[AnalysisCategories[Category].ReconstructionVar],TTbar_Down_Dump[AnalysisCategories[Category].RollingVar],TTbar_Down_Dump['Weight'])
 
     #go trhough the master dictionary,
     # and replace all histogram entries with their unrolled counterparts
