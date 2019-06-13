@@ -121,21 +121,20 @@ def GenerateControlPlots(TheFile,OutFile,args):
                                and TheTree.pt_1 > 21 and TheTree.pt_2 > 31 
                                and TheTree.pt_1 < 25
                                and abs(TheTree.eta_2 < 2.1))
+        elif args.Year == "2016":
+            Trigger22 = (TheTree.pt_1 >23.0 and abs(TheTree.eta_1)<2.1 
+                         and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
+                              or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1)))
+            Trigger1920 = (TheTree.pt_1 > 20.0 and TheTree.pt_1 < 23.0 and TheTree.pt_2 > 21.0 
+                           and ((TheTree.passMu19Tau20 and TheTree.matchMu19Tau20_1 and TheTree.matchMu19Tau20_2 and TheTree.filterMu19Tau20_1 and TheTree.filterMu19Tau20_2) 
+                                or (TheTree.passMu19Tau20SingleL1 and TheTree.matchMu19Tau20SingleL1_1 and TheTree.matchMu19Tau20SingleL1_2 and TheTree.filterMu19Tau20SingleL1_1 and TheTree.filterMu19Tau20SingleL1_2)))
+            
         if(MT > 50.0):
             continue
         
         TheWeighting = TheTree.FinalWeighting
         if UseFakeFactor:
-            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor
-        if args.Year == "2016":
-            mjjVal = TheTree.mjj
-            njetsVal = TheTree.njets
-        elif args.Year == "2017":
-            mjjVal = TheTree.mjjWoNoisyJets
-            njetsVal = TheTree.njetsWoNoisyJets
-        elif args.Year == "2018":
-            mjjVal = TheTree.mjj
-            njetsVal = TheTree.njets        
+            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor        
         
         TauPtHisto.Fill(TauVector.Pt(),TheWeighting)
         TauEtaHisto.Fill(TauVector.Eta(),TheWeighting)
@@ -146,19 +145,25 @@ def GenerateControlPlots(TheFile,OutFile,args):
         mvisHisto.Fill((TauVector+MuVector).M(),TheWeighting)
         NJetsHisto.Fill(TheTree.njets,TheWeighting)
         HiggsPtHisto.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-        mjjHisto.Fill(mjjVal,TheWeighting)
-        if njetsVal > 0:
+        mjjHisto.Fill(TheTree.mjj,TheWeighting)
+        if TheTree.njets > 0:
             LeadingJetEtaHisto.Fill(TheTree.jeta_1,TheWeighting)
             LeadingJetPtHisto.Fill(TheTree.jpt_1,TheWeighting)
-                
-        if Trigger24:
-            TriggerHisto.Fill(0,TheWeighting)
-        if Trigger27:
-            TriggerHisto.Fill(1,TheWeighting)
-        if Trigger2027:
-            TriggerHisto.Fill(2,TheWeighting)
+            
+        if args.Year == "2018" or args.Year == "2017":
+            if Trigger24:
+                TriggerHisto.Fill(0,TheWeighting)
+            if Trigger27:
+                TriggerHisto.Fill(1,TheWeighting)
+            if Trigger2027:
+                TriggerHisto.Fill(2,TheWeighting)
+        else:
+            if Trigger22:
+                TriggerHisto.Fill(0,TheWeighting)
+            if Trigger1920:
+                TriggerHisto.Fill(1,TheWeighting)
         
-        if args.Year=="2018":
+        if args.Year=="2018" or args.Year == "2016" or args.Year == "2017":
             if (TheHisto == "DY" and TheTree.gen_match_2 <5):
                 TauPtHisto_DYll.Fill(TauVector.Pt(),TheWeighting)
                 TauEtaHisto_DYll.Fill(TauVector.Eta(),TheWeighting)
@@ -169,14 +174,22 @@ def GenerateControlPlots(TheFile,OutFile,args):
                 mvisHisto_DYll.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYll.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYll.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYll.Fill(mjjVal,TheWeighting)
-                if njetsVal > 0:
+                mjjHisto_DYll.Fill(TheTree.mjj,TheWeighting)                
+                if TheTree.njets > 0:
                     LeadingJetEtaHisto_DYll.Fill(TheTree.jeta_1,TheWeighting)
                     LeadingJetPtHisto_DYll.Fill(TheTree.jpt_1,TheWeighting)
-                if Trigger24:
-                    TriggerHisto_DYll.Fill(0,TheWeighting)
-                if Trigger2027:
-                    TriggerHisto_DYll.Fill(2,TheWeighting)
+                if args.Year == "2018" or args.Year == "2017":
+                    if Trigger24:
+                        TriggerHisto_DYll.Fill(0,TheWeighting)
+                    if Trigger27:
+                        TriggerHisto_DYll.Fill(1,TheWeighting)
+                    if Trigger2027:
+                        TriggerHisto_DYll.Fill(2,TheWeighting)
+                elif args.Year == "2016":
+                    if Trigger22:
+                        TriggerHisto_DYll.Fill(0,TheWeighting)
+                    if Trigger1920:
+                        TriggerHisto_DYll.Fill(1,TheWeighting)
 
             elif(TheHisto == "DY" and TheTree.gen_match_2 ==5):
                 TauPtHisto_DYtt.Fill(TauVector.Pt(),TheWeighting)
@@ -188,17 +201,24 @@ def GenerateControlPlots(TheFile,OutFile,args):
                 mvisHisto_DYtt.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYtt.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYtt.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
-                if njetsVal > 0:
+                mjjHisto_DYtt.Fill(TheTree.mjj,TheWeighting)
+                if TheTree.njets > 0:
                     LeadingJetEtaHisto_DYtt.Fill(TheTree.jeta_1,TheWeighting)
                     LeadingJetPtHisto_DYtt.Fill(TheTree.jpt_1,TheWeighting)
-                if Trigger24:
-                    TriggerHisto_DYtt.Fill(0,TheWeighting)
-                if Trigger27:
-                    TriggerHisto_DYtt.Fill(1,TheWeighting)
-                if Trigger2027:
-                    TriggerHisto_DYtt.Fill(2,TheWeighting)
-            
+                if args.Year == "2018" or args.Year == "2017":
+                    if Trigger24:
+                        TriggerHisto_DYtt.Fill(0,TheWeighting)
+                    if Trigger27:
+                        TriggerHisto_DYtt.Fill(1,TheWeighting)
+                    if Trigger2027:
+                        TriggerHisto_DYtt.Fill(2,TheWeighting)
+                elif args.Year == "2016":
+                    if Trigger22:
+                        TriggerHisto_DYtt.Fill(0,TheWeighting)
+                    if Trigger1920:
+                        TriggerHisto_DYtt.Fill(1,TheWeighting)
+                    
+        """
         elif args.Year == "2017":
             if (TheHisto == "DY" and TheTree.gen_match_2 <5):
                 TauPtHisto_DYll.Fill(TauVector.Pt(),TheWeighting)
@@ -210,8 +230,8 @@ def GenerateControlPlots(TheFile,OutFile,args):
                 mvisHisto_DYll.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYll.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYll.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYll.Fill(mjjVal,TheWeighting)
-                if njetsVal > 0:
+                mjjHisto_DYll.Fill(TheTree.mjj,TheWeighting)
+                if TheTree.njets > 0:
                     LeadingJetEtaHisto_DYll.Fill(TheTree.jeta_1,TheWeighting)
                     LeadingJetPtHisto_DYll.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
@@ -231,8 +251,8 @@ def GenerateControlPlots(TheFile,OutFile,args):
                 mvisHisto_DYtt.Fill((TauVector+MuVector).M(),TheWeighting)
                 NJetsHisto_DYtt.Fill(TheTree.njets,TheWeighting)
                 HiggsPtHisto_DYtt.Fill((TauVector+MuVector+METVector).Pt(),TheWeighting)
-                mjjHisto_DYtt.Fill(mjjVal,TheWeighting)
-                if njetsVal > 0:
+                mjjHisto_DYtt.Fill(TheTree.mjj,TheWeighting)
+                if TheTree.njets > 0:
                     LeadingJetEtaHisto_DYtt.Fill(TheTree.jeta_1,TheWeighting)
                     LeadingJetPtHisto_DYtt.Fill(TheTree.jpt_1,TheWeighting)
                 if Trigger24:
@@ -241,6 +261,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
                     TriggerHisto_DYtt.Fill(1,TheWeighting)
                 if Trigger2027:
                     TriggerHisto_DYtt.Fill(2,TheWeighting)
+        """
 
     OutFile.cd()
     TauPtHisto.Write()
@@ -257,7 +278,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     LeadingJetPtHisto.Write()
     TriggerHisto.Write()
 
-    if args.Year == "2018":        
+    if args.Year == "2018" or args.Year == "2016" or args.Year == "2017":        
         if(TheHisto == "DY"):
             TauPtHisto_DYll.Write()
             TauEtaHisto_DYll.Write()
@@ -287,6 +308,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
             LeadingJetPtHisto_DYtt.Write()
             TriggerHisto_DYtt.Write()
 
+    """
     if args.Year == "2017":
         print("Writing 2017 version of DY...")
         if TheHisto == "Embedded":
@@ -318,6 +340,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
             LeadingJetEtaHisto_DYll.Write()
             LeadingJetPtHisto_DYll.Write()
             TriggerHisto_DYll.Write()
+    """
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate control plots.")
