@@ -44,10 +44,14 @@ def AddFinalWeights(FileToRun, args):
     FinalWeighting = array('f',[0])
     FinalWeighting_ZPT_DOWN = array('f',[0])
     FinalWeighting_ZPT_UP = array('f',[0])
+    FinalWeighting_TOP_UP = array('f',[0])
+    FinalWeighting_TOP_DOWN = array('f',[0])
     
     TheBranch = ReweightFile.mt_Selected.Branch('FinalWeighting',FinalWeighting,'FinalWeighitng/F')
     TheBranch_ZPT_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_DOWN',FinalWeighting_ZPT_DOWN,'FinalWeighitng_ZPT_DOWN/F')
     TheBranch_ZPT_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_UP',FinalWeighting_ZPT_UP,'FinalWeighting_ZPT_UP/F')
+    TheBranch_TOP_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_UP',FinalWeighting_TOP_UP,'FinalWeighting_TOP_UP/F')
+    TheBranch_TOP_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_DOWN',FinalWeighting_TOP_DOWN,'FinalWeighting_TOP_DOWN/F')
 
     print("Adding the final weighting...")
     
@@ -99,12 +103,15 @@ def AddFinalWeights(FileToRun, args):
                 if pttop2 > 400:
                     pttop2 = 400
                 topfactor = math.sqrt(math.exp(0.0615-0.0005*pttop1)*math.exp(0.0615-0.0005*pttop2))
+                Weight_TOP_UP = Weight * (2.0 * (topfactor - 1.0) + 1.0)
+                Weight_TOP_DOWN = Weight
                 Weight = Weight * TopFactor
         
-        if not args.DisableZPTWeighting:
+        if not args.DisableZPTWeighting:            
             Weight_ZPT_DOWN = Weight * ReweightFile.mt_Selected.ZPTWeighting_DOWN
             Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP
             Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
+            
 
         #ALWAYS
         if FileName == "Data.root":
@@ -112,12 +119,21 @@ def AddFinalWeights(FileToRun, args):
         FinalWeighting[0] = Weight        
         if not args.DisableZPTWeighting:
             FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
-            FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP
-        
+            FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP            
+        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
+                                               or FileName == "TTToSemiLeptonic.root"
+                                               or FileName == "TTTo2L2Nu.root"):
+            FinalWeighting_TOP_UP[0] = Weight_TOP_UP
+            FinalWeighting_TOP_DOWN[0] = Weight_TOP_DOWN
         TheBranch.Fill()
         if not args.DisableZPTWeighting:
             TheBranch_ZPT_DOWN.Fill()
             TheBranch_ZPT_UP.Fill()
+        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
+                                               or FileName == "TTToSemiLeptonic.root"
+                                               or FileName == "TTTo2L2Nu.root"):
+            TheBranch_TOP_UP.Fill()
+            TheBranch_TOP_DOWN.Fill()
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
