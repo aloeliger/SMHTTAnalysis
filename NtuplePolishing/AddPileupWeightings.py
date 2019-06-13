@@ -8,7 +8,7 @@ import AddPileupHisto
 def GenerateTheWeights(File,args):
     print("Generating weights for this file...") 
     if args.year == "2016":
-        raise RuntimeError("2016 not implemented yet. Implement Me!")
+        TheDataFile = ROOT.TFile("Weightings/2016DataPileupHistogram.root")
     elif args.year == "2017":
         TheDataFile = ROOT.TFile("Weightings/2017DataPileupHistogram.root")
     elif args.year == "2018":

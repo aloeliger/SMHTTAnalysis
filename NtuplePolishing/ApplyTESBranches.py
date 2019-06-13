@@ -68,28 +68,28 @@ def ApplyTESBranches(FileName,Arguments):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0 
                 else:
-                    EnergyCorrectFactor = 0.005
+                    EnergyCorrectFactor = -0.006
                 CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
-                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
-                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.010))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.010))
                                 
             elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 1):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
-                    EnergyCorrectFactor = 0.011
+                    EnergyCorrectFactor = -0.005
                 CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
-                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
-                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.009))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.009))
 
             elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 10):
                 if Argument.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
-                    EnergyCorrectFactor = 0.006
+                    EnergyCorrectFactor = 0.0
                 CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
-                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.012))
-                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.012))
+                CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.011))
+                CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.011))
                 
             TES_E[0] = CorrectedTauVector.E()
             TES_E_UP[0] = CorrectedTauVector_UP.E()

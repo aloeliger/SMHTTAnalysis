@@ -30,7 +30,7 @@ def Make2016Fractions(args):
     #W region :  W+ZJ+VVJ
     #TT region : TTJ
     #Data region: data_obs
-    #real region: Embedded(ZL)+TTTTTL+VVT+VVL
+    #real region: Embedded(ZT)+(ZL)+TTL+VVT+VVL
     #QCD: Data - real - TT- W
 
     DataFile = ROOT.TFile(args.Directory+"Data.root")
@@ -57,14 +57,23 @@ def Make2016Fractions(args):
     WW1L1Nu2QFile = ROOT.TFile(args.Directory+"WW1L1Nu2Q.root")
     WW1L1Nu2QTree  = WW1L1Nu2QFile.mt_Selected
 
+    WZ1L1Nu2QFile = ROOT.TFile(args.Directory+"WZ1L1Nu2Q.root")
+    WZ1L1Nu2QTree  = WZ1L1Nu2QFile.mt_Selected
+
+    WZ1L3NuFile = ROOT.TFile(args.Directory+"WZ1L3Nu.root")
+    WZ1L3NuTree = WZ1L3NuFile.mt_Selected
+
     WZ2L2QFile = ROOT.TFile(args.Directory+"WZ2L2Q.root")
     WZ2L2QTree  = WZ2L2QFile.mt_Selected
 
     WZJLLLNuFile = ROOT.TFile(args.Directory+"WZJLLLNu.root")
     WZJLLLNuTree  = WZJLLLNuFile.mt_Selected
+
+    ZZ2L2QFile = ROOT.TFile(args.Directory+"ZZ2L2Q.root")
+    ZZ2L2QTree  = ZZ2L2QFile.mt_Selected
     
     ZZ4LFile = ROOT.TFile(args.Directory+"ZZ4L.root")
-    ZZ4LTree  = ZZ4LFile.mt_Selected
+    ZZ4LTree  = ZZ4LFile.mt_Selected    
 
     WFile = ROOT.TFile(args.Directory+"W.root")
     WTree = WFile.mt_Selected
@@ -196,6 +205,38 @@ def Make2016Fractions(args):
             WFilledEvents+=1.0
             WFracHisto.Fill((TauVector+MuVector).M(),WW1L1Nu2QTree.FinalWeighting)
 
+    for i in tqdm(range(WZ1L1Nu2QTree.GetEntries())):
+        WZ1L1Nu2QTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(WZ1L1Nu2QTree.pt_1,WZ1L1Nu2QTree.eta_1,WZ1L1Nu2QTree.phi_1,WZ1L1Nu2QTree.m_1)
+        TauVector.SetPtEtaPhiM(WZ1L1Nu2QTree.pt_2,WZ1L1Nu2QTree.eta_2,WZ1L1Nu2QTree.phi_2,WZ1L1Nu2QTree.m_2)
+        if WZ1L1Nu2QTree.gen_match_2 <= 5:
+            RealFilledEvents+=1.0
+            RealEventsFromVV+=1.0
+            AverageRealWeight+=WZ1L1Nu2QTree.FinalWeighting
+            AvRealWeightFromVV+=WZ1L1Nu2QTree.FinalWeighting
+            RealFracHisto.Fill((TauVector+MuVector).M(),WZ1L1Nu2QTree.FinalWeighting)
+        elif WZ1L1Nu2QTree.gen_match_2 ==6:
+            WFilledEvents+=1.0
+            WFracHisto.Fill((TauVector+MuVector).M(),WZ1L1Nu2QTree.FinalWeighting)
+
+    for i in tqdm(range(WZ1L3NuTree.GetEntries())):
+        WZ1L3NuTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(WZ1L3NuTree.pt_1,WZ1L3NuTree.eta_1,WZ1L3NuTree.phi_1,WZ1L3NuTree.m_1)
+        TauVector.SetPtEtaPhiM(WZ1L3NuTree.pt_2,WZ1L3NuTree.eta_2,WZ1L3NuTree.phi_2,WZ1L3NuTree.m_2)
+        if WZ1L3NuTree.gen_match_2 <= 5:
+            RealFilledEvents+=1.0
+            RealEventsFromVV+=1.0
+            AverageRealWeight+=WZ1L3NuTree.FinalWeighting
+            AvRealWeightFromVV+=WZ1L3NuTree.FinalWeighting
+            RealFracHisto.Fill((TauVector+MuVector).M(),WZ1L3NuTree.FinalWeighting)
+        elif WZ1L3NuTree.gen_match_2 ==6:
+            WFilledEvents+=1.0
+            WFracHisto.Fill((TauVector+MuVector).M(),WZ1L3NuTree.FinalWeighting)
+
     for i in tqdm(range(WZ2L2QTree.GetEntries())):
         WZ2L2QTree.GetEntry(i)
         MuVector = ROOT.TLorentzVector()
@@ -243,6 +284,22 @@ def Make2016Fractions(args):
         elif ZZ4LTree.gen_match_2 ==6:
             WFilledEvents+=1.0
             WFracHisto.Fill((TauVector+MuVector).M(),ZZ4LTree.FinalWeighting)
+            
+    for i in tqdm(range(ZZ2L2QTree.GetEntries())):
+        ZZ2L2QTree.GetEntry(i)
+        MuVector = ROOT.TLorentzVector()
+        TauVector = ROOT.TLorentzVector()
+        MuVector.SetPtEtaPhiM(ZZ2L2QTree.pt_1,ZZ2L2QTree.eta_1,ZZ2L2QTree.phi_1,ZZ2L2QTree.m_1)
+        TauVector.SetPtEtaPhiM(ZZ2L2QTree.pt_2,ZZ2L2QTree.eta_2,ZZ2L2QTree.phi_2,ZZ2L2QTree.m_2)
+        if ZZ2L2QTree.gen_match_2 <= 5:
+            RealFilledEvents+=1.0
+            RealEventsFromVV+=1.0
+            AverageRealWeight+=ZZ2L2QTree.FinalWeighting
+            AvRealWeightFromVV+=ZZ2L2QTree.FinalWeighting
+            RealFracHisto.Fill((TauVector+MuVector).M(),ZZ2L2QTree.FinalWeighting)
+        elif ZZ2L2QTree.gen_match_2 ==6:
+            WFilledEvents+=1.0
+            WFracHisto.Fill((TauVector+MuVector).M(),ZZ2L2QTree.FinalWeighting)
 
     for i in tqdm(range(WTree.GetEntries())):
         WTree.GetEntry(i)
@@ -255,7 +312,7 @@ def Make2016Fractions(args):
             RealFracHisto.Fill((TauVector+MuVector).M(),WTree.FinalWeighting)
         elif WTree.gen_match_2 ==6:
             WFilledEvents+=1.0
-            WFracHisto.Fill((TauVector+MuVector).M(),WTree.FinalWeighting)
+            WFracHisto.Fill((TauVector+MuVector).M(),WTree.FinalWeighting)            
 
     QCDFracHisto.Add(RealFracHisto,-1)
     QCDFracHisto.Add(TTFracHisto,-1)
@@ -294,9 +351,11 @@ def MakeFractions(args):
     DYFile = ROOT.TFile(args.Directory+"DY.root")
     DYTree = DYFile.mt_Selected
     
+    """
     if(args.Year == "2017"):
         EmbeddedFile = ROOT.TFile(args.Directory+"Embedded.root")
         EmbeddedTree = EmbeddedFile.mt_Selected
+    """
     
     ST_t_antitopFile = ROOT.TFile(args.Directory+"ST_t_antitop.root")
     ST_t_antitopTree = ST_t_antitopFile.mt_Selected
@@ -379,6 +438,7 @@ def MakeFractions(args):
             AvRealWeightFromDY += DYTree.FinalWeighting
             RealFracHisto.Fill((TauVector+MuVector).M(),DYTree.FinalWeighting)
     #no embedded available for 2018 yet
+    """
     if(args.Year == "2017"):
         for i in tqdm(range(EmbeddedTree.GetEntries())):
             EmbeddedTree.GetEntry(i)
@@ -387,6 +447,7 @@ def MakeFractions(args):
             MuVector.SetPtEtaPhiM(EmbeddedTree.pt_1,EmbeddedTree.eta_1,EmbeddedTree.phi_1,EmbeddedTree.m_1)
             TauVector.SetPtEtaPhiM(EmbeddedTree.pt_2,EmbeddedTree.eta_2,EmbeddedTree.phi_2,EmbeddedTree.m_2)
             RealFracHisto.Fill((TauVector+MuVector).M())
+    """
      
     #St->VVT and VVL and VVJ    
     for i in tqdm(range(ST_t_antitopTree.GetEntries())):
@@ -634,6 +695,27 @@ def AddFakeFactorWeightings(args):
         FracW = WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))/dataFracHisto.GetBinContent(dataFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))
         FracTT = TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))/dataFracHisto.GetBinContent(dataFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))
 
+        Denom = ( QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) + 
+                  WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) + 
+                  TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) )
+        
+        altFracQCD = QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) / Denom
+        altFracW = WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) / Denom
+        altFracTT = TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M())) / Denom
+        
+        """
+        print("FracQCD: "+str(FracQCD))
+        print("FracW: "+str(FracW))
+        print("FracTT: "+str(FracTT))        
+        print("QCD: "+str(QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))))
+        print("W: "+str(WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))))
+        print("TT: "+str(TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()))))
+        print("Denom: "+str(Denom))        
+        print("altFracQCD: "+str(altFracQCD))
+        print("altFracW: "+str(altFracW))
+        print("altFracTT: "+str(altFracTT))
+        """
+        
         m_vis = (MuVector + TauVector).M()
         TransverseMass = sqrt(2.0*MuVector.Pt()*MissingMomentumVector.Pt()*(1.0-cos(MuVector.DeltaPhi(MissingMomentumVector))))
 
@@ -646,6 +728,9 @@ def AddFakeFactorWeightings(args):
                   FracQCD,
                   FracW,
                   FracTT]
+                  #altFracQCD,
+                  #altFracW,
+                  #altFracTT]
 
         Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs))
         ff_qcd_syst_up[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_syst_up')
@@ -707,7 +792,7 @@ if __name__ == "__main__":
     
     if args.Year == "2017" or args.Year == "2018":
         MakeFractions(args)
-    elif args.Year == "2018":
+    elif args.Year == "2016":
         Make2016Fractions(args)
     
     AddFakeFactorWeightings(args)

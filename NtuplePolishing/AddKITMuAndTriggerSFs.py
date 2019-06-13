@@ -163,7 +163,7 @@ def AddKITMuAndTriggerSFs(File,args):
         IsoMu22SF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2016BtoH/Muon_Mu22OR_eta2p1_eff.root")
         CrossTriggerSF = KITMuSF()
         CrossTriggerSF.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2016BtoH/Muon_Mu19leg_2016BtoH_eff.root")
-        TauLegFactor = SFReader("triggerSF/mu-tau/trigger_sf_mt.root",interpolate=False)
+        TauLegFactor = getSF.SFReader("triggerSF/mu-tau/trigger_sf_mt.root",interpolate=False)
 
     elif args.year == "2017":
         IDIso.init_ScaleFactors("/data/aloeliger/CMSSW_9_4_0/src/LeptonEfficiencies/Muon/Run2017/Muon_IdIso_IsoLt0.15_eff_RerecoFall17.root")
@@ -193,13 +193,14 @@ def AddKITMuAndTriggerSFs(File,args):
                 and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
                      or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
                 TriggerSF = IsoMu22SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif (MuVector.Pt() > 20.0 and TauVector.Pt() > 21.0 
-                  and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
-                      or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
+            elif (MuVector.Pt() > 20.0 and MuVector.Pt() < 23.0 and TauVector.Pt() > 21.0 
+                  and ((TheTree.passMu19Tau20 and TheTree.matchMu19Tau20_1 and TheTree.matchMu19Tau20_2 and TheTree.filterMu19Tau20_1 and TheTree.filterMu19Tau20_2) 
+                        or (TheTree.passMu19Tau20SingleL1 and TheTree.matchMu19Tau20SingleL1_1 and TheTree.matchMu19Tau20SingleL1_2 and TheTree.filterMu19Tau20SingleL1_1 and TheTree.filterMu19Tau20SingleL1_2))):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-                TriggerSF = TriggerSF * TauLegFactor.getSF(TauVector.Pt(),TauVector.Eta(), Tau_isocut="TightIso",genuine=(TheTree.gen_match_2 == 6),tau_dm = TheTree.l2_decayMode)
+                TriggerSF = TriggerSF * TauLegFactor.getSF(TauVector.Pt(),TauVector.Eta(), tau_isocut="TightIso",genuine=(TheTree.gen_match_2 == 6),tau_dm = TheTree.l2_decayMode)
             else:
-                print("WARNING! Something fell through our trigger definitions!")
+                print("WARNING! Something fell through our 2016 trigger definitions!")                
+                
                 TriggerSF = 1
         elif args.year=="2017":
             if(MuVector.Pt() < 25.0 and TheTree.passMu20Tau27):
@@ -210,7 +211,7 @@ def AddKITMuAndTriggerSFs(File,args):
                 TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
                 TriggerSF = TriggerSF*TheTree.DiTauTriggerWeight
             else:
-                print("WARNING! Something fell through our trigger definitions!")
+                print("WARNING! Something fell through our 2017 trigger definitions!")
                 TriggerSF = 1
                 
         elif args.year=="2018":
@@ -219,7 +220,7 @@ def AddKITMuAndTriggerSFs(File,args):
             elif (MuVector.Pt() > 21.0 and MuVector.Pt() < 25.0 and (TheTree.passMu20Tau27 or TheTree.passMu20HPSTau27)):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
             else:
-                print("WARNING! Something fell through our trigger definitions!")
+                print("WARNING! Something fell through our 2018 trigger definitions!")
                 TriggerSF = 1
 
         MuAndTriggerSF[0] = IDIsoSF * TriggerSF
