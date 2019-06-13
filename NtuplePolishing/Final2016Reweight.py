@@ -71,7 +71,10 @@ def AddFinalWeights(FileToRun,args):
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Generate the final 2017 recipe reweighting")
     parser.add_argument('Files',nargs="+",help="List of files to run the tool on")
-    parser.add_argument('--year',choices=["2016","2017","2018"],help="Change the year of the corrections applied",nargs='?',default = "2017")
+    parser.add_argument('--year',choices=["2016","2017","2018"],help="Change the year of the corrections applied",nargs='?',default = "2016")
+    parser.add_argument('--DisablePileupWeighting',help="Disable the pileup weighting",action="store_true")
+    parser.add_argument('--UseInclusiveDY',help="Option for using non DY#.root files in cross section weighting",action="store_true")
+    parser.add_argument('--DisableMuAndTriggerSFs',help="Disable the KIT style muon scale factors",action="store_true")    
 
     args = parser.parse_args()    
 
