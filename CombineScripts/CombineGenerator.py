@@ -6,7 +6,24 @@ import AnalysisCategory
 import SampleDefinition
 import sys
 
-def PerformFinalSteps(OutputSamples,AnalysisCategories):    
+def CalculateAverageWeights(OutputSamples):
+    print("Average Weights")
+    AverageWeights={}
+    for Sample in OutputSamples:        
+        CategoryWeights={}
+        for Cat in OutputSamples[Sample].MasterCategoryDictionary:                        
+            if OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetEntries() > 0.0:
+                TheWeight = OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].Integral()/OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetEntries()
+                CategoryWeights[Cat]=TheWeight
+            else: 
+                print("No Entries! Defaulting Zero!")
+                print(Sample)
+                print(Cat)
+                CategoryWeights[Cat]=0.0
+        AverageWeights[Sample] = CategoryWeights
+    return AverageWeights
+
+def PerformFinalSteps(OutputSamples,AnalysisCategories,AverageWeights):    
     #create the ttbar contamination stuff
     try:
         TTbarContaminationSample = OutputSamples['TT_Contamination']
@@ -33,17 +50,9 @@ def PerformFinalSteps(OutputSamples,AnalysisCategories):
         raise
     #rectify empty bins/negative bins
     for Sample in OutputSamples:
-        #Nominal should now be OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].
-        for Cat in OutputSamples[Sample].MasterCategoryDictionary:
-            #this is breaking the fits. Check it
-            AverageWeight = OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].Integral()/OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetEntries()                   
-            print(Sample)
-            print(Cat)
-            # saw some very high weights created by this method
-            #maybe this will unbreak the fits?
-            #100 breaks this, 20 doesn't
-            if AverageWeight*1.8 > 20.0:
-                continue
+        #Nominal should now be OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].    
+        for Cat in OutputSamples[Sample].MasterCategoryDictionary:            
+            TheWeight=AverageWeights[Sample][Cat]            
             for i in range(1,OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetNbinsX()+1):
                 if Sample == "data_obs":
                     continue
@@ -54,29 +63,29 @@ def PerformFinalSteps(OutputSamples,AnalysisCategories):
                         if OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i-1) > 0:
                             print("Bin #"+str(i)+" (Overflow bin)")
                             # now we just add the bin error
-                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*AverageWeight)
-                            print("Adding Error: "+str(1.8*AverageWeight))
+                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
+                            print("Adding Error: "+str(1.8*TheWeight))
                             #check if we are in the first bin on 
                     elif (i-1 ) % AnalysisCategories[Cat].nReconstructionBins == 0:                        
                         if OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i+1) > 0:
                             print("Bin #"+str(i)+" (First bin)")
-                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*AverageWeight)
-                            print("Adding Error: "+str(1.8*AverageWeight))
+                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
+                            print("Adding Error: "+str(1.8*TheWeight))
                     else:
                         if (OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i-1) > 0) or (OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i+1) > 0):
                             print("Bin #"+str(i))
-                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*AverageWeight)
-                            print("Adding Error: "+str(1.8*AverageWeight))
+                            OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
+                            print("Adding Error: "+str(1.8*TheWeight))
                 else:
                     continue                    
-            #do the same thing, but now we adjust the MC up a bit everywhere it is zero
+            #do the same thing, but now we adjust the MC up a bit everywhere it is zero            
             for i in range(1,OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetNbinsX()+1):
                 if Sample == "data_obs":
                     continue
-                elif OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i) <= 0.0:
+                elif OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i) <= 0.0:                    
                     OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinContent(i,1e-8)
                 else:
-                    continue
+                    continue                        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate a combine file with the specified signal sample and analysis category")
@@ -129,13 +138,17 @@ if __name__ == "__main__":
             #do the nominal things
             OutputSamples[Sample].ProcessEvent(AnalysisCategories,args)
             if not args.RunShapeless:
-                OutputSamples[Sample].ProcessAllUncertainties(AnalysisCategories,args)
+                OutputSamples[Sample].ProcessAllUncertainties(AnalysisCategories,args)    
+
+    #Create the average weights
+    AverageWeightDict = CalculateAverageWeights(OutputSamples)
+    
     #now we unroll all of our distributions
     for Sample in OutputSamples:
         OutputSamples[Sample].UnrollAllDistributions()
     
     #perform any final miscellaneous operations we may need    
-    PerformFinalSteps(OutputSamples,AnalysisCategories)    
+    PerformFinalSteps(OutputSamples,AnalysisCategories,AverageWeightDict)    
 
     #now we create a combine file, and write to it
     CombineFile = ROOT.TFile(str(args.OutputFileName)+"_"+str(args.year)+".root","RECREATE")
