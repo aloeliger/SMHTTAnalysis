@@ -53,10 +53,14 @@ def AddFinalWeights(FileToRun,args):
     FinalWeighting = array('f',[0])
     FinalWeighting_ZPT_DOWN = array('f',[0])
     FinalWeighting_ZPT_UP = array('f',[0])
+    FinalWeighting_TOP_UP = array('f',[0])
+    FinalWeighting_TOP_DOWN = array('f',[0])
 
     TheBranch = ReweightFile.mt_Selected.Branch('FinalWeighting',FinalWeighting,'FinalWeighitng/F')
     TheBranch_ZPT_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_DOWN',FinalWeighting_ZPT_DOWN,'FinalWeighitng_ZPT_DOWN/F')
     TheBranch_ZPT_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_ZPT_UP',FinalWeighting_ZPT_UP,'FinalWeighting_ZPT_UP/F')
+    TheBranch_TOP_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_UP',FinalWeighting_TOP_UP,'FinalWeighting_TOP_UP/F')
+    TheBranch_TOP_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_DOWN',FinalWeighting_TOP_DOWN,'FinalWeighting_TOP_DOWN/F')
     
     FirstScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/htt_scalefactors_v17_5.root")
     FirstWorkSpace = FirstScaleFactorFile.w
@@ -101,7 +105,13 @@ def AddFinalWeights(FileToRun,args):
                 elif(abs(TauVector.Eta())<1.7):
                     Weight = Weight*0.93      
                 elif(abs(TauVector.Eta())<2.3):
-                    Weight = Weight*1.61                
+                    Weight = Weight*1.61
+            elif(ReweightFile.mt_Selected.gen_match_2 == 1
+                 or ReweightFile.mt_Selected.gen_match_2 == 3):
+                if(abs(TauVector.Eta())<1.460):
+                    Weight = Weight*1.09
+                elif(abs(TauVector.Eta())>=1.559):
+                    Weight = Weight*1.19
 
         Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
                  and ReweightFile.mt_Selected.filterMu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)
@@ -166,10 +176,12 @@ def AddFinalWeights(FileToRun,args):
                 if pttop2 > 400:
                     pttop2 = 400
                 topfactor = math.sqrt(math.exp(0.0615-0.0005*pttop1)*math.exp(0.0615-0.0005*pttop2))
+                Weight_TOP_UP = Weight * (2.0 * (topfactor - 1.0) + 1.0)
+                Weight_TOP_DOWN = Weight
                 Weight = Weight * TopFactor
         
         #ZPT Weighting
-        if not args.DisableZPTReweighting:
+        if not args.DisableZPTWeighting:
             Weight_ZPT_DOWN = Weight * ReweightFile.mt_Selected.ZPTWeighting_DOWN
             Weight_ZPT_UP = Weight * ReweightFile.mt_Selected.ZPTWeighting_UP
             Weight = Weight * ReweightFile.mt_Selected.ZPTWeighting
@@ -183,12 +195,24 @@ def AddFinalWeights(FileToRun,args):
             Weight = 1.0           
 
         FinalWeighting[0]=Weight
-        FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
-        FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP
+        if not args.DisableZPTWeighting:
+            FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
+            FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP            
+        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
+                                               or FileName == "TTToSemiLeptonic.root"
+                                               or FileName == "TTTo2L2Nu.root"):
+            FinalWeighting_TOP_UP[0] = Weight_TOP_UP
+            FinalWeighting_TOP_DOWN[0] = Weight_TOP_DOWN
         
         TheBranch.Fill()
-        TheBranch_ZPT_DOWN.Fill()
-        TheBranch_ZPT_UP.Fill()
+        if not args.DisableZPTWeighting:
+            TheBranch_ZPT_DOWN.Fill()
+            TheBranch_ZPT_UP.Fill()
+        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
+                                               or FileName == "TTToSemiLeptonic.root"
+                                               or FileName == "TTTo2L2Nu.root"):
+            TheBranch_TOP_UP.Fill()
+            TheBranch_TOP_DOWN.Fill()
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
@@ -202,7 +226,7 @@ if __name__=="__main__":
 
     parser.add_argument('--DisableEmbeddingReconstructionWeighting',help="Disable Embedded track and trigger based weights",action="store_true")
     parser.add_argument('--DisableTopReweighting',help="Disable top reweighting",action="store_true")
-    parser.add_argument('--DisableZPTReweighting',help="Disable Z Pt reweighting",action="store_true")
+    parser.add_argument('--DisableZPTWeighting',help="Disable Z Pt reweighting",action="store_true")
     parser.add_argument('--year',choices=["2016","2017","2018"],help="Change the year of the corrections applied",nargs='?',default = "2017")
     parser.add_argument('--DisablePileupWeighting',help="Disable the pileup weighting",action="store_true")
     parser.add_argument('--UseInclusiveDY',help="Option for using non DY#.root files in cross section weighting",action="store_true")

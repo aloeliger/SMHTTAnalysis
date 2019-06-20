@@ -76,6 +76,7 @@ def AddFinalWeights(FileToRun, args):
         if(FileName != "Data.root" and FileName != "Embedded.root"):
             Weight = Weight * 0.90 #0.90 tight tau ID
 
+        #preliminary values I took from Camilla's presentation a while ago
         if not args.DisableEtaWeighting:
             if(ReweightFile.mt_Selected.gen_match_2 == 2
                or ReweightFile.mt_Selected.gen_match_2 == 4):
