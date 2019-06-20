@@ -83,7 +83,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.009))
 
             elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 10):
-                if Argument.NoEnergyCorrect:
+                if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
                     EnergyCorrectFactor = 0.0
@@ -93,7 +93,7 @@ def ApplyTESBranches(FileName,Arguments):
                 
             TES_E[0] = CorrectedTauVector.E()
             TES_E_UP[0] = CorrectedTauVector_UP.E()
-            TES_DOWN[0] = CorrectedTauVector_E_DOWN.E()
+            TES_E_DOWN[0] = CorrectedTauVector_DOWN.E()
             TES_Pt[0] = CorrectedTauVector.Pt()
             TES_Pt_UP[0] = CorrectedTauVector_UP.Pt()
             TES_Pt_DOWN[0] = CorrectedTauVector_DOWN.Pt()

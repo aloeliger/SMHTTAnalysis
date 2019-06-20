@@ -101,8 +101,85 @@ def ApplyEESandMES(File,args):
         EES_METVector_DOWN = ROOT.TLorentzVector()
 
         #2016/2018 MES/EES
+        if(args.year == "2018"):
+            raise RuntimeError("2018 not implemented yet! Implement me!")
         if(args.year =="2016" or args.year == "2018"):
-            raise RuntimeError("2018 and 2016 not impletmented yet! Implement me!")
+            #EES
+            if(TheTree.gen_match_2 == 1 or TheTree.gen_match_2 == 3 ):
+                if(TheTree.l2_decayMode == 0):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = 0.0
+                elif(TheTree.l2_decayMode == 1):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = 0.095
+                else:
+                    EnergyCorrectFactor = 0.0
+                #Do not correct anything to do with the MES
+                MES_TauVector = TauVector
+                MES_TauVector_UP = TauVector
+                MES_TauVector_DOWN = TauVector
+                MES_METVector = METVector
+                MES_METVector_UP = METVector
+                MES_METVector_DOWN = METVector
+
+                #Do correct the EES tau vectors
+                EES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
+                EES_TauVector_UP = TauVector * (1.00 +(EnergyCorrectFactor + 0.03))
+                EES_TauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor - 0.03))
+                EES_METVector = GetCorrectedMetVector(TauVector, EES_TauVector, METVector)
+                EES_METVector_UP = GetCorrectedMetVector(TauVector, EES_TauVector_UP, METVector)
+                EES_METVector_DOWN = GetCorrectedMetVector(TauVector, EES_TauVector_DOWN, METVector)
+                
+            #MES
+            elif(TheTree.gen_match_2 == 2 or TheTree.gen_match_2 == 4):
+                if(TheTree.l2_decayMode == 0):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = 0.015                        
+                elif(TheTree.l2_decayMode == 0):
+                    if args.NoEnergyCorrect:
+                        EnergyCorrectFactor = 0.0
+                    else:
+                        EnergyCorrectFactor = -0.002
+                else:
+                    EnergyCorrectFactor = 0.0
+                
+                #Do not correct anything to do with the EES
+                EES_TauVector = TauVector
+                EES_TauVector_UP = TauVector
+                EES_TauVector_DOWN = TauVector
+                EES_METVector = METVector
+                EES_METVector_UP = METVector
+                EES_METVector_DOWN = METVector
+
+                #Do correct the MES
+                MES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
+                MES_TauVector_UP = TauVector * (1.00 + (EnergyCorrectFactor + 0.03))
+                MES_TauVector_DOWN = TauVector * (1.00 + (EnergyCorrectFactor - 0.03))
+                MES_METVector = GetCorrectedMetVector(TauVector, MES_TauVector, METVector)
+                MES_METVector_UP = GetCorrectedMetVector(TauVector, MES_TauVector_UP, METVector)
+                MES_METVector_DOWN = GetCorrectedMetVector(TauVector, MES_TauVector_DOWN, METVector)
+
+            #nothing doing. Do trivial things
+            else:
+                EES_TauVector=TauVector
+                EES_TauVector_UP=TauVector
+                EES_TauVector_DOWN=TauVector
+                EES_METVector=METVector
+                EES_METVector_UP=METVector
+                EES_METVector_DOWN=METVector
+
+                MES_TauVector = TauVector
+                MES_TauVector_UP = TauVector
+                MES_TauVector_DOWN = TauVector
+                MES_METVector = METVector
+                MES_METVector_UP = METVector
+                MES_METVector_DOWN = METVector
         #2017 MES/EES
         if(args.year == "2017"):
             #EES
