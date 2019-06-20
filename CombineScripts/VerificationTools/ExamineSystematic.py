@@ -3,6 +3,7 @@ import argparse
 from tqdm import tqdm
 import math
 import re
+import os
 
 def ExamineSystematic(TheDirectory,NominalName,UncertaintyName,args):
     ROOT.gStyle.SetOptStat(0)
@@ -72,7 +73,7 @@ def ExamineSystematic(TheDirectory,NominalName,UncertaintyName,args):
     UpRatio.GetYaxis().SetNdivisions(5,0,0)    
     DownRatio.Draw("P SAME")        
 
-    TheCanvas.SaveAs("SystematicsScans/"+TheDirectory.GetName()+"/"+UncertaintyName+".png")
+    TheCanvas.SaveAs(os.environ.get('CMSSW_BASE')+"src/SMHTTAnalysis/CombineScripts/SystematicsScans/"+TheDirectory.GetName()+"/"+UncertaintyName+".png")
 
     if(not args.AllUncerts):
         raw_input("Press Enter to Continue...")
