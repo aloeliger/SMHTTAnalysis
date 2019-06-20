@@ -181,9 +181,7 @@ class Sample():
 
         MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
         HiggsPt = (TauVector+MuVector+METVector).Pt()
-        Higgs_jjPt = (TauVector+MuVector+METVector+JetOneVector+JetTwoVector).Pt()        
-        if args.year == "2016":
-            raise RuntimeError("2016 not implemented yet! Implement me!")
+        Higgs_jjPt = (TauVector+MuVector+METVector+JetOneVector+JetTwoVector).Pt()                
         
         TheEventDump = {}
         #lepton kinematics
@@ -561,9 +559,7 @@ class Sample():
             'JetEta3to5Down': self.EventChain.mjj_JetEta3to5Down,
             'JetEta0to5Up': self.EventChain.mjj_JetEta0to5Up,
             'JetEta0to5Down': self.EventChain.mjj_JetEta0to5Down,
-        }
-        if args.year == "2016":
-            raise RuntimeError("2016 not implemented yet! Implement me")                            
+        }        
 
         for Shape in MTDictionary:
             JESDump = NominalDump.copy()
