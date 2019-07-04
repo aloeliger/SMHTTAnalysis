@@ -7,7 +7,6 @@ import SampleDefinition
 import sys
 
 def CalculateAverageWeights(OutputSamples):
-    print("Average Weights")
     AverageWeights={}
     for Sample in OutputSamples:        
         CategoryWeights={}
@@ -61,21 +60,21 @@ def PerformFinalSteps(OutputSamples,AnalysisCategories,AverageWeights):
                     #in which case we need only check the bin to our left
                     if i % AnalysisCategories[Cat].nReconstructionBins == 0:
                         if OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i-1) > 0:
-                            print("Bin #"+str(i)+" (Overflow bin)")
+                            #print("Bin #"+str(i)+" (Overflow bin)")
                             # now we just add the bin error
                             OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
-                            print("Adding Error: "+str(1.8*TheWeight))
+                            #print("Adding Error: "+str(1.8*TheWeight))
                             #check if we are in the first bin on 
                     elif (i-1 ) % AnalysisCategories[Cat].nReconstructionBins == 0:                        
                         if OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i+1) > 0:
-                            print("Bin #"+str(i)+" (First bin)")
+                            #print("Bin #"+str(i)+" (First bin)")
                             OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
-                            print("Adding Error: "+str(1.8*TheWeight))
+                            #print("Adding Error: "+str(1.8*TheWeight))
                     else:
                         if (OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i-1) > 0) or (OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i+1) > 0):
-                            print("Bin #"+str(i))
+                            #print("Bin #"+str(i))
                             OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinError(i,1.8*TheWeight)
-                            print("Adding Error: "+str(1.8*TheWeight))
+                            #print("Adding Error: "+str(1.8*TheWeight))
                 else:
                     continue                    
             #do the same thing, but now we adjust the MC up a bit everywhere it is zero            
