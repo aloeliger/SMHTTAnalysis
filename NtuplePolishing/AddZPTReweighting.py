@@ -96,9 +96,10 @@ def Apply2016ZPTReweighting(File,args):
         if(FileName != "Embedded.root"
            and FileName != "Data.root"):
             ZPTWeighting[0] = ZPTWeightsHisto.GetBinContent(ZPTWeightsHisto.GetXaxis().FindBin(TheTree.genM),
-                                                            ZPTWeightsHisto.GetYaxis().FindBin(TheTree.genpT))
-        ZPTWeighting_UP[0] = 1.1 * ZPTWeighting[0]
-        ZPTWeighting_DOWN[0] = 0.9 * ZPTWeighting[0]
+                                                            ZPTWeightsHisto.GetYaxis().FindBin(TheTree.genpT))            
+        #this isn't quite correct
+        ZPTWeighting_UP[0] = 1.0+(ZPTWeighting[0]-1.0)*1.1
+        ZPTWeighting_DOWN[0] = 1.0+(ZPTWeighting[0]-1.0)*0.9        
 
         if(FileName == "Data.root"
            or FileName == "Embedded.root"):
