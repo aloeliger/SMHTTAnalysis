@@ -1167,7 +1167,7 @@ void Draw2018ControlPlots()
 
   CMS_lumi(PlotPad_j1eta,0,33);
 
-  TLegend* Legend_j1eta = new TLegend(0.61,0.41,0.88,0.68);  
+  TLegend* Legend_j1eta = new TLegend(0.78,0.41,0.98,0.68);  
   Legend_j1eta->AddEntry(Data_j1eta,"Observed","pe");
   Legend_j1eta->AddEntry(DYTT_j1eta,"DY #rightarrow #tau#tau","f");
   Legend_j1eta->AddEntry(Other_j1eta,"Other","f");
