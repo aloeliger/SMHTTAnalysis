@@ -118,23 +118,18 @@ def DrawDirectoryContents(TheDirectory,args):
     TheCanvas = ROOT.TCanvas("TheCanvas","TheCanvas")
 
     data_obs = TheDirectory.Get("data_obs")
-    jetFakes = TheDirectory.Get("jetFakes")
-    if args.year=='2018':
-        ZT = TheDirectory.Get("ZT")
-    elif args.year == '2017':
-        ZT.year = TheDirectory.Get("embedded")
+    jetFakes = TheDirectory.Get("jetFakes")    
+    ZT = TheDirectory.Get("ZT")    
     ZL = TheDirectory.Get("ZL")
-    TT = TheDirectory.Get("TTL")
-    if args.year=='2018':
-        TT.Add(TheDirectory.Get("TTT"))
+    TT = TheDirectory.Get("TTL")    
+    TT.Add(TheDirectory.Get("TTT"))
     #create the other category
     Other = TheDirectory.Get("VVL")
     Other.Add(TheDirectory.Get("qqH_htt125"))
     Other.Add(TheDirectory.Get("ggH_htt125"))
     Other.Add(TheDirectory.Get("WH_htt125"))
-    Other.Add(TheDirectory.Get("ZH_htt125"))
-    if args.year == '2018':
-        Other.Add(TheDirectory.Get("VVT"))    
+    Other.Add(TheDirectory.Get("ZH_htt125"))    
+    Other.Add(TheDirectory.Get("VVT"))    
     HiggsUpscale = TheDirectory.Get("qqH_htt125") #create the upscale
     HiggsUpscale.Add(TheDirectory.Get("ggH_htt125"))
     HiggsUpscale.Add(TheDirectory.Get("WH_htt125"))
@@ -255,6 +250,7 @@ def DrawDirectoryContents(TheDirectory,args):
     #RatioHist.Print()
 
     BackgroundStack.SetMaximum(max(BackgroundStack.GetMaximum(),data_obs.GetMaximum())*1.1)
+    BackgroundStack.SetMinimum(1.0)
 
     BackgroundStack.Draw()
     TheErrors.Draw("SAME e2")
