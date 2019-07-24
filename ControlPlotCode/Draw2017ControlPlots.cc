@@ -119,6 +119,7 @@ void Draw2017ControlPlots()
 
   Legend_MuPt->Draw();
   CanvasOne->SaveAs("FinalPlots/MuPt.png");
+  CanvasOne->SaveAs("FinalPlots/MuPt.pdf");
 
   //MuEta
   TCanvas* CanvasTwo = new TCanvas("CanvasTwo","MuEta",550,550);
@@ -225,6 +226,7 @@ void Draw2017ControlPlots()
 
   Legend_MuEta->Draw();
   CanvasTwo->SaveAs("FinalPlots/MuEta.png");
+  CanvasTwo->SaveAs("FinalPlots/MuEta.pdf");
 
   //TauPt  
   TCanvas* CanvasThree = new TCanvas("CanvasThree","TauPt",550,550);
@@ -331,6 +333,7 @@ void Draw2017ControlPlots()
 
   Legend_TauPt->Draw();
   CanvasThree->SaveAs("FinalPlots/TauPt.png");
+  CanvasThree->SaveAs("FinalPlots/TauPt.pdf");
 
   //TauEta  
   TCanvas* CanvasFour = new TCanvas("CanvasFour","TauEta",550,550);
@@ -437,6 +440,7 @@ void Draw2017ControlPlots()
 
   Legend_TauEta->Draw();
   CanvasFour->SaveAs("FinalPlots/TauEta.png");
+  CanvasFour->SaveAs("FinalPlots/TauEta.pdf");
 
   //MET  
   TCanvas* CanvasFive = new TCanvas("CanvasFive","MET",550,550);
@@ -543,6 +547,7 @@ void Draw2017ControlPlots()
 
   Legend_MET->Draw();
   CanvasFive->SaveAs("FinalPlots/MET.png");
+  CanvasFive->SaveAs("FinalPlots/MET.pdf");
 
   //METPHI
   TCanvas* CanvasSix = new TCanvas("CanvasSix","METPhi",550,550);
@@ -649,6 +654,7 @@ void Draw2017ControlPlots()
 
   Legend_METPhi->Draw();
   CanvasSix->SaveAs("FinalPlots/METPhi.png");
+  CanvasSix->SaveAs("FinalPlots/METPhi.pdf");
 
   //mvis histo
   TCanvas* CanvasSeven = new TCanvas("CanvasSeven","mvis",550,550);
@@ -755,6 +761,7 @@ void Draw2017ControlPlots()
 
   Legend_mvis->Draw();
   CanvasSeven->SaveAs("FinalPlots/mvis.png");
+  CanvasSeven->SaveAs("FinalPlots/mvis.pdf");
 
   //NJets Histo
   TCanvas* CanvasEight = new TCanvas("CanvasEight","Njets",550,550);
@@ -861,6 +868,7 @@ void Draw2017ControlPlots()
 
   Legend_Njets->Draw();
   CanvasEight->SaveAs("FinalPlots/Njets.png");
+  CanvasEight->SaveAs("FinalPlots/Njets.pdf");
 
   //Higgs Pt Histo
   TCanvas* CanvasNine = new TCanvas("CanvasNine","HiggsPt",550,550);
@@ -967,6 +975,7 @@ void Draw2017ControlPlots()
 
   Legend_HiggsPt->Draw();
   CanvasNine->SaveAs("FinalPlots/HiggsPt.png");
+  CanvasNine->SaveAs("FinalPlots/HiggsPt.pdf");
 
   //mjj Histo
   TCanvas* CanvasTen = new TCanvas("CanvasTen","mjj",550,550);
@@ -1073,6 +1082,7 @@ void Draw2017ControlPlots()
 
   Legend_mjj->Draw();
   CanvasTen->SaveAs("FinalPlots/mjj.png");
+  CanvasTen->SaveAs("FinalPlots/mjj.pdf");
 
   //trigger
   TCanvas* CanvasEleven = new TCanvas("CanvasEleven","trigger",550,550);
@@ -1179,4 +1189,112 @@ void Draw2017ControlPlots()
 
   Legend_trigger->Draw();
   CanvasEleven->SaveAs("FinalPlots/trigger.png");
+  CanvasEleven->SaveAs("FinalPlots/trigger.pdf");
+
+  //msv
+  TCanvas* CanvasTwelve = new TCanvas("CanvasTwelve","msv",550,550);
+  CanvasTwelve->SetTickx();
+  CanvasTwelve->SetTicky();
+
+  gStyle->SetOptStat(0);
+  TH1F* Data_msv = (TH1F*) HistoFile->Get("Data_2017_msv");
+  TH1F* Data_Fake_msv = (TH1F*) HistoFile->Get("Data_2017_Fake__msv");
+  TH1F* DYTT_msv = (TH1F*) HistoFile->Get("DY_2017_genmatch_tt_msv");
+  TH1F* DYMM_msv = (TH1F*) HistoFile->Get("DY_2017_genmatch_low_msv");
+  TH1F* TTToHadronic_msv = (TH1F*) HistoFile->Get("TTToHadronic_2017_msv");
+  TH1F* TTTo2L2Nu_msv = (TH1F*) HistoFile->Get("TTTo2L2Nu_2017_msv");
+  TH1F* TTToSemiLeptonic_msv = (TH1F*) HistoFile->Get("TTToSemiLeptonic_2017_msv");  
+  TH1F* WW_msv = (TH1F*) HistoFile->Get("WW_2017_msv");
+  TH1F* WZ_msv = (TH1F*) HistoFile->Get("WZ_2017_msv");
+  TH1F* ZZ_msv = (TH1F*) HistoFile->Get("ZZ_2017_msv");
+  TH1F* ST_tW_top_msv = (TH1F*) HistoFile->Get("ST_tW_top_2017_msv");
+  TH1F* ggH_msv = (TH1F*) HistoFile->Get("ggH_2017_msv");
+  TH1F* VBF_msv = (TH1F*) HistoFile->Get("VBF_2017_msv");
+  TH1F* WHPlus_msv = (TH1F*) HistoFile->Get("WHPlus_2017_msv");
+  TH1F* WHMinus_msv = (TH1F*) HistoFile->Get("WHMinus_2017_msv");
+  TH1F* ZH_msv = (TH1F*) HistoFile->Get("ZH_2017_msv");
+
+  TH1F* TTFinal_msv = (TH1F*) TTToHadronic_msv->Clone();
+  TTFinal_msv->Add(TTTo2L2Nu_msv);
+  TTFinal_msv->Add(TTToSemiLeptonic_msv);
+
+  TH1F* VVFinal_msv = (TH1F*) WW_msv->Clone();
+  VVFinal_msv->Add(WZ_msv);
+  VVFinal_msv->Add(ZZ_msv);
+  VVFinal_msv->Add(ST_tW_top_msv);
+  
+  TH1F* VHFinal_msv = (TH1F*) WHPlus_msv->Clone();
+  VHFinal_msv->Add(WHMinus_msv);
+  VHFinal_msv->Add(ZH_msv);
+
+  TH1F* Other_msv = (TH1F*) VHFinal_msv->Clone();
+  Other_msv->Add(ggH_msv);
+  Other_msv->Add(VBF_msv);
+  Other_msv->Add(VVFinal_msv);
+
+  TH1F* AllHiggs_msv = (TH1F*) VHFinal_msv->Clone();
+  AllHiggs_msv->Add(ggH_msv);
+  AllHiggs_msv->Add(VBF_msv);
+
+  Data_msv->SetMarkerStyle(20);
+  Data_msv->Sumw2();
+  
+  Data_Fake_msv->SetLineColor(kBlack);
+  Data_Fake_msv->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    
+  DYTT_msv->SetLineColor(kBlack);
+  DYTT_msv->SetFillColor(TColor::GetColor("#ffcc66"));
+
+  DYMM_msv->SetLineColor(kBlack);
+  DYMM_msv->SetFillColor(TColor::GetColor("#4496c8"));
+  
+  TTFinal_msv->SetLineColor(kBlack);
+  TTFinal_msv->SetFillColor(TColor::GetColor("#9999cc"));
+
+  Other_msv->SetLineColor(kBlack);
+  Other_msv->SetFillColor(TColor::GetColor("#12cadd"));
+  
+  AllHiggs_msv->SetLineColor(kRed);
+  AllHiggs_msv->Scale(30);
+
+  std::cout<<"Fake Background Integral: "<<Data_Fake_msv->Integral()<<std::endl;
+
+  THStack* BackgroundStack_msv = new THStack("BackgroundStack_msv","BackgroundStack_msv");  
+  BackgroundStack_msv->Add(Data_Fake_msv,"hist");
+  BackgroundStack_msv->Add(TTFinal_msv,"hist");
+  BackgroundStack_msv->Add(Other_msv,"hist");
+  BackgroundStack_msv->Add(DYMM_msv,"hist");
+  BackgroundStack_msv->Add(DYTT_msv,"hist");
+
+  TH1F* BackgroundStack_msv_Errors = MakeStackErrors(BackgroundStack_msv);
+
+  TPad* PlotPad_msv = MakeRatioPlot(CanvasTwelve,BackgroundStack_msv, Data_msv, "m_{tt}",0.7,1.3);
+  PlotPad_msv->SetTickx();
+  PlotPad_msv->SetTicky();
+
+  BackgroundStack_msv->SetMaximum(max(BackgroundStack_msv->GetMaximum(),Data_msv->GetMaximum()));
+  
+  BackgroundStack_msv->Draw();
+  BackgroundStack_msv_Errors->Draw("SAME e2");
+  BackgroundStack_msv->SetTitle("m_{tt}");
+  Data_msv->Draw("SAME e1");
+  AllHiggs_msv->Draw("SAME HIST");
+  BackgroundStack_msv->GetYaxis()->SetTitle("Events");
+  BackgroundStack_msv->GetYaxis()->SetTitleOffset(1.58);
+  BackgroundStack_msv->GetXaxis()->SetLabelSize(0.0);
+
+  CMS_lumi(PlotPad_msv,0,33);
+
+  TLegend* Legend_msv = new TLegend(0.61,0.41,0.88,0.68);  
+  Legend_msv->AddEntry(Data_msv,"Observed","pe");
+  Legend_msv->AddEntry(DYTT_msv,"DY #rightarrow #tau#tau","f");
+  Legend_msv->AddEntry(Other_msv,"Other","f");
+  Legend_msv->AddEntry(DYMM_msv,"DY #rightarrow ll","f");
+  Legend_msv->AddEntry(TTFinal_msv,"t#bar{t}","f");
+  Legend_msv->AddEntry(Data_Fake_msv,"Fakes","f");
+  Legend_msv->AddEntry(AllHiggs_msv,"All Higgs (#times 30)","l");
+
+  Legend_msv->Draw();
+  CanvasTwelve->SaveAs("FinalPlots/msv.png");
+  CanvasTwelve->SaveAs("FinalPlots/msv.pdf");
 }
