@@ -2,6 +2,15 @@ import ROOT
 import argparse
 from tqdm import tqdm
 import math
+from array import array
+
+def GetHistogramAxisInfo(TheHistogram):
+    BinBoundaries = []
+    for i in range(1,TheHistogram.GetNbinsX()+1):
+        BinBoundaries.append(TheHistogram.GetBinLowEdge(i))
+    BinBoundaries.append(TheHistogram.GetXaxis().GetXmax())
+    Nbins = len(BinBoundaries)-1
+    return Nbins,BinBoundaries
 
 def MakeRatioPlot(TheCanvas,TheStack,TheData,XAxisLabel,YBoundDown,YBoundUp):
     PlotPad = ROOT.TPad("pad1","plot",0.,0.20,1.,1.)
@@ -14,34 +23,34 @@ def MakeRatioPlot(TheCanvas,TheStack,TheData,XAxisLabel,YBoundDown,YBoundUp):
     RatioPad.SetBottomMargin(0.08)
     RatioPad.SetGridy()
 
+    nBins,BinBoundaries = GetHistogramAxisInfo(TheData)
+    BinBoundaryArray=array('f',BinBoundaries)
+
     RatioHist = ROOT.TH1F("Ratio","",
-                          TheData.GetNbinsX(),
-                          TheData.GetXaxis().GetXmin(),
-                          TheData.GetXaxis().GetXmax())
+                          nBins,
+                          BinBoundaryArray)
     RatioHist.Sumw2()
     RatioHist.Add(TheData)
 
     DenominatorHistos = ROOT.TH1F("DenominatorHistos","DenominatorHistos",
-                                  TheData.GetNbinsX(),
-                                  TheData.GetXaxis().GetXmin(),
-                                  TheData.GetXaxis().GetXmax())
+                                  nBins,
+                                  BinBoundaryArray)
     
     ListOfStackHistograms = TheStack.GetHists()
     for i in range(TheStack.GetNhists()):
         DenominatorHistos.Add(TheStack.GetHists().At(i))
     RatioHist.Divide(DenominatorHistos)
     FinalRatioHist = ROOT.TH1F("FinalRatio","",
-                               RatioHist.GetNbinsX(),
-                               RatioHist.GetXaxis().GetXmin(),
-                               RatioHist.GetXaxis().GetXmax())
+                               nBins,
+                               BinBoundaryArray)
 
     for i in range(1,FinalRatioHist.GetNbinsX()+1):
         FinalRatioHist.SetBinContent(i,RatioHist.GetBinContent(i))
         try:
             FinalRatioHist.SetBinError(i,(TheData.GetBinError(i)/TheData.GetBinContent(i))*RatioHist.GetBinContent(i))
         except ZeroDivisionError:
-            print("Division By zero in ratio bin errors.")
-            print("Setting bin: "+str(i)+" to zero")
+            #print("Division By zero in ratio bin errors.")
+            #print("Setting bin: "+str(i)+" to zero")
             FinalRatioHist.SetBinError(i,0)
     
     FinalRatioHist.SetMarkerStyle(20)
@@ -60,17 +69,15 @@ def MakeRatioPlot(TheCanvas,TheStack,TheData,XAxisLabel,YBoundDown,YBoundUp):
     FinalRatioHist.GetXaxis().SetTitleSize(0.14)
 
     MCErrors = ROOT.TH1F("MCErrors","MCErrors",
-                         RatioHist.GetNbinsX(),
-                         RatioHist.GetXaxis().GetXmin(),
-                         RatioHist.GetXaxis().GetXmax())
-
+                         nBins,
+                         BinBoundaryArray)
     for i in range (1,MCErrors.GetNbinsX()+1):
         MCErrors.SetBinContent(i,1.0)
         try:
             MCErrors.SetBinError(i,DenominatorHistos.GetBinError(i)/DenominatorHistos.GetBinContent(i))
         except:
-            print("No background predicted in ratio plot errors for bin: "+str(i))
-            print("Setting it to zero")
+            #print("No background predicted in ratio plot errors for bin: "+str(i))
+            #print("Setting it to zero")
             MCErrors.SetBinError(i,0)
 
     MCErrors.SetFillStyle(3001)
@@ -91,16 +98,16 @@ def MakeRatioPlot(TheCanvas,TheStack,TheData,XAxisLabel,YBoundDown,YBoundUp):
     return PlotPad,RatioPad,FinalRatioHist,MCErrors
 
 def MakeStackErrors(TheStack):
+    nBins,BinBoundaries = GetHistogramAxisInfo(TheStack.GetHists().At(0))
+    BinBoundaryArray = array('f',BinBoundaries)
     DenominatorHistos = ROOT.TH1F("DenominatorHistos","DenominatorHistos",
-                                  TheStack.GetHists().At(0).GetNbinsX(),
-                                  TheStack.GetHists().At(0).GetXaxis().GetXmin(),
-                                  TheStack.GetHists().At(0).GetXaxis().GetXmax())
+                                  nBins,
+                                  BinBoundaryArray)
     for i in range(TheStack.GetNhists()):
         DenominatorHistos.Add(TheStack.GetHists().At(i))
     TheErrorHisto = ROOT.TH1F("TheErrorHisto","",
-                              DenominatorHistos.GetNbinsX(),
-                              DenominatorHistos.GetXaxis().GetXmin(),
-                              DenominatorHistos.GetXaxis().GetXmax())
+                              nBins,
+                              BinBoundaryArray)
 
     for i in range(1,DenominatorHistos.GetNbinsX()+1):
         TheErrorHisto.SetBinContent(i,DenominatorHistos.GetBinContent(i))
@@ -280,7 +287,7 @@ def DrawDirectoryContents(TheDirectory,args):
     #Image.WriteImage("PrefitCheck/"+TheDirectory.GetName()+".png")
 
     #Create Grid Divisions
-    numCategories = (BackgroundStack.GetHistogram().GetNbinsX())/11
+    numCategories = int((BackgroundStack.GetHistogram().GetXaxis().GetXmax()-BackgroundStack.GetHistogram().GetXaxis().GetXmin()))/11
     print("Number of unrolled bins: "+str(numCategories))
     TheGridDivisions = ROOT.TH1F("GridDivisions","GridDivisions",
                                  HiggsUpscale.GetNbinsX(),

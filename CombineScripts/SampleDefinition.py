@@ -111,16 +111,16 @@ class Sample():
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_qcd_njet0_mt_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_qcd_njet0_mt_statDown"+"_"+Cat,self.Name+"_CMS_ff_qcd_njet0_mt_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_qcd_njet1_mt_statUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_qcd_njet1_mt_statUp"+"_"+Cat,self.Name+"_CMS_ff_qcd_njet1_mt_statUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_qcd_njet1_mt_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_qcd_njet1_mt_statDown"+"_"+Cat,self.Name+"_CMS_ff_qcd_njet1_mt_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_njet1_statUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_njet1_statUp"+"_"+Cat,self.Name+"_CMS_ff_tt_njet1_statUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_njet1_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_njet1_statDown"+"_"+Cat,self.Name+"_CMS_ff_tt_njet1_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_systUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_systUp"+"_"+Cat,self.Name+"_CMS_ff_tt_systUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_systDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_systDown"+"_"+Cat,self.Name+"_CMS_ff_tt_systDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_njet1_mt_statUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_njet1_mt_statUp"+"_"+Cat,self.Name+"_CMS_ff_tt_njet1_mt_statUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_njet1_mt_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_njet1_mt_statDown"+"_"+Cat,self.Name+"_CMS_ff_tt_njet1_mt_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_mt_systUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_mt_systUp"+"_"+Cat,self.Name+"_CMS_ff_tt_mt_systUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_tt_mt_systDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_tt_mt_systDown"+"_"+Cat,self.Name+"_CMS_ff_tt_mt_systDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_njet0_mt_statUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_njet0_mt_statUp"+"_"+Cat,self.Name+"_CMS_ff_w_njet0_mt_statUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_njet0_mt_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_njet0_mt_statDown"+"_"+Cat,self.Name+"_CMS_ff_w_njet0_mt_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_njet1_mt_statUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_njet1_mt_statUp"+"_"+Cat,self.Name+"_CMS_ff_w_njet1_mt_statUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
         self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_njet1_mt_statDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_njet1_mt_statDown"+"_"+Cat,self.Name+"_CMS_ff_w_njet1_mt_statDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_systUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_systUp"+"_"+Cat,self.Name+"_CMS_ff_w_systUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
-        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_systDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_systDown"+"_"+Cat,self.Name+"_CMS_ff_w_systDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_mt_systUp"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_mt_systUp"+"_"+Cat,self.Name+"_CMS_ff_w_mt_systUp"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
+        self.MasterCategoryDictionary[Cat][self.Name+"_CMS_ff_w_mt_systDown"+"_"+Cat] = ROOT.TH2F(self.Name+"_CMS_ff_w_mt_systDown"+"_"+Cat,self.Name+"_CMS_ff_w_mt_systDown"+"_"+Cat,nRecoBins,RecoBinsArray,nRollingBins,RollingBinsArray)
     def InitializeTESShapes(self,Cat,RollingBinsArray,nRollingBins,RecoBinsArray,nRecoBins):
         if self.Name == 'embedded':
             TESName = '_CMS_scale_emb_t'
@@ -332,16 +332,16 @@ class Sample():
                               'CMS_ff_qcd_njet0_mt_statDown':self.EventChain.ff_qcd_dm0_njet0_stat_down,
                               'CMS_ff_qcd_njet1_mt_statUp':self.EventChain.ff_qcd_dm0_njet1_stat_up,
                               'CMS_ff_qcd_njet1_mt_statDown':self.EventChain.ff_qcd_dm0_njet1_stat_down,
-                              'CMS_ff_tt_njet1_statUp':self.EventChain.ff_tt_dm0_njet1_stat_up,
-                              'CMS_ff_tt_njet1_statDown':self.EventChain.ff_tt_dm0_njet1_stat_down,
-                              'CMS_ff_tt_systUp':self.EventChain.ff_tt_syst_up,
-                              'CMS_ff_tt_systDown':self.EventChain.ff_tt_syst_down,
+                              'CMS_ff_tt_njet1_mt_statUp':self.EventChain.ff_tt_dm0_njet1_stat_up,
+                              'CMS_ff_tt_njet1_mt_statDown':self.EventChain.ff_tt_dm0_njet1_stat_down,
+                              'CMS_ff_tt_mt_systUp':self.EventChain.ff_tt_syst_up,
+                              'CMS_ff_tt_mt_systDown':self.EventChain.ff_tt_syst_down,
                               'CMS_ff_w_njet0_mt_statUp':self.EventChain.ff_w_dm0_njet0_stat_up,
                               'CMS_ff_w_njet0_mt_statDown':self.EventChain.ff_w_dm0_njet0_stat_down,
                               'CMS_ff_w_njet1_mt_statUp':self.EventChain.ff_w_dm0_njet1_stat_up,
                               'CMS_ff_w_njet1_mt_statDown':self.EventChain.ff_w_dm0_njet1_stat_down,
-                              'CMS_ff_w_systUp':self.EventChain.ff_w_syst_up,
-                              'CMS_ff_w_systDown':self.EventChain.ff_w_syst_down}
+                              'CMS_ff_w_mt_systUp':self.EventChain.ff_w_syst_up,
+                              'CMS_ff_w_mt_systDown':self.EventChain.ff_w_syst_down}
         for Shape in FFChangeDictionary:
             NewDump = NominalDump.copy()
             NewDump['Weight'] = self.EventChain.FinalWeighting*FFChangeDictionary[Shape]

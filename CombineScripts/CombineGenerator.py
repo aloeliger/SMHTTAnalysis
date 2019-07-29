@@ -82,7 +82,7 @@ def PerformFinalSteps(OutputSamples,AnalysisCategories,AverageWeights):
                 if Sample == "data_obs":
                     continue
                 elif OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].GetBinContent(i) <= 0.0:                    
-                    OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinContent(i,1e-8)
+                    OutputSamples[Sample].MasterCategoryDictionary[Cat][Sample].SetBinContent(i,1e-6)
                 else:
                     continue                        
 
