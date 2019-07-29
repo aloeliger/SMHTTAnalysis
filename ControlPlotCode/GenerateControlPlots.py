@@ -15,9 +15,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
         if TheFile in args.UseFakeFactorOnFiles:
             UseFakeFactor = True
     except:
-        pass
-    if UseFakeFactor:
-        FullHistoName=FullHistoName+"_Fake_"
+        pass    
     
     print("Histogram Name: "+FullHistoName)
 

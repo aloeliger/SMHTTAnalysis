@@ -20,7 +20,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_MuPt = (TH1F*) HistoFile->Get("Data_2016_MuPt");
-  TH1F* Data_Fake_MuPt = (TH1F*) HistoFile->Get("Data_2016_Fake__MuPt");
+  TH1F* Data_Fake_MuPt = (TH1F*) HistoFile->Get("Fake_2016_MuPt");
   TH1F* DYTT_MuPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_MuPt");
   TH1F* DYMM_MuPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_MuPt");
   TH1F* TT_MuPt = (TH1F*) HistoFile->Get("TT_2016_MuPt");  
@@ -126,7 +126,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_MuEta = (TH1F*) HistoFile->Get("Data_2016_MuEta");
-  TH1F* Data_Fake_MuEta = (TH1F*) HistoFile->Get("Data_2016_Fake__MuEta");
+  TH1F* Data_Fake_MuEta = (TH1F*) HistoFile->Get("Fake_2016_MuEta");
   TH1F* DYTT_MuEta = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_MuEta");
   TH1F* DYMM_MuEta = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_MuEta");
   TH1F* TT_MuEta = (TH1F*) HistoFile->Get("TT_2016_MuEta");  
@@ -232,7 +232,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_TauPt = (TH1F*) HistoFile->Get("Data_2016_TauPt");
-  TH1F* Data_Fake_TauPt = (TH1F*) HistoFile->Get("Data_2016_Fake__TauPt");
+  TH1F* Data_Fake_TauPt = (TH1F*) HistoFile->Get("Fake_2016_TauPt");
   TH1F* DYTT_TauPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_TauPt");
   TH1F* DYMM_TauPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_TauPt");
   TH1F* TT_TauPt = (TH1F*) HistoFile->Get("TT_2016_TauPt");  
@@ -338,7 +338,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_TauEta = (TH1F*) HistoFile->Get("Data_2016_TauEta");
-  TH1F* Data_Fake_TauEta = (TH1F*) HistoFile->Get("Data_2016_Fake__TauEta");
+  TH1F* Data_Fake_TauEta = (TH1F*) HistoFile->Get("Fake_2016_TauEta");
   TH1F* DYTT_TauEta = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_TauEta");
   TH1F* DYMM_TauEta = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_TauEta");
   TH1F* TT_TauEta = (TH1F*) HistoFile->Get("TT_2016_TauEta");  
@@ -444,7 +444,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_MET = (TH1F*) HistoFile->Get("Data_2016_MET");
-  TH1F* Data_Fake_MET = (TH1F*) HistoFile->Get("Data_2016_Fake__MET");
+  TH1F* Data_Fake_MET = (TH1F*) HistoFile->Get("Fake_2016_MET");
   TH1F* DYTT_MET = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_MET");
   TH1F* DYMM_MET = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_MET");
   TH1F* TT_MET = (TH1F*) HistoFile->Get("TT_2016_MET");  
@@ -550,7 +550,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_METPhi = (TH1F*) HistoFile->Get("Data_2016_METPhi");
-  TH1F* Data_Fake_METPhi = (TH1F*) HistoFile->Get("Data_2016_Fake__METPhi");
+  TH1F* Data_Fake_METPhi = (TH1F*) HistoFile->Get("Fake_2016_METPhi");
   TH1F* DYTT_METPhi = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_METPhi");
   TH1F* DYMM_METPhi = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_METPhi");
   TH1F* TT_METPhi = (TH1F*) HistoFile->Get("TT_2016_METPhi");  
@@ -656,7 +656,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_mvis = (TH1F*) HistoFile->Get("Data_2016_mvis");
-  TH1F* Data_Fake_mvis = (TH1F*) HistoFile->Get("Data_2016_Fake__mvis");
+  TH1F* Data_Fake_mvis = (TH1F*) HistoFile->Get("Fake_2016_mvis");
   TH1F* DYTT_mvis = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_mvis");
   TH1F* DYMM_mvis = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_mvis");
   TH1F* TT_mvis = (TH1F*) HistoFile->Get("TT_2016_mvis");  
@@ -762,7 +762,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_Njets = (TH1F*) HistoFile->Get("Data_2016_Njets");
-  TH1F* Data_Fake_Njets = (TH1F*) HistoFile->Get("Data_2016_Fake__Njets");
+  TH1F* Data_Fake_Njets = (TH1F*) HistoFile->Get("Fake_2016_Njets");
   TH1F* DYTT_Njets = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_Njets");
   TH1F* DYMM_Njets = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_Njets");
   TH1F* TT_Njets = (TH1F*) HistoFile->Get("TT_2016_Njets");  
@@ -868,7 +868,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_HiggsPt = (TH1F*) HistoFile->Get("Data_2016_HiggsPt");
-  TH1F* Data_Fake_HiggsPt = (TH1F*) HistoFile->Get("Data_2016_Fake__HiggsPt");
+  TH1F* Data_Fake_HiggsPt = (TH1F*) HistoFile->Get("Fake_2016_HiggsPt");
   TH1F* DYTT_HiggsPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_HiggsPt");
   TH1F* DYMM_HiggsPt = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_HiggsPt");
   TH1F* TT_HiggsPt = (TH1F*) HistoFile->Get("TT_2016_HiggsPt");  
@@ -974,7 +974,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_mjj = (TH1F*) HistoFile->Get("Data_2016_mjj");
-  TH1F* Data_Fake_mjj = (TH1F*) HistoFile->Get("Data_2016_Fake__mjj");
+  TH1F* Data_Fake_mjj = (TH1F*) HistoFile->Get("Fake_2016_mjj");
   TH1F* DYTT_mjj = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_mjj");
   TH1F* DYMM_mjj = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_mjj");
   TH1F* TT_mjj = (TH1F*) HistoFile->Get("TT_2016_mjj");  
@@ -1080,7 +1080,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_trigger = (TH1F*) HistoFile->Get("Data_2016_trigger");
-  TH1F* Data_Fake_trigger = (TH1F*) HistoFile->Get("Data_2016_Fake__trigger");
+  TH1F* Data_Fake_trigger = (TH1F*) HistoFile->Get("Fake_2016_trigger");
   TH1F* DYTT_trigger = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_trigger");
   TH1F* DYMM_trigger = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_trigger");
   TH1F* TT_trigger = (TH1F*) HistoFile->Get("TT_2016_trigger");  
@@ -1186,7 +1186,7 @@ void Draw2016ControlPlots()
 
   gStyle->SetOptStat(0);
   TH1F* Data_msv = (TH1F*) HistoFile->Get("Data_2016_msv");
-  TH1F* Data_Fake_msv = (TH1F*) HistoFile->Get("Data_2016_Fake__msv");
+  TH1F* Data_Fake_msv = (TH1F*) HistoFile->Get("Fake_2016_msv");
   TH1F* DYTT_msv = (TH1F*) HistoFile->Get("DY_2016_genmatch_tt_msv");
   TH1F* DYMM_msv = (TH1F*) HistoFile->Get("DY_2016_genmatch_low_msv");
   TH1F* TT_msv = (TH1F*) HistoFile->Get("TT_2016_msv");  
