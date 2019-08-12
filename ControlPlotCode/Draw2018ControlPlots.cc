@@ -21,7 +21,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_MuPt = (TH1F*) HistoFile->Get("Data_2018_MuPt");
   TH1F* Data_Fake_MuPt = (TH1F*) HistoFile->Get("Fake_2018_MuPt");
-  TH1F* DYTT_MuPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_MuPt");
+  TH1F* DYTT_MuPt = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_MuPt");
   TH1F* DYMM_MuPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_MuPt");
   TH1F* TTToHadronic_MuPt = (TH1F*) HistoFile->Get("TTToHadronic_2018_MuPt");
   TH1F* TTTo2L2Nu_MuPt = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_MuPt");
@@ -128,7 +128,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_MuEta = (TH1F*) HistoFile->Get("Data_2018_MuEta");
   TH1F* Data_Fake_MuEta = (TH1F*) HistoFile->Get("Fake_2018_MuEta");
-  TH1F* DYTT_MuEta = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_MuEta");
+  TH1F* DYTT_MuEta = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_MuEta");
   TH1F* DYMM_MuEta = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_MuEta");
   TH1F* TTToHadronic_MuEta = (TH1F*) HistoFile->Get("TTToHadronic_2018_MuEta");
   TH1F* TTTo2L2Nu_MuEta = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_MuEta");
@@ -235,7 +235,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_TauPt = (TH1F*) HistoFile->Get("Data_2018_TauPt");
   TH1F* Data_Fake_TauPt = (TH1F*) HistoFile->Get("Fake_2018_TauPt");
-  TH1F* DYTT_TauPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_TauPt");
+  TH1F* DYTT_TauPt = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_TauPt");
   TH1F* DYMM_TauPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_TauPt");
   TH1F* TTToHadronic_TauPt = (TH1F*) HistoFile->Get("TTToHadronic_2018_TauPt");
   TH1F* TTTo2L2Nu_TauPt = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_TauPt");
@@ -342,7 +342,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_TauEta = (TH1F*) HistoFile->Get("Data_2018_TauEta");
   TH1F* Data_Fake_TauEta = (TH1F*) HistoFile->Get("Fake_2018_TauEta");
-  TH1F* DYTT_TauEta = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_TauEta");
+  TH1F* DYTT_TauEta = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_TauEta");
   TH1F* DYMM_TauEta = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_TauEta");
   TH1F* TTToHadronic_TauEta = (TH1F*) HistoFile->Get("TTToHadronic_2018_TauEta");
   TH1F* TTTo2L2Nu_TauEta = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_TauEta");
@@ -449,7 +449,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_MET = (TH1F*) HistoFile->Get("Data_2018_MET");
   TH1F* Data_Fake_MET = (TH1F*) HistoFile->Get("Fake_2018_MET");
-  TH1F* DYTT_MET = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_MET");
+  TH1F* DYTT_MET = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_MET");
   TH1F* DYMM_MET = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_MET");
   TH1F* TTToHadronic_MET = (TH1F*) HistoFile->Get("TTToHadronic_2018_MET");
   TH1F* TTTo2L2Nu_MET = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_MET");
@@ -556,7 +556,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_METPhi = (TH1F*) HistoFile->Get("Data_2018_METPhi");
   TH1F* Data_Fake_METPhi = (TH1F*) HistoFile->Get("Fake_2018_METPhi");
-  TH1F* DYTT_METPhi = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_METPhi");
+  TH1F* DYTT_METPhi = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_METPhi");
   TH1F* DYMM_METPhi = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_METPhi");
   TH1F* TTToHadronic_METPhi = (TH1F*) HistoFile->Get("TTToHadronic_2018_METPhi");
   TH1F* TTTo2L2Nu_METPhi = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_METPhi");
@@ -663,7 +663,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_mvis = (TH1F*) HistoFile->Get("Data_2018_mvis");
   TH1F* Data_Fake_mvis = (TH1F*) HistoFile->Get("Fake_2018_mvis");
-  TH1F* DYTT_mvis = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_mvis");
+  TH1F* DYTT_mvis = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_mvis");
   TH1F* DYMM_mvis = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_mvis");
   TH1F* TTToHadronic_mvis = (TH1F*) HistoFile->Get("TTToHadronic_2018_mvis");
   TH1F* TTTo2L2Nu_mvis = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_mvis");
@@ -770,7 +770,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_Njets = (TH1F*) HistoFile->Get("Data_2018_Njets");
   TH1F* Data_Fake_Njets = (TH1F*) HistoFile->Get("Fake_2018_Njets");
-  TH1F* DYTT_Njets = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_Njets");
+  TH1F* DYTT_Njets = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_Njets");
   TH1F* DYMM_Njets = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_Njets");
   TH1F* TTToHadronic_Njets = (TH1F*) HistoFile->Get("TTToHadronic_2018_Njets");
   TH1F* TTTo2L2Nu_Njets = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_Njets");
@@ -877,7 +877,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_HiggsPt = (TH1F*) HistoFile->Get("Data_2018_HiggsPt");
   TH1F* Data_Fake_HiggsPt = (TH1F*) HistoFile->Get("Fake_2018_HiggsPt");
-  TH1F* DYTT_HiggsPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_HiggsPt");
+  TH1F* DYTT_HiggsPt = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_HiggsPt");
   TH1F* DYMM_HiggsPt = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_HiggsPt");
   TH1F* TTToHadronic_HiggsPt = (TH1F*) HistoFile->Get("TTToHadronic_2018_HiggsPt");
   TH1F* TTTo2L2Nu_HiggsPt = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_HiggsPt");
@@ -984,7 +984,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_mjj = (TH1F*) HistoFile->Get("Data_2018_mjj");
   TH1F* Data_Fake_mjj = (TH1F*) HistoFile->Get("Fake_2018_mjj");
-  TH1F* DYTT_mjj = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_mjj");
+  TH1F* DYTT_mjj = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_mjj");
   TH1F* DYMM_mjj = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_mjj");
   TH1F* TTToHadronic_mjj = (TH1F*) HistoFile->Get("TTToHadronic_2018_mjj");
   TH1F* TTTo2L2Nu_mjj = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_mjj");
@@ -1091,7 +1091,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_j1eta = (TH1F*) HistoFile->Get("Data_2018_j1eta");
   TH1F* Data_Fake_j1eta = (TH1F*) HistoFile->Get("Fake_2018_j1eta");
-  TH1F* DYTT_j1eta = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_j1eta");
+  TH1F* DYTT_j1eta = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_j1eta");
   TH1F* DYMM_j1eta = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_j1eta");
   TH1F* TTToHadronic_j1eta = (TH1F*) HistoFile->Get("TTToHadronic_2018_j1eta");
   TH1F* TTTo2L2Nu_j1eta = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_j1eta");
@@ -1198,7 +1198,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_trigger = (TH1F*) HistoFile->Get("Data_2018_trigger");
   TH1F* Data_Fake_trigger = (TH1F*) HistoFile->Get("Fake_2018_trigger");
-  TH1F* DYTT_trigger = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_trigger");
+  TH1F* DYTT_trigger = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_trigger");
   TH1F* DYMM_trigger = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_trigger");
   TH1F* TTToHadronic_trigger = (TH1F*) HistoFile->Get("TTToHadronic_2018_trigger");
   TH1F* TTTo2L2Nu_trigger = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_trigger");
@@ -1305,7 +1305,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_j1pt = (TH1F*) HistoFile->Get("Data_2018_j1pt");
   TH1F* Data_Fake_j1pt = (TH1F*) HistoFile->Get("Fake_2018_j1pt");
-  TH1F* DYTT_j1pt = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_j1pt");
+  TH1F* DYTT_j1pt = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_j1pt");
   TH1F* DYMM_j1pt = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_j1pt");
   TH1F* TTToHadronic_j1pt = (TH1F*) HistoFile->Get("TTToHadronic_2018_j1pt");
   TH1F* TTTo2L2Nu_j1pt = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_j1pt");
@@ -1412,7 +1412,7 @@ void Draw2018ControlPlots()
   gStyle->SetOptStat(0);
   TH1F* Data_msv = (TH1F*) HistoFile->Get("Data_2018_msv");
   TH1F* Data_Fake_msv = (TH1F*) HistoFile->Get("Fake_2018_msv");
-  TH1F* DYTT_msv = (TH1F*) HistoFile->Get("DY_2018_genmatch_tt_msv");
+  TH1F* DYTT_msv = (TH1F*) HistoFile->Get("Embedded_2018_genmatch_tt_msv");
   TH1F* DYMM_msv = (TH1F*) HistoFile->Get("DY_2018_genmatch_low_msv");
   TH1F* TTToHadronic_msv = (TH1F*) HistoFile->Get("TTToHadronic_2018_msv");
   TH1F* TTTo2L2Nu_msv = (TH1F*) HistoFile->Get("TTTo2L2Nu_2018_msv");
