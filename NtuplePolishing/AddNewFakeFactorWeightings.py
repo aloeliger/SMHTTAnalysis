@@ -5,11 +5,90 @@ import argparse
 import FakeFactorConfiguration as cfg
 import AddMTandPZeta
 
+#Let's try splitting these up by triggers.
+# see if that helps us deal with the the problem in the 2017 cross trigger?
 WFracHisto = ROOT.TH2F("WFrac","WFrac",20,0.0,500.0,7,1.0,8.0)
 QCDFracHisto = ROOT.TH2F("QCDFrac","QCDFrac",20,0.0,500.0,7,1.0,8.0)
 TTFracHisto = ROOT.TH2F("TTFrac","TTFrac",20,0.0,500.0,7,1.0,8.0)
 dataFracHisto = ROOT.TH2F("DataFrac","DataFrac",20,0.0,500.0,7,1.0,8.0)
 RealFracHisto = ROOT.TH2F("RealFrac","RealFrac",20,0.0,500.0,7,1.0,8.0)
+
+#2016 triggers
+WFracHisto_Trigger22 = ROOT.TH2F("WFrac_Trigger22","WFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+QCDFracHisto_Trigger22 = ROOT.TH2F("QCDFrac_Trigger22","QCDFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+TTFracHisto_Trigger22 = ROOT.TH2F("TTFrac_Trigger22","TTFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+dataFracHisto_Trigger22 = ROOT.TH2F("DataFrac_Trigger22","DataFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+RealFracHisto_Trigger22 = ROOT.TH2F("RealFrac_Trigger22","RealFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+
+WFracHisto_Trigger1920 = ROOT.TH2F("WFrac_Trigger1920","WFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+QCDFracHisto_Trigger1920 = ROOT.TH2F("QCDFrac_Trigger1920","QCDFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+TTFracHisto_Trigger1920 = ROOT.TH2F("TTFrac_Trigger1920","TTFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+dataFracHisto_Trigger1920 = ROOT.TH2F("DataFrac_Trigger1920","DataFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+RealFracHisto_Trigger1920 = ROOT.TH2F("RealFrac_Trigger1920","RealFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+
+#2017 & 2018 triggers
+WFracHisto_Trigger24 = ROOT.TH2F("WFrac_Trigger24","WFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+QCDFracHisto_Trigger24 = ROOT.TH2F("QCDFrac_Trigger24","QCDFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+TTFracHisto_Trigger24 = ROOT.TH2F("TTFrac_Trigger24","TTFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+dataFracHisto_Trigger24 = ROOT.TH2F("DataFrac_Trigger24","DataFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+RealFracHisto_Trigger24 = ROOT.TH2F("RealFrac_Trigger24","RealFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+
+WFracHisto_Trigger27 = ROOT.TH2F("WFrac_Trigger27","WFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+QCDFracHisto_Trigger27 = ROOT.TH2F("QCDFrac_Trigger27","QCDFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+TTFracHisto_Trigger27 = ROOT.TH2F("TTFrac_Trigger27","TTFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+dataFracHisto_Trigger27 = ROOT.TH2F("DataFrac_Trigger27","DataFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+RealFracHisto_Trigger27 = ROOT.TH2F("RealFrac_Trigger27","RealFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+
+WFracHisto_Trigger2027 = ROOT.TH2F("WFrac_Trigger2027","WFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+QCDFracHisto_Trigger2027 = ROOT.TH2F("QCDFrac_Trigger2027","QCDFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+TTFracHisto_Trigger2027 = ROOT.TH2F("TTFrac_Trigger2027","TTFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+dataFracHisto_Trigger2027 = ROOT.TH2F("DataFrac_Trigger2027","DataFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+RealFracHisto_Trigger2027 = ROOT.TH2F("RealFrac_Trigger2027","RealFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+
+WHistos = {
+    "Inclusive": WFracHisto,
+    "Trigger22": WFracHisto_Trigger22,
+    "Trigger1920": WFracHisto_Trigger1920,
+    "Trigger24": WFracHisto_Trigger24,
+    "Trigger27": WFracHisto_Trigger27,
+    "Trigger2027": WFracHisto_Trigger2027
+    }
+
+QCDHistos = {
+    "Inclusive": QCDFracHisto,
+    "Trigger22": QCDFracHisto_Trigger22,
+    "Trigger1920": QCDFracHisto_Trigger1920,
+    "Trigger24": QCDFracHisto_Trigger24,
+    "Trigger27": QCDFracHisto_Trigger27,
+    "Trigger2027": QCDFracHisto_Trigger2027
+    }
+
+TTHistos = {
+    "Inclusive": TTFracHisto,
+    "Trigger22": TTFracHisto_Trigger22,
+    "Trigger1920": TTFracHisto_Trigger1920,
+    "Trigger24": TTFracHisto_Trigger24,
+    "Trigger27": TTFracHisto_Trigger27,
+    "Trigger2027": TTFracHisto_Trigger2027
+    }
+
+dataHistos = {
+    "Inclusive": dataFracHisto,
+    "Trigger22": dataFracHisto_Trigger22,
+    "Trigger1920": dataFracHisto_Trigger1920,
+    "Trigger24": dataFracHisto_Trigger24,
+    "Trigger27": dataFracHisto_Trigger27,
+    "Trigger2027": dataFracHisto_Trigger2027
+    }
+
+RealHistos = {
+    "Inclusive": RealFracHisto,
+    "Trigger22": RealFracHisto_Trigger22,
+    "Trigger1920": RealFracHisto_Trigger1920,
+    "Trigger24": RealFracHisto_Trigger24,
+    "Trigger27": RealFracHisto_Trigger27,
+    "Trigger2027": RealFracHisto_Trigger2027
+    }
 
 def MakeNtuples(path,ProcessFiles):
     Chain = ROOT.TChain("mt_Selected")
@@ -28,28 +107,126 @@ def MakeAllNtuples(args):
         DataFiles = cfg.Data_Files_2017
         WFiles = cfg.W_Files_2017
         TTFiles = cfg.TT_Files_2017
+        EmbeddedFiles = cfg.Embedded_Files_2017
+        EmbeddedNtuple = MakeNtuples(FilePath,EmbeddedFiles)
+        EmbeddedNtuple.SetNameTitle("Embedded","Embedded")
     elif args.year == "2018":
         FilePath = cfg.ntuple_path_2018
         DataFiles = cfg.Data_Files_2018
         WFiles = cfg.W_Files_2018
         TTFiles = cfg.TT_Files_2018
     DataNtuple = MakeNtuples(FilePath,DataFiles)
+    DataNtuple.SetNameTitle("Data","Data")
     WNtuple = MakeNtuples(FilePath,WFiles)
+    WNtuple.SetNameTitle("W","W")
     TTNtuple = MakeNtuples(FilePath,TTFiles)
+    TTNtuple.SetNameTitle("TT","TT")
 
-    return DataNtuple,WNtuple,TTNtuple
+    if args.year!="2017":
+        return DataNtuple,WNtuple,TTNtuple
+    else:
+        return DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple
 
-def ProcessNtuple(Ntuple,FakeHistogram,RealHistogram):
+def ProcessNtuple(args,Ntuple,HistogramFamily,GenMatches,Sample=""):
     for i in tqdm(range(Ntuple.GetEntries())):
         Ntuple.GetEntry(i)
         MuVector = ROOT.TLorentzVector()
         TauVector = ROOT.TLorentzVector()
         MuVector.SetPtEtaPhiM(Ntuple.pt_1,Ntuple.eta_1,Ntuple.phi_1,Ntuple.m_1)
         TauVector.SetPtEtaPhiM(Ntuple.pt_2,Ntuple.eta_2,Ntuple.phi_2,Ntuple.m_2)
-        if Ntuple.gen_match_2 <= 5:
-            RealHistogram.Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
-        elif Ntuple.gen_match_2 == 6:
-            FakeHistogram.Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
+        if Ntuple.gen_match_2 in GenMatches:
+            HistogramFamily[ClassifyTrigger(args,Ntuple,Sample)].Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
+            HistogramFamily["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
+
+def ClassifyTrigger(args,TheEvent,Sample=""):
+    if args.year == "2018":
+        Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
+                     and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
+        Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
+                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 28.0)
+        if Sample == "Data":
+            if (TheEvent.run >= 317509): #hps trigger, no filter
+                Trigger2027 = (TheEvent.passMu20HPSTau27 
+                               and TheEvent.matchMu20HPSTau27_1
+                               and TheEvent.matchMu20HPSTau27_2
+                               and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
+                               and TheEvent.pt_2 > 28
+                               and abs(TheEvent.eta_1) < 2.1
+                               and abs(TheEvent.eta_2) < 2.1)
+            if (TheEvent.run < 317509): #non hps trigger, can filter
+                Trigger2027 = (TheEvent.passMu20Tau27 
+                               and TheEvent.matchMu20Tau27_1
+                               and TheEvent.matchMu20Tau27_2
+                               and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
+                               and TheEvent.pt_2 > 28
+                               and abs(TheEvent.eta_1) < 2.1
+                               and abs(TheEvent.eta_2) < 2.1
+                               and TheEvent.filterMu20Tau27_1
+                               and TheEvent.filterMu20Tau27_2)
+        else: #all hps cross trigger, ignore HPS filters
+            Trigger2027 = (TheEvent.passMu20HPSTau27 
+                           and TheEvent.matchMu20HPSTau27_1
+                           and TheEvent.matchMu20HPSTau27_2
+                           and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
+                           and TheEvent.pt_2 > 28
+                           and abs(TheEvent.eta_1) < 2.1
+                           and abs(TheEvent.eta_2) < 2.1)
+        if Trigger24:
+            return "Trigger24"
+        elif Trigger27:
+            return "Trigger27"
+        elif Trigger2027:
+            return "Trigger2027"
+    elif args.year == "2017":
+        Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
+                     and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
+        Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
+                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 28.0)
+        Trigger2027 = (TheEvent.passMu20Tau27 and TheEvent.matchMu20Tau27_1 
+                       and TheEvent.matchMu20Tau27_2
+                       and TheEvent.filterMu20Tau27_1                    
+                       and TheEvent.filterMu20Tau27_2
+                       and TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
+                       and TheEvent.pt_1 < 25
+                       and abs(TheEvent.eta_1) < 2.1
+                       and abs(TheEvent.eta_2) < 2.1)
+        if Sample == "Embedded":
+            Trigger2027 = (#TheEvent.passMu20Tau27 
+                           #and TheEvent.matchMu20Tau27_1 
+                           #and TheEvent.filterMu20Tau27_1
+                #and TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
+                TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
+                and TheEvent.pt_1 < 25
+                and abs(TheEvent.eta_1) < 2.1
+                and abs(TheEvent.eta_2) < 2.1)
+        if Trigger24:
+            return "Trigger24"
+        elif Trigger27:
+            return "Trigger27"
+        elif Trigger2027:
+            return "Trigger2027"
+    elif args.year == "2016":
+        Trigger22 = (TheEvent.pt_1 >23.0 and abs(TheEvent.eta_1)<2.1 
+                     and ((TheEvent.passMu22eta2p1 and TheEvent.matchMu22eta2p1_1 and TheEvent.filterMu22eta2p1_1) 
+                          or (TheEvent.passTkMu22eta2p1 and TheEvent.matchTkMu22eta2p1_1 and TheEvent.filterTkMu22eta2p1_1)))
+
+        Trigger1920 = (TheEvent.pt_1 > 20.0 and TheEvent.pt_2 > 21.0 
+                       and ((TheEvent.passMu19Tau20 and TheEvent.matchMu19Tau20_1 and TheEvent.matchMu19Tau20_2 and TheEvent.filterMu19Tau20_1 and TheEvent.filterMu19Tau20_2) 
+                            or (TheEvent.passMu19Tau20SingleL1 and TheEvent.matchMu19Tau20SingleL1_1 and TheEvent.matchMu19Tau20SingleL1_2 and TheEvent.filterMu19Tau20SingleL1_1 and TheEvent.filterMu19Tau20SingleL1_2)))
+        
+        if Trigger22:
+            return "Trigger22"
+        elif Trigger1920:
+            return "Trigger1920"
+
+    print "Failed to find a proper trigger! returning a default!"
+    if args.year == "2016":
+        return "Trigger22"
+    if args.year == "2017":
+        return "Trigger24"
+    if args.year == "2018":
+        return "Trigger24"
+    
          
 #function for defining what of our usual categories an event falls into
 #key:
@@ -95,7 +272,10 @@ def ClassifyEvent(TheEvent):
 
 def MakeFractions(args):
     #get ntuples to make fractions with 
-    DataNtuple,WNtuple,TTNtuple=MakeAllNtuples(args)
+    if args.year != "2017":
+        DataNtuple,WNtuple,TTNtuple=MakeAllNtuples(args)
+    else:
+        DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple=MakeAllNtuples(args)
     #process the data ntuple
     for i in tqdm(range(DataNtuple.GetEntries())):
         DataNtuple.GetEntry(i)
@@ -103,15 +283,25 @@ def MakeFractions(args):
         TauVector = ROOT.TLorentzVector()
         MuVector.SetPtEtaPhiM(DataNtuple.pt_1,DataNtuple.eta_1,DataNtuple.phi_1,DataNtuple.m_1)
         TauVector.SetPtEtaPhiM(DataNtuple.pt_2,DataNtuple.eta_2,DataNtuple.phi_2,DataNtuple.m_2)
-        QCDFracHisto.Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
-        dataFracHisto.Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
+        QCDHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
+        QCDHistos["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
+        dataHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))        
+        dataHistos["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
     #fill in the remaining ones
-    ProcessNtuple(WNtuple,WFracHisto,RealFracHisto)
-    ProcessNtuple(TTNtuple,TTFracHisto,RealFracHisto)
+    #ProcessNtuple(WNtuple,WFracHisto,RealFracHisto)
+    #ProcessNtuple(TTNtuple,TTFracHisto,RealFracHisto)
+    ProcessNtuple(args,WNtuple,WHistos,[6])
+    ProcessNtuple(args,WNtuple,RealHistos,[1,2,3,4,5])
+    ProcessNtuple(args,TTNtuple,TTHistos,[6])
+    ProcessNtuple(args,TTNtuple,RealHistos,[1,2,3,4,5])
+    if args.year=="2017":
+        ProcessNtuple(args,EmbeddedNtuple,RealHistos,[6],"Embedded")
 
-    QCDFracHisto.Add(RealFracHisto,-1)
-    QCDFracHisto.Add(TTFracHisto,-1)
-    QCDFracHisto.Add(WFracHisto,-1)
+    #Perform the subtractions
+    for Trigger in QCDHistos:
+        QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
+        QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
+        QCDHistos[Trigger].Add(WHistos[Trigger],-1)
 
 def AddFakeFactorWeightings(FileName,args):
     print("Adding Fake Factors to "+FileName)
@@ -120,7 +310,7 @@ def AddFakeFactorWeightings(FileName,args):
     elif args.year == "2018":
         ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2018/SM2018/tight/vloose/mt/fakeFactors.root")
     elif args.year == "2016":
-        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2016/SM2016_ML/tight/mt/fakeFactors_tight.root")
+        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2016/SM2016/tight/vloose/mt/fakeFactors.root")
     print("Retrieving Fake Factors from file")
     ff = ff_file.Get('ff_comb')
 
@@ -169,6 +359,16 @@ def AddFakeFactorWeightings(FileName,args):
     ff_tt_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_up',ff_tt_dm0_njet1_stat_up,'ff_tt_dm0_njet1_stat_up/F')
     ff_tt_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_down',ff_tt_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
     
+    Sample = ""
+    if FileName.find("Data") > 0:
+        Sample = "Data"
+    elif FileName.find("Embedded") > 0:
+        Sample = "Embedded"
+
+    AvFracQCD = 0
+    AvFracW = 0
+    AvFracTT = 0
+
     print("Looping...")
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
@@ -191,26 +391,31 @@ def AddFakeFactorWeightings(FileName,args):
                                            ReweightFile.mt_Selected.metphi,
                                            0)
 
-        #now we need to compute proper fractions now
+        #now we need to compute proper fractions now        
         EventClassification = ClassifyEvent(ReweightFile.mt_Selected)
-        Denom = ( QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
-                  WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
-                  TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) )
+        TriggerClassification = ClassifyTrigger(args,ReweightFile.mt_Selected,Sample)        
+        Denom = ( QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
+                  WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
+                  TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) )
         try:
-            FracQCD = QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
-            FracW = WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
-            FracTT = TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
+            FracQCD = QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
+            FracW = WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
+            FracTT = TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom            
         except ZeroDivisionError:
             print("Denom zero!")
             print("Denom: "+str(Denom))
-            print("QCD Content: "+str(QCDFracHisto.GetBinContent(QCDFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
-            print("W Content: "+str(WFracHisto.GetBinContent(WFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification))) 
-            print("TT Content: "+str(TTFracHisto.GetBinContent(TTFracHisto.GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
+            print("QCD Content: "+str(QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
+            print("W Content: "+str(WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification))) 
+            print("TT Content: "+str(TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
             print("mass: "+str((TauVector+MuVector).M()))
             print("Event classification: "+str(EventClassification))
             FracQCD = 0.0
             FracW = 0.0
             FracTT = 0.0
+
+        AvFracQCD += FracQCD
+        AvFracW += FracW
+        AvFracTT += FracTT
 
         m_vis = (MuVector + TauVector).M()
         TransverseMass = AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
@@ -273,6 +478,14 @@ def AddFakeFactorWeightings(FileName,args):
         ff_tt_dm0_njet1_stat_up_Branch.Fill()
         ff_tt_dm0_njet1_stat_down_Branch.Fill()
             
+    AvFracQCD = AvFracQCD / ReweightFile.mt_Selected.GetEntries()
+    AvFracW = AvFracW / ReweightFile.mt_Selected.GetEntries()
+    AvFracTT = AvFracTT / ReweightFile.mt_Selected.GetEntries()
+
+    print("Average QCD Fraction: "+str(AvFracQCD))
+    print("Average W Fraction: "+str(AvFracW))
+    print("Average TT Fraction: "+str(AvFracTT))
+
     ff.Delete()
     ff_file.Close()
 
@@ -280,6 +493,7 @@ def AddFakeFactorWeightings(FileName,args):
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
     ReweightFile.Close()
+    
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Generate and attach fake factor weighting branches.")

@@ -101,12 +101,15 @@ def ApplyTESBranches(FileName,Arguments):
                 
         #2017 TES corrections
         elif(Arguments.year=="2017"):
-            if(TheTree.gen_match_2 != 5):
+            AppropriateGenMatch = 5
+            if FileName.find("Embedded") > 0:
+                AppropriateGenMatch = 6
+            if(TheTree.gen_match_2 != AppropriateGenMatch):
                 CorrectedTauVector = TauVector
                 CorrectedTauVector_UP = TauVector
                 CorrectedTauVector_DOWN = TauVector
             
-            elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 0):
+            elif(TheTree.gen_match_2 == AppropriateGenMatch and TheTree.l2_decayMode == 0):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
@@ -115,7 +118,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.008))
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.008))
                                 
-            elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 1):
+            elif(TheTree.gen_match_2 == AppropriateGenMatch and TheTree.l2_decayMode == 1):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
@@ -124,7 +127,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.008))
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.008))
                                 
-            elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 10):
+            elif(TheTree.gen_match_2 == AppropriateGenMatch and TheTree.l2_decayMode == 10):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:

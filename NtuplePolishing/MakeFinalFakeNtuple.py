@@ -27,7 +27,10 @@ if __name__ == "__main__":
         MCFile = ROOT.TFile(File)
         OpenFile.append(MCFile)
         FakeFile.cd()
-        NewTree = MCFile.mt_Selected.CopyTree("gen_match_2 <= 5")
+        if File.find("Embedded") >= 0:
+            NewTree = MCFile.mt_Selected
+        else:
+            NewTree = MCFile.mt_Selected.CopyTree("gen_match_2 <= 5")
         EntryTotal += NewTree.GetEntries()
         MergeList.Add(NewTree)
     FakeFile.cd()

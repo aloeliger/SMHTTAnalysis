@@ -62,7 +62,7 @@ def AddFinalWeights(FileToRun,args):
     TheBranch_TOP_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_UP',FinalWeighting_TOP_UP,'FinalWeighting_TOP_UP/F')
     TheBranch_TOP_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_DOWN',FinalWeighting_TOP_DOWN,'FinalWeighting_TOP_DOWN/F')
     
-    FirstScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/htt_scalefactors_v17_5.root")
+    FirstScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/CorrectionsWorkspace/htt_scalefactors_v17_6.root")
     FirstWorkSpace = FirstScaleFactorFile.w
 
     SecondScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/htt_scalefactors_2017_v2.root")
@@ -126,12 +126,14 @@ def AddFinalWeights(FileToRun,args):
                        and abs(ReweightFile.mt_Selected.eta_2) < 2.1)
     #no tau trigger matching in embedded
         if(FileName == "Embedded.root"):
-            Trigger2027 = (ReweightFile.mt_Selected.passMu20Tau27 and ReweightFile.mt_Selected.matchMu20Tau27_1 
-                           and ReweightFile.mt_Selected.filterMu20Tau27_1
-                           and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
-                           and ReweightFile.mt_Selected.pt_1 < 25
-                           and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                           and abs(ReweightFile.mt_Selected.eta_2 < 2.1))
+            Trigger2027 = (#ReweightFile.mt_Selected.passMu20Tau27 
+                           #and ReweightFile.mt_Selected.matchMu20Tau27_1 
+                           #and ReweightFile.mt_Selected.filterMu20Tau27_1
+                #and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
+                ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
+                and ReweightFile.mt_Selected.pt_1 < 25
+                and abs(ReweightFile.mt_Selected.eta_1) < 2.1
+                and abs(ReweightFile.mt_Selected.eta_2 < 2.1))
             
         #Embedded trigger whatever
         if not args.DisableEmbeddingReconstructionWeighting:
@@ -145,16 +147,18 @@ def AddFinalWeights(FileToRun,args):
                 FirstWorkSpace.var("m_pt").setVal(MuVector.Pt())
                 FirstWorkSpace.var("m_eta").setVal(MuVector.Eta())
                 FirstWorkSpace.var("gt_pt").setVal(MuVector.Pt())
-                FirstWorkSpace.var("gt_eta").setVal(MuVector.Eta())
-                Weight = Weight * FirstWorkSpace.function("m_sel_idEmb_ratio").getVal()
-                FirstWorkSpace.var("gt_pt").setVal(TauVector.Pt())
-                FirstWorkSpace.var("gt_eta").setVal(TauVector.Eta())
-                Weight = Weight * FirstWorkSpace.function("m_sel_idEmb_ratio").getVal()
+                FirstWorkSpace.var("gt_eta").setVal(MuVector.Eta())                
                 FirstWorkSpace.var("gt1_pt").setVal(MuVector.Pt())
                 FirstWorkSpace.var("gt1_eta").setVal(MuVector.Eta())
                 FirstWorkSpace.var("gt2_pt").setVal(TauVector.Pt())
                 FirstWorkSpace.var("gt2_eta").setVal(TauVector.Eta())
+                FirstWorkSpace.var("m_iso").setVal(ReweightFile.mt_Selected.iso_1)
+                FirstWorkSpace.var("t_pt").setVal(TauVector.Pt())
                 Weight=Weight*FirstWorkSpace.function("m_sel_trg_ratio").getVal()
+                Weight = Weight * FirstWorkSpace.function("m_sel_idEmb_ratio").getVal()                
+                FirstWorkSpace.var("gt_pt").setVal(TauVector.Pt())
+                FirstWorkSpace.var("gt_eta").setVal(TauVector.Eta())
+                Weight = Weight * FirstWorkSpace.function("m_sel_idEmb_ratio").getVal()
                 Weight=Weight*FirstWorkSpace.function("m_iso_binned_embed_kit_ratio").getVal()
                 Weight = Weight*FirstWorkSpace.function("m_id_embed_kit_ratio").getVal()
                 if(Trigger24 or Trigger27):

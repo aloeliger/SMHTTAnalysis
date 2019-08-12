@@ -51,12 +51,14 @@ def AddMCTriggerScaleFactors(File,args):
                            and abs(ReweightFile.mt_Selected.eta_2) < 2.1)
     #no tau trigger matching in embedded
             if(FileName == "Embedded.root"):
-                Trigger2027 = (ReweightFile.mt_Selected.passMu20Tau27 and ReweightFile.mt_Selected.matchMu20Tau27_1 
-                               and ReweightFile.mt_Selected.filterMu20Tau27_1
-                               and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
-                               and ReweightFile.mt_Selected.pt_1 < 25
-                               and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                               and abs(ReweightFile.mt_Selected.eta_2) < 2.1)
+                Trigger2027 = (#ReweightFile.mt_Selected.passMu20Tau27 
+                               #and ReweightFile.mt_Selected.matchMu20Tau27_1 
+                               #and ReweightFile.mt_Selected.filterMu20Tau27_1
+                    #and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
+                    ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_2 > 31 
+                    and ReweightFile.mt_Selected.pt_1 < 25
+                    and abs(ReweightFile.mt_Selected.eta_1) < 2.1
+                    and abs(ReweightFile.mt_Selected.eta_2) < 2.1)
         elif args.year == "2018":
             Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
                          and ReweightFile.mt_Selected.filterMu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)

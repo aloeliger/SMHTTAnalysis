@@ -49,5 +49,4 @@ TT_Files_2018 = {'TTTo2L2Nu':'TTTo2L2Nu.root',
                  'TTToHadronic':'TTToHadronic.root',
                  'TTToSemiLeptonic':'TTToSemiLeptonic.root'}
 
-
-
+Embedded_Files_2017 = {'Embedded':'Embedded.root'}

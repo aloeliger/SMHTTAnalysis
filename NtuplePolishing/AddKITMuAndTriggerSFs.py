@@ -189,12 +189,12 @@ def AddKITMuAndTriggerSFs(File,args):
         IDIsoSF = IDIso.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
         #decide which trigger we're using
         if args.year=="2016":
-            if (MuVector.Pt() > 23.0 and abs(MuVector.Eta())<2.1
-                and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
-                     or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
+            if (TheTree.pt_1 >23.0 and abs(TheTree.eta_1)<2.1 
+                 and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
+                      or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
                 TriggerSF = IsoMu22SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif (MuVector.Pt() > 20.0 and MuVector.Pt() < 23.0 and TauVector.Pt() > 21.0 
-                  and ((TheTree.passMu19Tau20 and TheTree.matchMu19Tau20_1 and TheTree.matchMu19Tau20_2 and TheTree.filterMu19Tau20_1 and TheTree.filterMu19Tau20_2) 
+            elif (TheTree.pt_1 > 20.0 and TheTree.pt_2 > 21.0 
+                   and ((TheTree.passMu19Tau20 and TheTree.matchMu19Tau20_1 and TheTree.matchMu19Tau20_2 and TheTree.filterMu19Tau20_1 and TheTree.filterMu19Tau20_2) 
                         or (TheTree.passMu19Tau20SingleL1 and TheTree.matchMu19Tau20SingleL1_1 and TheTree.matchMu19Tau20SingleL1_2 and TheTree.filterMu19Tau20SingleL1_1 and TheTree.filterMu19Tau20SingleL1_2))):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
                 TriggerSF = TriggerSF * TauLegFactor.getSF(TauVector.Pt(),TauVector.Eta(), tau_isocut="TightIso",genuine=(TheTree.gen_match_2 == 6),tau_dm = TheTree.l2_decayMode)
