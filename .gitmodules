@@ -14,3 +14,7 @@
 [submodule "ScriptsAndMacros"]
 	path = ScriptsAndMacros
 	url = git@github.com:aloeliger/ScriptsAndMacros.git
+[submodule "NtuplePolishing/Weightings/CorrectionsWorkspace"]
+	path = NtuplePolishing/Weightings/CorrectionsWorkspace
+	url = https://github.com/harrypuuter/CorrectionsWorkspace.git
+	branch = 2017_17NovReRecoData_Fall17MC

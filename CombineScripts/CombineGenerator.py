@@ -31,10 +31,10 @@ def PerformFinalSteps(OutputSamples,AnalysisCategories,AverageWeights):
         except KeyError:
             print("Couldn't find embedded samples to make ttbar contamination shapes with!")
         for Category in embeddedSample.MasterCategoryDictionary:
-            Emb_tt_UP = MasterCategoryDictionary[Category]['embedded'].Clone()
+            Emb_tt_UP = embeddedSample.MasterCategoryDictionary[Category]['embedded'].Clone()
             Emb_tt_UP.SetNameTitle('embedded_CMS_htt_emb_ttbarUp_'+Category,'embedded_CMS_htt_emb_ttbarUp_'+Category)
-            Emb_tt_DOWN = MasterCategoryDictionary[Category]['embedded'].Clone()
-            Emb_tt_DoWN.SetNameTitle('embedded_CMS_htt_emb_ttbarDown_'+Category,'embedded_CMS_htt_emb_ttbarDown_'+Category)
+            Emb_tt_DOWN = embeddedSample.MasterCategoryDictionary[Category]['embedded'].Clone()
+            Emb_tt_DOWN.SetNameTitle('embedded_CMS_htt_emb_ttbarDown_'+Category,'embedded_CMS_htt_emb_ttbarDown_'+Category)
             #get the actual TTContamination histogram
             TTContamination = TTbarContaminationSample.MasterCategoryDictionary[Category]['TT_Contamination_CMS_htt_emb_ttbar_'+Category]
             Emb_tt_UP.Add(TTContamination)
