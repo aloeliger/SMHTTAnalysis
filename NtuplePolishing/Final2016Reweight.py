@@ -122,9 +122,7 @@ def AddFinalWeights(FileToRun,args):
         if not args.DisableZPTWeighting:
             FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN
             FinalWeighting_ZPT_UP[0] = Weight_ZPT_UP            
-        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
-                                               or FileName == "TTToSemiLeptonic.root"
-                                               or FileName == "TTTo2L2Nu.root"):
+        if not args.DisableTopReweighting and (FileName == "TT.root"):
             FinalWeighting_TOP_UP[0] = Weight_TOP_UP
             FinalWeighting_TOP_DOWN[0] = Weight_TOP_DOWN
 
@@ -132,9 +130,7 @@ def AddFinalWeights(FileToRun,args):
         if not args.DisableZPTWeighting:
             TheBranch_ZPT_DOWN.Fill()
             TheBranch_ZPT_UP.Fill()
-        if not args.DisableTopReweighting and (FileName == "TTToHadronic.root"
-                                               or FileName == "TTToSemiLeptonic.root"
-                                               or FileName == "TTTo2L2Nu.root"):
+        if not args.DisableTopReweighting and (FileName == "TT.root"):
             TheBranch_TOP_UP.Fill()
             TheBranch_TOP_DOWN.Fill()
     
