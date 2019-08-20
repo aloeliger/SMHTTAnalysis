@@ -163,6 +163,17 @@ def ClassifyTrigger(args,TheEvent,Sample=""):
                                and abs(TheEvent.eta_2) < 2.1
                                and TheEvent.filterMu20Tau27_1
                                and TheEvent.filterMu20Tau27_2)
+        elif Sample == "Embedded": # embedded doesn't match taus
+            Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
+                 and TheEvent.matchEmbFilter_Mu24_1 and TheEvent.pt_1 > 25.0)
+            Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
+                         and TheEvent.matchEmbFilter_Mu27_1 and TheEvent.pt_1 > 28.0)            
+            Trigger2027 = (TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
+                           and TheEvent.pt_2 > 28
+                           and abs(TheEvent.eta_1) < 2.1
+                           and abs(TheEvent.eta_2) < 2.1
+                           and TheEvent.matchEmbFilter_Mu20Tau27_1
+                           and (TheEvent.matchEmbFilter_Mu20Tau27_2 or TheEvent.matchEmbFilter_Mu20HPSTau27_2))
         else: #all hps cross trigger, ignore HPS filters
             Trigger2027 = (TheEvent.passMu20HPSTau27 
                            and TheEvent.matchMu20HPSTau27_1
@@ -482,9 +493,9 @@ def AddFakeFactorWeightings(FileName,args):
     AvFracW = AvFracW / ReweightFile.mt_Selected.GetEntries()
     AvFracTT = AvFracTT / ReweightFile.mt_Selected.GetEntries()
 
-    print("Average QCD Fraction: "+str(AvFracQCD))
-    print("Average W Fraction: "+str(AvFracW))
-    print("Average TT Fraction: "+str(AvFracTT))
+    #print("Average QCD Fraction: "+str(AvFracQCD))
+    #print("Average W Fraction: "+str(AvFracW))
+    #print("Average TT Fraction: "+str(AvFracTT))
 
     ff.Delete()
     ff_file.Close()
