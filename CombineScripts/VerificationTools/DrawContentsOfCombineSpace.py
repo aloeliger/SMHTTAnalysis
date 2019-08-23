@@ -126,17 +126,22 @@ def DrawDirectoryContents(TheDirectory,args):
 
     data_obs = TheDirectory.Get("data_obs")
     jetFakes = TheDirectory.Get("jetFakes")    
-    ZT = TheDirectory.Get("ZT")    
+    if args.UseEmbedded:
+        ZT=TheDirectory.Get("embedded")
+    else:
+        ZT = TheDirectory.Get("ZT")    
     ZL = TheDirectory.Get("ZL")
     TT = TheDirectory.Get("TTL")    
-    TT.Add(TheDirectory.Get("TTT"))
+    if not args.UseEmbedded:
+        TT.Add(TheDirectory.Get("TTT"))
     #create the other category
     Other = TheDirectory.Get("VVL")
     Other.Add(TheDirectory.Get("qqH_htt125"))
     Other.Add(TheDirectory.Get("ggH_htt125"))
     Other.Add(TheDirectory.Get("WH_htt125"))
     Other.Add(TheDirectory.Get("ZH_htt125"))    
-    Other.Add(TheDirectory.Get("VVT"))    
+    if not args.UseEmbedded:
+        Other.Add(TheDirectory.Get("VVT"))    
     HiggsUpscale = TheDirectory.Get("qqH_htt125") #create the upscale
     HiggsUpscale.Add(TheDirectory.Get("ggH_htt125"))
     HiggsUpscale.Add(TheDirectory.Get("WH_htt125"))
@@ -270,7 +275,10 @@ def DrawDirectoryContents(TheDirectory,args):
 
     TheLegend = ROOT.TLegend(0.9,0.6,1.0,0.9)
     TheLegend.AddEntry(data_obs,"Observed","pe")
-    TheLegend.AddEntry(ZT,"DY #rightarrow #tau#tau","f")
+    if args.UseEmbedded:
+        TheLegend.AddEntry(ZT,"Embedded","f")
+    else:
+        TheLegend.AddEntry(ZT,"DY #rightarrow #tau#tau","f")
     TheLegend.AddEntry(Other,"Other","f")
     TheLegend.AddEntry(ZL,"DY #rightarrow ll","f")
     TheLegend.AddEntry(TT,"t#bar{t}","f")
@@ -329,6 +337,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate plots for all the directories inside of a given htt combine space (provided all the names are familiar)")
     parser.add_argument('year',choices=['2016','2017','2018'],help="Specify the year of the files")
     parser.add_argument('CombineFile',help="Specify the file to draw the plots from")
+    parser.add_argument('--UseEmbedded',help="Flag whether this data card uses embedded samples",action="store_true")
 
     args = parser.parse_args()
 
