@@ -98,21 +98,22 @@ def GenerateControlPlots(TheFile,OutFile,args):
                                    and TheTree.filterMu20Tau27_1
                                    and TheTree.filterMu20Tau27_2)
             elif TheHisto == "Embedded": # embedded doesn't need to match taus.
-                Trigger2027 = (TheTree.passMu20HPSTau27 
-                               and TheTree.matchMu20HPSTau27_1                       
-                               and TheTree.pt_1 > 21 and TheTree.pt_1 < 25
+                Trigger24 = (TheTree.passMu24 and TheTree.matchMu24_1 
+                             and TheTree.matchEmbFilter_Mu24_1 and TheTree.pt_1 > 25.0)
+                Trigger27 = (TheTree.passMu27 and TheTree.matchMu27_1 
+                             and TheTree.matchEmbFilter_Mu27_1 and TheTree.pt_1 > 28.0)            
+                Trigger2027 = (TheTree.pt_1 > 21 and TheTree.pt_1 < 25
                                and TheTree.pt_2 > 28
                                and abs(TheTree.eta_1) < 2.1
                                and abs(TheTree.eta_2) < 2.1
-                               and TheTree.filterMu20HPSTau27_1)
+                               and TheTree.matchEmbFilter_Mu20Tau27_1
+                               and (TheTree.matchEmbFilter_Mu20Tau27_2 or TheTree.matchEmbFilter_Mu20HPSTau27_2))
             else: #all hps cross trigger, ignore HPS filters
                 Trigger2027 = (TheTree.passMu20HPSTau27 
                                and TheTree.matchMu20HPSTau27_1
                                and TheTree.matchMu20HPSTau27_2
                                and TheTree.pt_1 > 21 and TheTree.pt_1 < 25
-                               and TheTree.pt_2 > 28)
-            if Trigger2027:
-                continue
+                               and TheTree.pt_2 > 28)                
 
         elif args.Year == "2017":
             Trigger24 = (TheTree.passMu24 and TheTree.matchMu24_1 
@@ -146,7 +147,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
                                 or (TheTree.passMu19Tau20SingleL1 and TheTree.matchMu19Tau20SingleL1_1 and TheTree.matchMu19Tau20SingleL1_2 and TheTree.filterMu19Tau20SingleL1_1 and TheTree.filterMu19Tau20SingleL1_2)))
             
         if(MT > 50.0):
-            continue
+            continue        
         
         TheWeighting = TheTree.FinalWeighting        
         if UseFakeFactor:
