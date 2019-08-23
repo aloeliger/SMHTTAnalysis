@@ -100,7 +100,7 @@ def AddFinalWeights(FileToRun, args):
         Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
                  and ReweightFile.mt_Selected.filterMu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)
         Trigger27 = (ReweightFile.mt_Selected.passMu27 and ReweightFile.mt_Selected.matchMu27_1 
-                 and ReweightFile.mt_Selected.filterMu27_1 and ReweightFile.mt_Selected.pt_1 > 28.0)            
+                 and ReweightFile.mt_Selected.filterMu27_1 and ReweightFile.mt_Selected.pt_1 > 25.0)            
         if FileName == "Data.root":
             if (ReweightFile.mt_Selected.run >= 317509): #hps trigger
                 Trigger2027 = (ReweightFile.mt_Selected.passMu20HPSTau27 

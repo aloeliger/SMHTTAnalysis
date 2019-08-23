@@ -143,7 +143,7 @@ def ClassifyTrigger(args,TheEvent,Sample=""):
         Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
                      and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
         Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 28.0)
+                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 25.0)
         if Sample == "Data":
             if (TheEvent.run >= 317509): #hps trigger, no filter
                 Trigger2027 = (TheEvent.passMu20HPSTau27 
@@ -167,7 +167,7 @@ def ClassifyTrigger(args,TheEvent,Sample=""):
             Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
                  and TheEvent.matchEmbFilter_Mu24_1 and TheEvent.pt_1 > 25.0)
             Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                         and TheEvent.matchEmbFilter_Mu27_1 and TheEvent.pt_1 > 28.0)            
+                         and TheEvent.matchEmbFilter_Mu27_1 and TheEvent.pt_1 > 25.0)            
             Trigger2027 = (TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
                            and TheEvent.pt_2 > 28
                            and abs(TheEvent.eta_1) < 2.1
@@ -192,7 +192,7 @@ def ClassifyTrigger(args,TheEvent,Sample=""):
         Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
                      and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
         Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 28.0)
+                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 25.0)
         Trigger2027 = (TheEvent.passMu20Tau27 and TheEvent.matchMu20Tau27_1 
                        and TheEvent.matchMu20Tau27_2
                        and TheEvent.filterMu20Tau27_1                    
