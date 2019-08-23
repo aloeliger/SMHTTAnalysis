@@ -18,3 +18,6 @@
 	path = NtuplePolishing/Weightings/CorrectionsWorkspace
 	url = https://github.com/harrypuuter/CorrectionsWorkspace.git
 	branch = 2017_17NovReRecoData_Fall17MC
+[submodule "Skimming_SMHTT_legacy"]
+	path = Skimming_SMHTT_legacy
+	url = https://github.com/cecilecaillol/Skimming_SMHTT_legacy.git
