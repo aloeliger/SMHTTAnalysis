@@ -95,9 +95,7 @@ def AddFinalWeights(FileToRun,args):
         #Top PT Reweighting
         if not args.DisableTopReweighting:
             TopFactor = 1.0
-            if(FileName == "TTToHadronic.root"
-               or FileName == "TTToSemiLeptonic.root"
-               or FileName == "TTTo2L2Nu.root"):
+            if(FileName == "TT.root"):
                 pttop1 = ReweightFile.mt_Selected.pt_top1
                 if pttop1 > 400:
                     pttop1 = 400

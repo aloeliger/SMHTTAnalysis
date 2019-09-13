@@ -144,25 +144,25 @@ def AddCrossSectionWeightings(FileToRun,args):
                     CrossSectionWeighting[0] = 3.0223
         elif (args.year=="2016"):
             if(FileName == "DY.root" and not args.UseInclusiveDY):
-                CrossSectionWeighting[0] = 1.58855
+                CrossSectionWeighting[0] = 1.5317
                 if ReweightFile.mt_Selected.numGenJets == 1:
-                    CrossSectionWeighting[0] = 0.36399
+                    CrossSectionWeighting[0] = 0.55526
                 elif ReweightFile.mt_Selected.numGenJets == 2:
-                    CrossSectionWeighting[0] = 0.33695
+                    CrossSectionWeighting[0] = 0.51796
                 elif ReweightFile.mt_Selected.numGenJets == 3:
-                    CrossSectionWeighting[0] = 0.53135
+                    CrossSectionWeighting[0] = 0.51866
                 elif ReweightFile.mt_Selected.numGenJets == 4:
-                    CrossSectionWeighting[0] = 0.44066
+                    CrossSectionWeighting[0] = 0.51536
             elif(FileName == "W.root"):
-                CrossSectionWeighting[0] = 28.85688
+                CrossSectionWeighting[0] = 25.427
                 if ReweightFile.mt_Selected.numGenJets == 1:
-                    CrossSectionWeighting[0] = 7.23957
+                    CrossSectionWeighting[0] = 6.8324
                 elif ReweightFile.mt_Selected.numGenJets == 2:
-                    CrossSectionWeighting[0] = 4.03088
+                    CrossSectionWeighting[0] = 2.09433
                 elif ReweightFile.mt_Selected.numGenJets == 3:
-                    CrossSectionWeighting[0] = 1.0792
+                    CrossSectionWeighting[0] = 0.687224
                 elif ReweightFile.mt_Selected.numGenJets == 4:
-                    CrossSectionWeighting[0] = 2.1222
+                    CrossSectionWeighting[0] = 2.1343
 
         if(FileName != "Data.root"):
             CrossSectionWeighting[0] = CrossSectionWeighting[0] * TheTree.genweight            

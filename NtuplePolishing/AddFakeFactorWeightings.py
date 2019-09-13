@@ -612,8 +612,8 @@ def MakeFractions(args):
     QCDFracHisto.Add(TTFracHisto,-1)
     QCDFracHisto.Add(WFracHisto,-1)
 
-def AddFakeFactorWeightings(args):
-    print("Adding Fake Factors to "+args.File)
+def AddFakeFactorWeightings(FileName,args):
+    print("Adding Fake Factors to "+FileName)
     if args.Year == "2017":
         ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data/SM2017/tight/vloose/mt/fakeFactors.root")
     elif args.Year == "2018":
@@ -624,7 +624,7 @@ def AddFakeFactorWeightings(args):
     ff = ff_file.Get('ff_comb')
 
     print("Retrieving reweight file and making branches")
-    ReweightFile = ROOT.TFile(args.File,"UPDATE")
+    ReweightFile = ROOT.TFile(FileName,"UPDATE")
     Event_Fake_Factor = array('f',[0.])    
     
     ff_qcd_syst_up = array('f',[0.])
@@ -783,9 +783,9 @@ def AddFakeFactorWeightings(args):
    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate and attach fake factor weighting branches.")
-    parser.add_argument('File',help="File add the factors to.")
-    parser.add_argument('Directory',help="Directory to make fractions from.")
-    parser.add_argument('Year',choices=["2016","2017","2018"],help="Running year")
+    parser.add_argument('--Files',nargs="+",help="Files to add the factors to.",required=True)
+    parser.add_argument('--Directory',help="Directory to make fractions from.",required=True)
+    parser.add_argument('--Year',choices=["2016","2017","2018"],help="Running year",required=True)
     parser.add_argument('--DisableUncertainties',help="Dont create the uncertainty branches",action="store_true")
     
     args = parser.parse_args()
@@ -794,5 +794,6 @@ if __name__ == "__main__":
         MakeFractions(args)
     elif args.Year == "2016":
         Make2016Fractions(args)
-    
-    AddFakeFactorWeightings(args)
+
+    for File in args.Files:
+        AddFakeFactorWeightings(File,args)

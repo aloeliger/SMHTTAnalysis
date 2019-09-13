@@ -489,10 +489,12 @@ def AddFakeFactorWeightings(FileName,args):
         ff_tt_dm0_njet1_stat_up_Branch.Fill()
         ff_tt_dm0_njet1_stat_down_Branch.Fill()
             
-    AvFracQCD = AvFracQCD / ReweightFile.mt_Selected.GetEntries()
-    AvFracW = AvFracW / ReweightFile.mt_Selected.GetEntries()
-    AvFracTT = AvFracTT / ReweightFile.mt_Selected.GetEntries()
-
+    try:
+        AvFracQCD = AvFracQCD / ReweightFile.mt_Selected.GetEntries()
+        AvFracW = AvFracW / ReweightFile.mt_Selected.GetEntries()
+        AvFracTT = AvFracTT / ReweightFile.mt_Selected.GetEntries()
+    except ZeroDivisionError:
+        print("No entries to calculate averages with...")
     #print("Average QCD Fraction: "+str(AvFracQCD))
     #print("Average W Fraction: "+str(AvFracW))
     #print("Average TT Fraction: "+str(AvFracTT))
