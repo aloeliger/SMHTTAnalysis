@@ -110,7 +110,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_MuPt = new TLegend(0.61,0.41,0.88,0.68);        
   Legend_MuPt->AddEntry(Data_MuPt,"Observed","pe");
-  Legend_MuPt->AddEntry(DYTT_MuPt,"DY #rightarrow #tau#tau","f");
+  Legend_MuPt->AddEntry(DYTT_MuPt,"Embedded","f");
   Legend_MuPt->AddEntry(Other_MuPt,"Other","f");  
   Legend_MuPt->AddEntry(DYMM_MuPt,"DY #rightarrow ll","f");  
   Legend_MuPt->AddEntry(TTFinal_MuPt,"t#bar{t}","f");  
@@ -217,7 +217,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_MuEta = new TLegend(0.61,0.41,0.88,0.68);      
   Legend_MuEta->AddEntry(Data_MuEta,"Observed","pe");
-  Legend_MuEta->AddEntry(DYTT_MuEta,"DY #rightarrow #tau#tau","f");
+  Legend_MuEta->AddEntry(DYTT_MuEta,"Embedded","f");
   Legend_MuEta->AddEntry(Other_MuEta,"Other","f");
   Legend_MuEta->AddEntry(DYMM_MuEta,"DY #rightarrow ll","f");
   Legend_MuEta->AddEntry(TTFinal_MuEta,"t#bar{t}","f");
@@ -324,7 +324,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_TauPt = new TLegend(0.61,0.41,0.88,0.68);  
   Legend_TauPt->AddEntry(Data_TauPt,"Observed","pe");
-  Legend_TauPt->AddEntry(DYTT_TauPt,"DY #rightarrow #tau#tau","f");
+  Legend_TauPt->AddEntry(DYTT_TauPt,"Embedded","f");
   Legend_TauPt->AddEntry(Other_TauPt,"Other","f");
   Legend_TauPt->AddEntry(DYMM_TauPt,"DY #rightarrow ll","f");
   Legend_TauPt->AddEntry(TTFinal_TauPt,"t#bar{t}","f");
@@ -431,7 +431,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_TauEta = new TLegend(0.61,0.41,0.88,0.68);
   Legend_TauEta->AddEntry(Data_TauEta,"Observed","pe");
-  Legend_TauEta->AddEntry(DYTT_TauEta,"DY #rightarrow #tau#tau","f");
+  Legend_TauEta->AddEntry(DYTT_TauEta,"Embedded","f");
   Legend_TauEta->AddEntry(Other_TauEta,"Other","f");
   Legend_TauEta->AddEntry(DYMM_TauEta,"DY #rightarrow ll","f");
     Legend_TauEta->AddEntry(TTFinal_TauEta,"t#bar{t}","f");
@@ -538,7 +538,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_MET = new TLegend(0.61,0.41,0.88,0.68);
   Legend_MET->AddEntry(Data_MET,"Observed","pe");
-  Legend_MET->AddEntry(DYTT_MET,"DY #rightarrow #tau#tau","f");
+  Legend_MET->AddEntry(DYTT_MET,"Embedded","f");
   Legend_MET->AddEntry(Other_MET,"Other","f");
   Legend_MET->AddEntry(TTFinal_MET,"t#bar{t}","f");
   Legend_MET->AddEntry(DYMM_MET,"DY #rightarrow ll","f");
@@ -645,7 +645,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_METPhi = new TLegend(0.61,0.41,0.88,0.68);
   Legend_METPhi->AddEntry(Data_METPhi,"Observed","pe");
-  Legend_METPhi->AddEntry(DYTT_METPhi,"DY #rightarrow #tau#tau","f");
+  Legend_METPhi->AddEntry(DYTT_METPhi,"Embedded","f");
   Legend_METPhi->AddEntry(Other_METPhi,"Other","f");
   Legend_METPhi->AddEntry(DYMM_METPhi,"DY #rightarrow ll","f");
   Legend_METPhi->AddEntry(TTFinal_METPhi,"t#bar{t}","f");
@@ -752,7 +752,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_mvis = new TLegend(0.61,0.41,0.88,0.68);  
   Legend_mvis->AddEntry(Data_mvis,"Observed","pe");
-  Legend_mvis->AddEntry(DYTT_mvis,"DY #rightarrow #tau#tau","f");
+  Legend_mvis->AddEntry(DYTT_mvis,"Embedded","f");
   Legend_mvis->AddEntry(Other_mvis,"Other","f");
   Legend_mvis->AddEntry(DYMM_mvis,"DY #rightarrow ll","f");
   Legend_mvis->AddEntry(TTFinal_mvis,"t#bar{t}","f");
@@ -859,7 +859,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_Njets = new TLegend(0.61,0.41,0.88,0.68);
   Legend_Njets->AddEntry(Data_Njets,"Observed","pe");
-  Legend_Njets->AddEntry(DYTT_Njets,"DY #rightarrow #tau#tau","f");
+  Legend_Njets->AddEntry(DYTT_Njets,"Embedded","f");
   Legend_Njets->AddEntry(Other_Njets,"Other","f");
   Legend_Njets->AddEntry(DYMM_Njets,"DY #rightarrow ll","f");
   Legend_Njets->AddEntry(TTFinal_Njets,"t#bar{t}","f");
@@ -966,7 +966,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_HiggsPt = new TLegend(0.61,0.41,0.88,0.68);
   Legend_HiggsPt->AddEntry(Data_HiggsPt,"Observed","pe");
-  Legend_HiggsPt->AddEntry(DYTT_HiggsPt,"DY #rightarrow #tau#tau","f");
+  Legend_HiggsPt->AddEntry(DYTT_HiggsPt,"Embedded","f");
   Legend_HiggsPt->AddEntry(Other_HiggsPt,"Other","f");
   Legend_HiggsPt->AddEntry(DYMM_HiggsPt,"DY #rightarrow ll","f");
   Legend_HiggsPt->AddEntry(TTFinal_HiggsPt,"t#bar{t}","f");
@@ -1073,7 +1073,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_mjj = new TLegend(0.61,0.41,0.88,0.68);  
   Legend_mjj->AddEntry(Data_mjj,"Observed","pe");
-  Legend_mjj->AddEntry(DYTT_mjj,"DY #rightarrow #tau#tau","f");
+  Legend_mjj->AddEntry(DYTT_mjj,"Embedded","f");
   Legend_mjj->AddEntry(Other_mjj,"Other","f");
   Legend_mjj->AddEntry(DYMM_mjj,"DY #rightarrow ll","f");
   Legend_mjj->AddEntry(TTFinal_mjj,"t#bar{t}","f");
@@ -1180,7 +1180,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_trigger = new TLegend(0.61,0.41,0.88,0.68);  
   Legend_trigger->AddEntry(Data_trigger,"Observed","pe");
-  Legend_trigger->AddEntry(DYTT_trigger,"DY #rightarrow #tau#tau","f");
+  Legend_trigger->AddEntry(DYTT_trigger,"Embedded","f");
   Legend_trigger->AddEntry(Other_trigger,"Other","f");
   Legend_trigger->AddEntry(DYMM_trigger,"DY #rightarrow ll","f");
   Legend_trigger->AddEntry(TTFinal_trigger,"t#bar{t}","f");
@@ -1287,7 +1287,7 @@ void Draw2017ControlPlots()
 
   TLegend* Legend_msv = new TLegend(0.61,0.41,0.88,0.68);  
   Legend_msv->AddEntry(Data_msv,"Observed","pe");
-  Legend_msv->AddEntry(DYTT_msv,"DY #rightarrow #tau#tau","f");
+  Legend_msv->AddEntry(DYTT_msv,"Embedded","f");
   Legend_msv->AddEntry(Other_msv,"Other","f");
   Legend_msv->AddEntry(DYMM_msv,"DY #rightarrow ll","f");
   Legend_msv->AddEntry(TTFinal_msv,"t#bar{t}","f");
