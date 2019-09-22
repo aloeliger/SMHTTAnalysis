@@ -5,6 +5,56 @@ import argparse
 import FakeFactorConfiguration as cfg
 import AddMTandPZeta
 
+#new way of accessing 
+def get_raw_FF(pt,fct):
+    ff=1.0
+    ff=fct.Eval(pt)
+    if(pt>80):
+        ff=fct.Eval(80)
+    return ff
+
+def get_mvis_closure(mvis,fct):
+    corr = 1.0
+    corr = fct.Eval(mvis)
+    if(mvis>300):
+        corr=fct.Eval(500)
+    if (mcis<50):
+        corr=fct.Eval(50)
+    return corr
+
+def get_mt_closure(mt, fct):
+    corr=1.0
+    corr.Eval(mt)
+    if (mt>120):
+        corr=fct.Eval(120)
+    return corr
+
+def get_ff(pt, mt, mvis, njets, frac_tt, frac_qcd, frac_w, fct_raw_qcd_0, fct_raw_qcd_1, fct_raw_w_0, fct_raw_w_1, fct_raw_tt, fct_mvisclosure_qcd, fct_mvisclosure_w,fct_mvisclosure_tt, fct_mtcorrection_w, fct_OSSScorrection_qcd):
+    ff_qcd = 1.0
+    ff_w = 0
+    ff_tt = 1.0
+    
+    #Raw ff
+    if(njets==0):
+        ff_qcd=get_raw_FF(pt,fct_raw_qcd_0)
+        ff_w=get_raw_FF(pt,fct_raw_w_0)
+    else:
+        ff_qcd=get_raw_FF(pt,fct_raw_qcd_0)
+        ff_w=get_raw_FF(pt,fct_raw_w_0)
+    ff_tt=get_raw_FF(pt,fct_raw_tt)
+
+    #mvis closure
+    ff_qcd = ff_qcd*get_mvis_closure(mvis,fct_mvisclosure_qcd)
+    ff_w = ff_w*get_mvis_closure(mvis,fct_mvisclosure_w)
+    ff_tt = ff_tt*get_mvis_closure(mvis,fct_mvisclosure_tt)
+
+    #MT and OSSS corrections
+    ff_w = ff_w*get_mt_closure(mt,fct_mtcorrection_w)
+    ff_qcd = ff_qcd*get_mvis_closure(mvis,fct_OSSScorrection_qcd)
+    
+    ff_cmb = frac_tt*ff_tt + frac_qcd*ff_qcd + frac_w*ff_w
+    return ff_cmb
+
 #Let's try splitting these up by triggers.
 # see if that helps us deal with the the problem in the 2017 cross trigger?
 WFracHisto = ROOT.TH2F("WFrac","WFrac",20,0.0,500.0,7,1.0,8.0)
@@ -115,6 +165,9 @@ def MakeAllNtuples(args):
         DataFiles = cfg.Data_Files_2018
         WFiles = cfg.W_Files_2018
         TTFiles = cfg.TT_Files_2018
+        EmbeddedFiles = cfg.Embedded_Files_2017
+        EmbeddedNtuple = MakeNtuples(FilePath,EmbeddedFiles)
+        EmbeddedNtuple.SetNameTitle("Embedded","Embedded")
     DataNtuple = MakeNtuples(FilePath,DataFiles)
     DataNtuple.SetNameTitle("Data","Data")
     WNtuple = MakeNtuples(FilePath,WFiles)
@@ -122,7 +175,7 @@ def MakeAllNtuples(args):
     TTNtuple = MakeNtuples(FilePath,TTFiles)
     TTNtuple.SetNameTitle("TT","TT")
 
-    if args.year!="2017":
+    if args.year=="2016":
         return DataNtuple,WNtuple,TTNtuple
     else:
         return DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple
@@ -139,95 +192,17 @@ def ProcessNtuple(args,Ntuple,HistogramFamily,GenMatches,Sample=""):
             HistogramFamily["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
 
 def ClassifyTrigger(args,TheEvent,Sample=""):
-    if args.year == "2018":
-        Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
-                     and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
-        Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 25.0)
-        if Sample == "Data":
-            if (TheEvent.run >= 317509): #hps trigger, no filter
-                Trigger2027 = (TheEvent.passMu20HPSTau27 
-                               and TheEvent.matchMu20HPSTau27_1
-                               and TheEvent.matchMu20HPSTau27_2
-                               and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
-                               and TheEvent.pt_2 > 28
-                               and abs(TheEvent.eta_1) < 2.1
-                               and abs(TheEvent.eta_2) < 2.1)
-            if (TheEvent.run < 317509): #non hps trigger, can filter
-                Trigger2027 = (TheEvent.passMu20Tau27 
-                               and TheEvent.matchMu20Tau27_1
-                               and TheEvent.matchMu20Tau27_2
-                               and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
-                               and TheEvent.pt_2 > 28
-                               and abs(TheEvent.eta_1) < 2.1
-                               and abs(TheEvent.eta_2) < 2.1
-                               and TheEvent.filterMu20Tau27_1
-                               and TheEvent.filterMu20Tau27_2)
-        elif Sample == "Embedded": # embedded doesn't match taus
-            Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
-                 and TheEvent.matchEmbFilter_Mu24_1 and TheEvent.pt_1 > 25.0)
-            Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                         and TheEvent.matchEmbFilter_Mu27_1 and TheEvent.pt_1 > 25.0)            
-            Trigger2027 = (TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
-                           and TheEvent.pt_2 > 28
-                           and abs(TheEvent.eta_1) < 2.1
-                           and abs(TheEvent.eta_2) < 2.1
-                           and TheEvent.matchEmbFilter_Mu20Tau27_1
-                           and (TheEvent.matchEmbFilter_Mu20Tau27_2 or TheEvent.matchEmbFilter_Mu20HPSTau27_2))
-        else: #all hps cross trigger, ignore HPS filters
-            Trigger2027 = (TheEvent.passMu20HPSTau27 
-                           and TheEvent.matchMu20HPSTau27_1
-                           and TheEvent.matchMu20HPSTau27_2
-                           and TheEvent.pt_1 > 21 and TheEvent.pt_1 < 25
-                           and TheEvent.pt_2 > 28
-                           and abs(TheEvent.eta_1) < 2.1
-                           and abs(TheEvent.eta_2) < 2.1)
-        if Trigger24:
+    if args.year == "2017" or args.year == "2018":
+        if TheEvent.Trigger24:
             return "Trigger24"
-        elif Trigger27:
+        elif TheEvent.Trigger27:
             return "Trigger27"
-        elif Trigger2027:
-            return "Trigger2027"
-    elif args.year == "2017":
-        Trigger24 = (TheEvent.passMu24 and TheEvent.matchMu24_1 
-                     and TheEvent.filterMu24_1 and TheEvent.pt_1 > 25.0)
-        Trigger27 = (TheEvent.passMu27 and TheEvent.matchMu27_1 
-                     and TheEvent.filterMu27_1 and TheEvent.pt_1 > 25.0)
-        Trigger2027 = (TheEvent.passMu20Tau27 and TheEvent.matchMu20Tau27_1 
-                       and TheEvent.matchMu20Tau27_2
-                       and TheEvent.filterMu20Tau27_1                    
-                       and TheEvent.filterMu20Tau27_2
-                       and TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
-                       and TheEvent.pt_1 < 25
-                       and abs(TheEvent.eta_1) < 2.1
-                       and abs(TheEvent.eta_2) < 2.1)
-        if Sample == "Embedded":
-            Trigger2027 = (#TheEvent.passMu20Tau27 
-                           #and TheEvent.matchMu20Tau27_1 
-                           #and TheEvent.filterMu20Tau27_1
-                #and TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
-                TheEvent.pt_1 > 21 and TheEvent.pt_2 > 31 
-                and TheEvent.pt_1 < 25
-                and abs(TheEvent.eta_1) < 2.1
-                and abs(TheEvent.eta_2) < 2.1)
-        if Trigger24:
-            return "Trigger24"
-        elif Trigger27:
-            return "Trigger27"
-        elif Trigger2027:
-            return "Trigger2027"
-    elif args.year == "2016":
-        Trigger22 = (TheEvent.pt_1 >23.0 and abs(TheEvent.eta_1)<2.1 
-                     and ((TheEvent.passMu22eta2p1 and TheEvent.matchMu22eta2p1_1 and TheEvent.filterMu22eta2p1_1) 
-                          or (TheEvent.passTkMu22eta2p1 and TheEvent.matchTkMu22eta2p1_1 and TheEvent.filterTkMu22eta2p1_1)))
-
-        Trigger1920 = (TheEvent.pt_1 > 20.0 and TheEvent.pt_2 > 21.0 
-                       and ((TheEvent.passMu19Tau20 and TheEvent.matchMu19Tau20_1 and TheEvent.matchMu19Tau20_2 and TheEvent.filterMu19Tau20_1 and TheEvent.filterMu19Tau20_2) 
-                            or (TheEvent.passMu19Tau20SingleL1 and TheEvent.matchMu19Tau20SingleL1_1 and TheEvent.matchMu19Tau20SingleL1_2 and TheEvent.filterMu19Tau20SingleL1_1 and TheEvent.filterMu19Tau20SingleL1_2)))
-        
-        if Trigger22:
+        elif TheEvent.Trigger2027:
+            return "Trigger2027"    
+    elif args.year == "2016":        
+        if TheEvent.Trigger22:
             return "Trigger22"
-        elif Trigger1920:
+        elif TheEvent.Trigger1920:
             return "Trigger1920"
 
     print "Failed to find a proper trigger! returning a default!"
@@ -283,7 +258,7 @@ def ClassifyEvent(TheEvent):
 
 def MakeFractions(args):
     #get ntuples to make fractions with 
-    if args.year != "2017":
+    if args.year == "2016":
         DataNtuple,WNtuple,TTNtuple=MakeAllNtuples(args)
     else:
         DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple=MakeAllNtuples(args)
@@ -305,7 +280,7 @@ def MakeFractions(args):
     ProcessNtuple(args,WNtuple,RealHistos,[1,2,3,4,5])
     ProcessNtuple(args,TTNtuple,TTHistos,[6])
     ProcessNtuple(args,TTNtuple,RealHistos,[1,2,3,4,5])
-    if args.year=="2017":
+    if args.year!="2016":
         ProcessNtuple(args,EmbeddedNtuple,RealHistos,[6],"Embedded")
 
     #Perform the subtractions
@@ -449,6 +424,7 @@ def AddFakeFactorWeightings(FileName,args):
         else:
             Modifier = 1.0
         
+            
         Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs)) * Modifier
         ff_qcd_syst_up[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_syst_up') * Modifier
         ff_qcd_syst_down[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_syst_down') * Modifier
@@ -468,8 +444,10 @@ def AddFakeFactorWeightings(FileName,args):
         ff_tt_dm0_njet0_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet0_stat_down') * Modifier
         ff_tt_dm0_njet1_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_up') * Modifier
         ff_tt_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_down') * Modifier
+            """
 
         FakeFactorBranch.Fill()
+        """
         ff_qcd_syst_up_Branch.Fill()
         ff_qcd_syst_down_Branch.Fill()
         ff_qcd_dm0_njet0_stat_up_Branch.Fill()

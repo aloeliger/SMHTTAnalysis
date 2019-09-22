@@ -1,9 +1,13 @@
 #configuration for fake factors
 import os
 
-ntuple_path_2016 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2016AntiIso/"
-ntuple_path_2017 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2017AntiIso/"
-ntuple_path_2018 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2018AntiIso/"
+#ntuple_path_2016 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2016AntiIso/"
+#ntuple_path_2017 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2017AntiIso/"
+#ntuple_path_2018 = os.environ["CMSSW_BASE"]+"/src/SMHTTAnalysis/SelectedNtuples/2018AntiIso/"
+
+ntuple_path_2016 = "/data/aloeliger/SMHTT_Selected_2016_AntiIso/"
+ntuple_path_2017 = "/data/aloeliger/SMHTT_Selected_2017_AntiIso/"
+ntuple_path_2018 = "/data/aloeliger/SMHTT_Selected_2018_AntiIso/"
 
 Data_Files_2016 = {'data':'Data.root'}
 Data_Files_2017 = {'data':'Data.root'}
@@ -53,3 +57,4 @@ TT_Files_2018 = {'TTTo2L2Nu':'TTTo2L2Nu.root',
                  'TTToSemiLeptonic':'TTToSemiLeptonic.root'}
 
 Embedded_Files_2017 = {'Embedded':'Embedded.root'}
+Embedded_Files_2018 = {'Embedded':'Embedded.root'}
