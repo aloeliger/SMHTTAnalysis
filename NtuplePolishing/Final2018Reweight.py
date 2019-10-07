@@ -5,9 +5,12 @@ from tqdm import tqdm
 import argparse
 import AddCrossSectionWeightings
 import AddPileupWeightings
-import AddKITMuSFs
+import AddKITMuAndTriggerSFs
 import AddZPTReweighting
 import math
+from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool
+
+
 
 def AddFinalWeights(FileToRun, args):
     print("")
@@ -34,10 +37,10 @@ def AddFinalWeights(FileToRun, args):
             print("Failed to find pileup weights. Adding them...")
             AddPileupWeightings.AddPileupWeightings(FileToRun,args)
         try:
-            CheckFile.mt_Selected.MuSF
+            CheckFile.mt_Selected.MuAndTriggerSF
         except:
             print("Failed to find mu scale factors. Adding them...")
-            AddKITMuSFs.AddKITMuSFs(FileToRun,args)
+            AddKITMuAndTriggerSFs.AddKITMuAndTriggerSFs(FileToRun,args)
     CheckFile.Close()
 
     ReweightFile = ROOT.TFile(FileToRun,"UPDATE")
@@ -54,11 +57,18 @@ def AddFinalWeights(FileToRun, args):
     TheBranch_TOP_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_DOWN',FinalWeighting_TOP_DOWN,'FinalWeighting_TOP_DOWN/F')
 
     #get the embedded weighting file.
-    ScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/htt_scalefactors_v18_2.root")
+    ScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/LegacyCorrectionsWorkspace/output/htt_scalefactors_legacy_2018.root")
+    #ScaleFactorFile = ROOT.TFile("/data/aloeliger/CMSSW_9_4_0/src/SMHTTAnalysis/NtuplePolishing/Weightings/htt_scalefactors_v18_2.root")
     ScaleFactorWorkspace = ScaleFactorFile.w
 
     print("Adding the final weighting...")
     
+    Embedded_XTrg_MuLegWeight = 0.0
+    Embedded_XTrg_TauLegWeight = 0.0
+    X_Trg_Events = 0.0
+
+    tauSFTool = TauIDSFTool(2018,"DeepTau2017v2p1",'Medium')
+ 
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
         TauVector = ROOT.TLorentzVector()
@@ -76,12 +86,13 @@ def AddFinalWeights(FileToRun, args):
             Weight = Weight * ReweightFile.mt_Selected.PileupWeight
             Weight = Weight * ReweightFile.mt_Selected.bweight # add in the btagging weight to MCs
         if( not args.DisableMuSFs and FileName != "Data.root" and FileName != "Embedded.root"):
-            Weight = Weight * ReweightFile.mt_Selected.MuSF
+            Weight = Weight * ReweightFile.mt_Selected.MuAndTriggerSF
 
         if(FileName != "Data.root" and FileName != "Embedded.root"):
-            Weight = Weight * 0.90 #0.90 tight tau ID
+            #Weight = Weight * 0.90 #0.90 tight tau ID
+            Weight = Weight * 0.86 #Deep medium ID#Weight * tauSFTool.getSFvsPT(TauVector.Pt())#
         elif FileName == "Embedded.root":
-            pass #need 2018 tau ID on embedded
+            Weight = Weight * 0.97 # make sure this is still correct on Deep Tau
 
         if not args.DisableEtaWeighting:
             if(ReweightFile.mt_Selected.gen_match_2 == 2
@@ -97,52 +108,9 @@ def AddFinalWeights(FileToRun, args):
                  elif(abs(TauVector.Eta())<2.3):
                      Weight = Weight*2.3
 
-        Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
-                 and ReweightFile.mt_Selected.filterMu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)
-        Trigger27 = (ReweightFile.mt_Selected.passMu27 and ReweightFile.mt_Selected.matchMu27_1 
-                 and ReweightFile.mt_Selected.filterMu27_1 and ReweightFile.mt_Selected.pt_1 > 25.0)            
-        if FileName == "Data.root":
-            if (ReweightFile.mt_Selected.run >= 317509): #hps trigger
-                Trigger2027 = (ReweightFile.mt_Selected.passMu20HPSTau27 
-                               and ReweightFile.mt_Selected.matchMu20HPSTau27_1
-                               and ReweightFile.mt_Selected.matchMu20HPSTau27_2
-                               and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_1 < 25
-                               and ReweightFile.mt_Selected.pt_2 > 28
-                               and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                               and abs(ReweightFile.mt_Selected.eta_2) < 2.1
-                               and ReweightFile.mt_Selected.filterMu20HPSTau27_1
-                               and ReweightFile.mt_Selected.filterMu20HPSTau27_2)
-            if (ReweightFile.mt_Selected.run < 317509): #non hps trigger
-                Trigger2027 = (ReweightFile.mt_Selected.passMu20Tau27 
-                               and ReweightFile.mt_Selected.matchMu20Tau27_1
-                               and ReweightFile.mt_Selected.matchMu20Tau27_2
-                               and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_1 < 25
-                               and ReweightFile.mt_Selected.pt_2 > 28
-                               and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                               and abs(ReweightFile.mt_Selected.eta_2) < 2.1
-                               and ReweightFile.mt_Selected.filterMu20Tau27_1
-                               and ReweightFile.mt_Selected.filterMu20Tau27_2)
-        elif FileName == "Embedded.root": # embedded doesn't match taus
-            Trigger24 = (ReweightFile.mt_Selected.passMu24 and ReweightFile.mt_Selected.matchMu24_1 
-                         and ReweightFile.mt_Selected.matchEmbFilter_Mu24_1 and ReweightFile.mt_Selected.pt_1 > 25.0)
-            Trigger27 = (ReweightFile.mt_Selected.passMu27 and ReweightFile.mt_Selected.matchMu27_1 
-                         and ReweightFile.mt_Selected.matchEmbFilter_Mu27_1 and ReweightFile.mt_Selected.pt_1 > 28.0)            
-            Trigger2027 = (ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_1 < 25
-                           and ReweightFile.mt_Selected.pt_2 > 28
-                           and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                           and abs(ReweightFile.mt_Selected.eta_2) < 2.1
-                           and ReweightFile.mt_Selected.matchEmbFilter_Mu20Tau27_1
-                           and (ReweightFile.mt_Selected.matchEmbFilter_Mu20Tau27_2 or ReweightFile.mt_Selected.matchEmbFilter_Mu20HPSTau27_2))
-        else: #all hps cross trigger
-            Trigger2027 = (ReweightFile.mt_Selected.passMu20HPSTau27 
-                           and ReweightFile.mt_Selected.matchMu20HPSTau27_1
-                           and ReweightFile.mt_Selected.matchMu20HPSTau27_2
-                           and ReweightFile.mt_Selected.pt_1 > 21 and ReweightFile.mt_Selected.pt_1 < 25
-                           and ReweightFile.mt_Selected.pt_2 > 28
-                           and abs(ReweightFile.mt_Selected.eta_1) < 2.1
-                           and abs(ReweightFile.mt_Selected.eta_2) < 2.1
-                           and ReweightFile.mt_Selected.filterMu20HPSTau27_1
-                           and ReweightFile.mt_Selected.filterMu20HPSTau27_2)
+        Trigger24 = ReweightFile.mt_Selected.Trigger24
+        Trigger27 = ReweightFile.mt_Selected.Trigger27
+        Trigger2027 = ReweightFile.mt_Selected.Trigger2027
 
         if not args.DisableEmbeddingReconstructionWeighting:
             if(FileName == "Embedded.root"):
@@ -154,7 +122,7 @@ def AddFinalWeights(FileToRun, args):
                     Weight = Weight * 0.975 * 0.975 * 0.975
                 ScaleFactorWorkspace.var("m_pt").setVal(MuVector.Pt())
                 ScaleFactorWorkspace.var("m_eta").setVal(MuVector.Eta())
-                ScaleFactorWorkspace.var("gt_pt").setVal(MuVector.Pt())
+                ScaleFactorWorkspace.var("gt_pt").setVal(MuVector.Pt()) 
                 ScaleFactorWorkspace.var("gt_eta").setVal(MuVector.Eta())                
                 ScaleFactorWorkspace.var("gt1_pt").setVal(MuVector.Pt())
                 ScaleFactorWorkspace.var("gt1_eta").setVal(MuVector.Eta())
@@ -171,15 +139,12 @@ def AddFinalWeights(FileToRun, args):
                 Weight = Weight*ScaleFactorWorkspace.function("m_id_embed_kit_ratio").getVal()
                 if(Trigger24 or Trigger27):
                     Weight = Weight*ScaleFactorWorkspace.function("m_trg24_27_embed_kit_ratio").getVal()
-                elif(Trigger2027):                                        
-                    if ScaleFactorWorkspace.function("m_trg_MuTau_Mu20Leg_embed_kit_ratio").getVal() > 1.2:
-                        print ""
-                        print("Weight: "+str(ScaleFactorWorkspace.function("m_trg_MuTau_Mu20Leg_embed_kit_ratio").getVal()))
-                        print("Mu Vector:")
-                        print("Pt: "+str(MuVector.Pt()))
-                        print("eta: "+str(MuVector.Eta()))
-                    Weight = Weight*ScaleFactorWorkspace.function("m_trg_MuTau_Mu20Leg_embed_kit_ratio").getVal() #This weight causes huge problems
+                elif(Trigger2027):                                                            
+                    X_Trg_Events +=1.0
+                    Embedded_XTrg_MuLegWeight+=ScaleFactorWorkspace.function("m_trg_binned_20_embed_ratio").getVal()
+                    Weight = Weight*ScaleFactorWorkspace.function("m_trg_binned_20_embed_ratio").getVal() #This weight causes huge problems
                     #Weight = Weight*ScaleFactorWorkspace.function("mt_emb_LooseChargedIsoPFTau27_kit_ratio").getVal()
+                    Embedded_XTrg_TauLegWeight+=ScaleFactorWorkspace.function("mt_emb_LooseChargedIsoPFTau27_tight_kit_ratio").getVal()
                     Weight = Weight*ScaleFactorWorkspace.function("mt_emb_LooseChargedIsoPFTau27_tight_kit_ratio").getVal()
                 else:
                     print("Something weird went through our trigger definitions.")
@@ -228,6 +193,14 @@ def AddFinalWeights(FileToRun, args):
                                                or FileName == "TTTo2L2Nu.root"):
             TheBranch_TOP_UP.Fill()
             TheBranch_TOP_DOWN.Fill()
+
+    
+    if FileName == "Embedded.root":
+        Embedded_XTrg_MuLegWeight = Embedded_XTrg_MuLegWeight/X_Trg_Events
+        Embedded_XTrg_TauLegWeight = Embedded_XTrg_TauLegWeight/X_Trg_Events
+        print("Embedded X trg mu leg weight (avg): "+str(Embedded_XTrg_MuLegWeight))
+        print("Embedded X trg tau leg weight (avg): "+str(Embedded_XTrg_TauLegWeight))
+    
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()

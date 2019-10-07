@@ -8,25 +8,25 @@ import AddMTandPZeta
 #new way of accessing 
 def get_raw_FF(pt,fct):
     ff=1.0
-    ff=fct.Eval(pt)
-    if(pt>80):
-        ff=fct.Eval(80)
+    ff=fct.Eval(pt)    
+    #if(pt>80):
+    #    ff=fct.Eval(80)
     return ff
 
 def get_mvis_closure(mvis,fct):
     corr = 1.0
     corr = fct.Eval(mvis)
-    if(mvis>300):
-        corr=fct.Eval(500)
-    if (mcis<50):
-        corr=fct.Eval(50)
+    if(mvis>350):
+        corr=fct.Eval(350)
+    #if (mvis<50):
+    #    corr=fct.Eval(50)
     return corr
 
 def get_mt_closure(mt, fct):
     corr=1.0
-    corr.Eval(mt)
-    if (mt>120):
-        corr=fct.Eval(120)
+    corr=fct.Eval(mt)
+    #if (mt>120):
+    #    corr=fct.Eval(120)
     return corr
 
 def get_ff(pt, mt, mvis, njets, frac_tt, frac_qcd, frac_w, fct_raw_qcd_0, fct_raw_qcd_1, fct_raw_w_0, fct_raw_w_1, fct_raw_tt, fct_mvisclosure_qcd, fct_mvisclosure_w,fct_mvisclosure_tt, fct_mtcorrection_w, fct_OSSScorrection_qcd):
@@ -280,7 +280,7 @@ def MakeFractions(args):
     ProcessNtuple(args,WNtuple,RealHistos,[1,2,3,4,5])
     ProcessNtuple(args,TTNtuple,TTHistos,[6])
     ProcessNtuple(args,TTNtuple,RealHistos,[1,2,3,4,5])
-    if args.year!="2016":
+    if args.year!="2016" and not args.UseMC:
         ProcessNtuple(args,EmbeddedNtuple,RealHistos,[6],"Embedded")
 
     #Perform the subtractions
@@ -288,72 +288,44 @@ def MakeFractions(args):
         QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
         QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
         QCDHistos[Trigger].Add(WHistos[Trigger],-1)
+    FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root","RECREATE")
+    for Histo in dataHistos:
+        WHistos[Histo].Write()
+        QCDHistos[Histo].Write()
+        TTHistos[Histo].Write()
+        dataHistos[Histo].Write()
+        RealHistos[Histo].Write()
+    
 
 def AddFakeFactorWeightings(FileName,args):
-    print("Adding Fake Factors to "+FileName)
-    if args.year == "2017":
-        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data/SM2017/tight/vloose/mt/fakeFactors.root")
-    elif args.year == "2018":
-        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2018/SM2018/tight/vloose/mt/fakeFactors.root")
-    elif args.year == "2016":
-        ff_file = ROOT.TFile.Open("/data/aloeliger/CMSSW_9_4_0/src/HTTutilities/Jet2TauFakes/data2016/SM2016/tight/vloose/mt/fakeFactors.root")
-    print("Retrieving Fake Factors from file")
-    ff = ff_file.Get('ff_comb')
+    print("Adding deep tau fake factors to "+FileName)
+    RawFF = ROOT.TFile("Weightings/DeepFFs/uncorrected_fakefactors_mt.root")
+    ff_qcd_0jet = RawFF.Get("rawFF_mt_qcd_0jet")
+    ff_qcd_1jet = RawFF.Get("rawFF_mt_qcd_1jet")
+    ff_w_0jet = RawFF.Get("rawFF_mt_w_0jet")
+    ff_w_1jet = RawFF.Get("rawFF_mt_w_1jet")
+    ff_tt_0jet = RawFF.Get("mc_rawFF_mt_tt")
+    
+    fmvisclosure = ROOT.TFile("Weightings/DeepFFs/FF_corrections_1.root")
+    mvisclosure_qcd = fmvisclosure.Get("closure_mvis_mt_qcd")
+    mvisclosure_w = fmvisclosure.Get("closure_mvis_mt_w")
+    mvisclosure_tt = fmvisclosure.Get("closure_mvis_mt_ttmc")
+    
+    fossclosure = ROOT.TFile("Weightings/DeepFFs/FF_QCDcorrectionOSSS.root")
+    osssclosure_qcd = fossclosure.Get("closure_mvis_mt_qcd")
+    mtclosure_w = fossclosure.Get("closure_mt_mt_w")
 
     print("Retrieving reweight file and making branches")
     ReweightFile = ROOT.TFile(FileName,"UPDATE")
     Event_Fake_Factor = array('f',[0.])    
-    
-    ff_qcd_syst_up = array('f',[0.])
-    ff_qcd_syst_down = array('f',[0.])
-    ff_qcd_dm0_njet0_stat_up = array('f',[0.])
-    ff_qcd_dm0_njet0_stat_down = array('f',[0.])
-    ff_qcd_dm0_njet1_stat_up = array('f',[0.])
-    ff_qcd_dm0_njet1_stat_down = array('f',[0.])
-    ff_w_syst_up = array('f',[0.])
-    ff_w_syst_down = array('f',[0.])
-    ff_w_dm0_njet0_stat_up = array('f',[0.])
-    ff_w_dm0_njet0_stat_down = array('f',[0.])
-    ff_w_dm0_njet1_stat_up = array('f',[0.])
-    ff_w_dm0_njet1_stat_down = array('f',[0.])
-    ff_tt_syst_up = array('f',[0.])
-    ff_tt_syst_down = array('f',[0.])
-    ff_tt_dm0_njet0_stat_up = array('f',[0.])
-    ff_tt_dm0_njet0_stat_down = array('f',[0.])
-    ff_tt_dm0_njet1_stat_up = array('f',[0.])
-    ff_tt_dm0_njet1_stat_down = array('f',[0.])
 
     FakeFactorBranch = ReweightFile.mt_Selected.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')    
-    ff_qcd_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_up',ff_qcd_syst_up,'ff_qcd_syst_up/F')
-    ff_qcd_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_syst_down',ff_qcd_syst_down,'ff_qcd_syst_down/F')
-    ff_qcd_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_up',ff_qcd_dm0_njet0_stat_up,'ff_qcd_dm0_njet0_stat_up/F')
-    ff_qcd_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet0_stat_down',ff_qcd_dm0_njet0_stat_down,'ff_qcd_dm0_njet0_stat_down/F')
-    ff_qcd_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_up',ff_qcd_dm0_njet1_stat_up,'ff_qcd_dm0_njet1_stat_up/F')
-    ff_qcd_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_dm0_njet1_stat_down',ff_qcd_dm0_njet1_stat_down,'ff_qcd_dm0_njet1_stat_down/F')
 
-    ff_w_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_up',ff_w_syst_up,'ff_w_syst_up/F')
-    ff_w_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_syst_down',ff_w_syst_down,'ff_w_syst_down/F')
-    ff_w_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_up',ff_w_dm0_njet0_stat_up,'ff_w_dm0_njet0_stat_up/F')
-    ff_w_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet0_stat_down',ff_w_dm0_njet0_stat_down,'ff_w_dm0_njet0_stat_down/F')
-    ff_w_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_up',ff_w_dm0_njet1_stat_up,'ff_w_dm0_njet1_stat_up/F')
-    ff_w_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_dm0_njet1_stat_down',ff_w_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
-
-    ff_tt_syst_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_up',ff_tt_syst_up,'ff_tt_syst_up/F')
-    ff_tt_syst_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_syst_down',ff_tt_syst_down,'ff_tt_syst_down/F')
-    ff_tt_dm0_njet0_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_up',ff_tt_dm0_njet0_stat_up,'ff_tt_dm0_njet0_stat_up/F')
-    ff_tt_dm0_njet0_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet0_stat_down',ff_tt_dm0_njet0_stat_down,'ff_tt_dm0_njet0_stat_down/F')
-    ff_tt_dm0_njet1_stat_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_up',ff_tt_dm0_njet1_stat_up,'ff_tt_dm0_njet1_stat_up/F')
-    ff_tt_dm0_njet1_stat_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_dm0_njet1_stat_down',ff_tt_dm0_njet1_stat_down,'ff_w_dm0_njet1_stat_down/F')
-    
     Sample = ""
     if FileName.find("Data") > 0:
         Sample = "Data"
     elif FileName.find("Embedded") > 0:
         Sample = "Embedded"
-
-    AvFracQCD = 0
-    AvFracW = 0
-    AvFracTT = 0
 
     print("Looping...")
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
@@ -380,6 +352,8 @@ def AddFakeFactorWeightings(FileName,args):
         #now we need to compute proper fractions now        
         EventClassification = ClassifyEvent(ReweightFile.mt_Selected)
         TriggerClassification = ClassifyTrigger(args,ReweightFile.mt_Selected,Sample)        
+
+
         Denom = ( QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
                   WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
                   TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) )
@@ -397,103 +371,59 @@ def AddFakeFactorWeightings(FileName,args):
             print("Event classification: "+str(EventClassification))
             FracQCD = 0.0
             FracW = 0.0
-            FracTT = 0.0
-
-        AvFracQCD += FracQCD
-        AvFracW += FracW
-        AvFracTT += FracTT
+            FracTT = 0.0        
 
         m_vis = (MuVector + TauVector).M()
         TransverseMass = AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
-
-        inputs = [TauVector.Pt(),
-                  ReweightFile.mt_Selected.l2_decayMode,
-                  ReweightFile.mt_Selected.njets,
-                  m_vis,
-                  TransverseMass,
-                  ReweightFile.mt_Selected.iso_1,
-                  FracQCD,
-                  FracW,
-                  FracTT]
-        #print("FracQCD: "+str(FracQCD))
-        #print("FracW: "+str(FracW))
-        #print("FracTT: "+str(FracTT))
-
+        
         if args.IsNegative:
             Modifier = -1.0
         else:
             Modifier = 1.0
-        
-            
-        Event_Fake_Factor[0] = ff.value(len(inputs),array('d',inputs)) * Modifier
-        ff_qcd_syst_up[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_syst_up') * Modifier
-        ff_qcd_syst_down[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_syst_down') * Modifier
-        ff_qcd_dm0_njet0_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_dm0_njet0_stat_up') * Modifier
-        ff_qcd_dm0_njet0_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_dm0_njet0_stat_down') * Modifier
-        ff_qcd_dm0_njet1_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_dm0_njet1_stat_up') * Modifier
-        ff_qcd_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_qcd_dm0_njet1_stat_down') * Modifier
-        ff_w_syst_up[0] = ff.value(len(inputs),array('d',inputs),'ff_w_syst_up') * Modifier 
-        ff_w_syst_down[0] = ff.value(len(inputs),array('d',inputs),'ff_w_syst_down') * Modifier
-        ff_w_dm0_njet0_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_w_dm0_njet0_stat_up') * Modifier
-        ff_w_dm0_njet0_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_w_dm0_njet0_stat_down') * Modifier
-        ff_w_dm0_njet1_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_w_dm0_njet1_stat_up') * Modifier
-        ff_w_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_w_dm0_njet1_stat_down') * Modifier
-        ff_tt_syst_up[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_syst_up') * Modifier
-        ff_tt_syst_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_syst_down') * Modifier * Modifier
-        ff_tt_dm0_njet0_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet0_stat_up') * Modifier
-        ff_tt_dm0_njet0_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet0_stat_down') * Modifier
-        ff_tt_dm0_njet1_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_up') * Modifier
-        ff_tt_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_down') * Modifier
-            """
+
+        Event_Fake_Factor[0] = get_ff(TauVector.Pt(),
+                                      TransverseMass,
+                                      m_vis,
+                                      ReweightFile.mt_Selected.njets,
+                                      FracTT,
+                                      FracQCD,
+                                      FracW,
+                                      ff_qcd_0jet,
+                                      ff_qcd_1jet,
+                                      ff_w_0jet,
+                                      ff_w_1jet,
+                                      ff_tt_0jet,
+                                      mvisclosure_qcd,
+                                      mvisclosure_w,
+                                      mvisclosure_tt,
+                                      mtclosure_w,
+                                      osssclosure_qcd) * Modifier        
 
         FakeFactorBranch.Fill()
-        """
-        ff_qcd_syst_up_Branch.Fill()
-        ff_qcd_syst_down_Branch.Fill()
-        ff_qcd_dm0_njet0_stat_up_Branch.Fill()
-        ff_qcd_dm0_njet0_stat_down_Branch.Fill()
-        ff_qcd_dm0_njet1_stat_up_Branch.Fill()
-        ff_qcd_dm0_njet1_stat_down_Branch.Fill()
-        ff_w_syst_up_Branch.Fill()
-        ff_w_syst_down_Branch.Fill()
-        ff_w_dm0_njet0_stat_up_Branch.Fill()
-        ff_w_dm0_njet0_stat_down_Branch.Fill()
-        ff_w_dm0_njet1_stat_up_Branch.Fill()
-        ff_w_dm0_njet1_stat_down_Branch.Fill()
-        ff_tt_syst_up_Branch.Fill()
-        ff_tt_syst_down_Branch.Fill()
-        ff_tt_dm0_njet0_stat_up_Branch.Fill()
-        ff_tt_dm0_njet0_stat_down_Branch.Fill()
-        ff_tt_dm0_njet1_stat_up_Branch.Fill()
-        ff_tt_dm0_njet1_stat_down_Branch.Fill()
-            
-    try:
-        AvFracQCD = AvFracQCD / ReweightFile.mt_Selected.GetEntries()
-        AvFracW = AvFracW / ReweightFile.mt_Selected.GetEntries()
-        AvFracTT = AvFracTT / ReweightFile.mt_Selected.GetEntries()
-    except ZeroDivisionError:
-        print("No entries to calculate averages with...")
-    #print("Average QCD Fraction: "+str(AvFracQCD))
-    #print("Average W Fraction: "+str(AvFracW))
-    #print("Average TT Fraction: "+str(AvFracTT))
-
-    ff.Delete()
-    ff_file.Close()
-
     ReweightFile.cd()
     ReweightFile.mt_Selected.Write('',ROOT.TObject.kOverwrite)
     ReweightFile.Write()
     ReweightFile.Close()
-    
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Generate and attach fake factor weighting branches.")
     parser.add_argument('--year',choices=["2016","2017","2018"],help="Running year",required=True)
     parser.add_argument('--files',nargs="+",help="Files to add the factors to",required=True)
     parser.add_argument('--IsNegative',help="Make the fake factors negative to support subtraction of MC",action="store_true")
+    parser.add_argument('--DontRecomputeFractions',help="Read the fake factor fraction histos from file isntead of computing them",action="store_true")
+    parser.add_argument('--UseMC',help="Perform all calculations ignoring embedded distributions if available",action="store_true")
     args = parser.parse_args()
 
-    MakeFractions(args)
+    if(not args.DontRecomputeFractions):
+        MakeFractions(args)
+    else:
+        FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root")
+        for Histo in dataHistos:
+            WHistos[Histo] = FractionFile.Get(WHistos[Histo].GetName())
+            QCDHistos[Histo] = FractionFile.Get(QCDHistos[Histo].GetName())
+            TTHistos[Histo] = FractionFile.Get(TTHistos[Histo].GetName())
+            dataHistos[Histo] = FractionFile.Get(dataHistos[Histo].GetName())
+            RealHistos[Histo] = FractionFile.Get(RealHistos[Histo].GetName())
 
     for filename in args.files:
         AddFakeFactorWeightings(filename,args)

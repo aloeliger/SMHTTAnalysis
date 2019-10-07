@@ -288,6 +288,13 @@ def MakeFractions(args):
         QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
         QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
         QCDHistos[Trigger].Add(WHistos[Trigger],-1)
+    FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root","RECREATE")
+    for Histo in dataHistos:
+        WHistos[Histo].Write()
+        QCDHistos[Histo].Write()
+        TTHistos[Histo].Write()
+        dataHistos[Histo].Write()
+        RealHistos[Histo].Write()
 
 def AddFakeFactorWeightings(FileName,args):
     print("Adding Fake Factors to "+FileName)
@@ -444,10 +451,9 @@ def AddFakeFactorWeightings(FileName,args):
         ff_tt_dm0_njet0_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet0_stat_down') * Modifier
         ff_tt_dm0_njet1_stat_up[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_up') * Modifier
         ff_tt_dm0_njet1_stat_down[0] = ff.value(len(inputs),array('d',inputs),'ff_tt_dm0_njet1_stat_down') * Modifier
-            """
 
         FakeFactorBranch.Fill()
-        """
+
         ff_qcd_syst_up_Branch.Fill()
         ff_qcd_syst_down_Branch.Fill()
         ff_qcd_dm0_njet0_stat_up_Branch.Fill()
@@ -491,9 +497,19 @@ if __name__=="__main__":
     parser.add_argument('--year',choices=["2016","2017","2018"],help="Running year",required=True)
     parser.add_argument('--files',nargs="+",help="Files to add the factors to",required=True)
     parser.add_argument('--IsNegative',help="Make the fake factors negative to support subtraction of MC",action="store_true")
+    parser.add_argument('--DontRecomputeFractions',help="Read the fake factor fraction histos from file isntead of computing them",action="store_true")
     args = parser.parse_args()
 
-    MakeFractions(args)
+    if(not args.DontRecomputeFractions):
+        MakeFractions(args)
+    else:
+        FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root")
+        for Histo in dataHistos:
+            WHistos[Histo] = FractionFile.Get(WHistos[Histo].GetName())
+            QCDHistos[Histo] = FractionFile.Get(QCDHistos[Histo].GetName())
+            TTHistos[Histo] = FractionFile.Get(TTHistos[Histo].GetName())
+            dataHistos[Histo] = FractionFile.Get(dataHistos[Histo].GetName())
+            RealHistos[Histo] = FractionFile.Get(RealHistos[Histo].GetName())
 
     for filename in args.files:
         AddFakeFactorWeightings(filename,args)

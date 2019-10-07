@@ -140,15 +140,14 @@ class KITMuSF:
             SF=1
         return SF
 
-def AddKITMuAndTriggerSFs(File,args):
-    if args.year=="2017":
-        CheckFile = ROOT.TFile(File)
-        try:
-            CheckFile.mt_Selected.DiTauTriggerWeight
-        except:
-            print("Failed to find ditau trigger factors. Adding them...")
-            AddDiTauTriggerFactor.AddDiTauTriggerFactor(File,args)
-        CheckFile.Close()
+def AddKITMuAndTriggerSFs(File,args):    
+    CheckFile = ROOT.TFile(File)
+    try:
+        CheckFile.mt_Selected.DiTauTriggerWeight
+    except:
+        print("Failed to find ditau trigger factors. Adding them...")
+        AddDiTauTriggerFactor.AddDiTauTriggerFactor(File,args)
+    CheckFile.Close()
 
     TheFile = ROOT.TFile(File,"UPDATE")
     TheTree = TheFile.mt_Selected
@@ -189,13 +188,9 @@ def AddKITMuAndTriggerSFs(File,args):
         IDIsoSF = IDIso.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
         #decide which trigger we're using
         if args.year=="2016":
-            if (TheTree.pt_1 >23.0 and abs(TheTree.eta_1)<2.1 
-                 and ((TheTree.passMu22eta2p1 and TheTree.matchMu22eta2p1_1 and TheTree.filterMu22eta2p1_1) 
-                      or (TheTree.passTkMu22eta2p1 and TheTree.matchTkMu22eta2p1_1 and TheTree.filterTkMu22eta2p1_1))):
+            if (TheTree.Trigger22):
                 TriggerSF = IsoMu22SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif (TheTree.pt_1 > 20.0 and TheTree.pt_2 > 21.0 
-                   and ((TheTree.passMu19Tau20 and TheTree.matchMu19Tau20_1 and TheTree.matchMu19Tau20_2 and TheTree.filterMu19Tau20_1 and TheTree.filterMu19Tau20_2) 
-                        or (TheTree.passMu19Tau20SingleL1 and TheTree.matchMu19Tau20SingleL1_1 and TheTree.matchMu19Tau20SingleL1_2 and TheTree.filterMu19Tau20SingleL1_1 and TheTree.filterMu19Tau20SingleL1_2))):
+            elif (TheTree.Trigger1920):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
                 TriggerSF = TriggerSF * TauLegFactor.getSF(TauVector.Pt(),TauVector.Eta(), tau_isocut="TightIso",genuine=(TheTree.gen_match_2 == 6),tau_dm = TheTree.l2_decayMode)
             else:
@@ -203,22 +198,23 @@ def AddKITMuAndTriggerSFs(File,args):
                 
                 TriggerSF = 1
         elif args.year=="2017":
-            if(MuVector.Pt() < 25.0 and TheTree.passMu20Tau27):
+            if(TheTree.Trigger2027):
                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif(MuVector.Pt() > 25.0 and MuVector.Pt() < 28.0 and TheTree.passMu24):
-                TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif(MuVector.Pt() >28.0 and (TheTree.passMu24 or TheTree.passMu27)):
-                TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
                 TriggerSF = TriggerSF*TheTree.DiTauTriggerWeight
+            elif(TheTree.Trigger24):
+                TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+            elif(TheTree.Trigger27):
+                TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())                
             else:
                 print("WARNING! Something fell through our 2017 trigger definitions!")
                 TriggerSF = 1
                 
         elif args.year=="2018":
-            if(MuVector.Pt() > 25.0 and TheTree.passMu24):
+            if(TheTree.Trigger24 or TheTree.Trigger27):
                 TriggerSF = IsoMu24or27SF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
-            elif (MuVector.Pt() > 21.0 and MuVector.Pt() < 25.0 and (TheTree.passMu20Tau27 or TheTree.passMu20HPSTau27)):
-                TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+            elif (TheTree.Trigger2027):
+                 TriggerSF = CrossTriggerSF.get_ScaleFactor(MuVector.Pt(),MuVector.Eta())
+                 TriggerSF = TriggerSF*TheTree.DiTauTriggerWeight
             else:
                 print("WARNING! Something fell through our 2018 trigger definitions!")
                 TriggerSF = 1
