@@ -116,7 +116,9 @@ def GenerateControlPlots(TheFile,OutFile,args):
                 MTHisto_DYtt.Fill(MT,TheWeighting)
             if TheHisto == "DY" and TheTree.gen_match_2 < 5:
                 MTHisto_DYll.Fill(MT,TheWeighting)
-            
+
+        if(TauVector.Pt() < 30.0):
+            continue                
         if(MT > 50.0):
             continue        
         
