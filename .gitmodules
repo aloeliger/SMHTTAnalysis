@@ -21,3 +21,6 @@
 [submodule "Skimming_SMHTT_legacy"]
 	path = Skimming_SMHTT_legacy
 	url = https://github.com/cecilecaillol/Skimming_SMHTT_legacy.git
+[submodule "ReweightScheme"]
+	path = ReweightScheme
+	url = git@github.com:aloeliger/ReweightScheme.git
