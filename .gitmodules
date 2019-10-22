@@ -24,3 +24,6 @@
 [submodule "ReweightScheme"]
 	path = ReweightScheme
 	url = git@github.com:aloeliger/ReweightScheme.git
+[submodule "DatacardCreator"]
+	path = DatacardCreator
+	url = git@github.com:aloeliger/DatacardCreator.git
