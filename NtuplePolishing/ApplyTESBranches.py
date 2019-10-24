@@ -82,7 +82,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.009))
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.009))
 
-            elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 10):
+            elif(TheTree.gen_match_2 == 5 and (TheTree.l2_decayMode == 10 or TheTree.l2_decayMode == 11)):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
@@ -127,7 +127,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.008))
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.008))
                                 
-            elif(TheTree.gen_match_2 == AppropriateGenMatch and TheTree.l2_decayMode == 10):
+            elif(TheTree.gen_match_2 == AppropriateGenMatch and (TheTree.l2_decayMode == 10 or TheTree.l2_decayMode == 11)):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:
@@ -165,7 +165,7 @@ def ApplyTESBranches(FileName,Arguments):
                 CorrectedTauVector = TauVector * (1.00+EnergyCorrectFactor)
                 CorrectedTauVector_UP = TauVector * (1.00+(EnergyCorrectFactor+0.009))
                 CorrectedTauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor-0.009))
-            elif(TheTree.gen_match_2 == 5 and TheTree.l2_decayMode == 10):
+            elif(TheTree.gen_match_2 == 5 and (TheTree.l2_decayMode == 10 or TheTree.l2_decayMode)):
                 if Arguments.NoEnergyCorrect:
                     EnergyCorrectFactor = 0.0
                 else:

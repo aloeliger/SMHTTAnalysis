@@ -7,6 +7,7 @@ import AddCrossSectionWeightings
 import AddZPTReweighting
 import AddPileupWeightings
 import AddKITMuAndTriggerSFs
+from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool
 
 def AddFinalWeights(FileToRun,args):
     print("")
@@ -53,6 +54,8 @@ def AddFinalWeights(FileToRun,args):
     TheBranch_TOP_UP = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_UP',FinalWeighting_TOP_UP,'FinalWeighting_TOP_UP/F')
     TheBranch_TOP_DOWN = ReweightFile.mt_Selected.Branch('FinalWeighting_TOP_DOWN',FinalWeighting_TOP_DOWN,'FinalWeighting_TOP_DOWN/F')
 
+    tauSFTool = TauIDSFTool(2016,"DeepTau2017v2p1",'Medium')
+
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
 
@@ -69,7 +72,7 @@ def AddFinalWeights(FileToRun,args):
         if( not args.DisableMuAndTriggerSFs and FileName != "Data.root" and FileName != "Embedded.root"):
             Weight = Weight * ReweightFile.mt_Selected.MuAndTriggerSF
         if FileName != "Embedded.root" and FileName != "Data.root":
-            Weight = Weight * 0.87
+            Weight = Weight * tauSFTool.getSFvsPT(TauVector.Pt())
 
         #mu->tau FR Sf's
         if not args.DisableEtaWeighting:

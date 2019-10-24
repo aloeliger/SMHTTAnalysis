@@ -8,6 +8,7 @@ import AddCrossSectionWeightings
 import AddZPTReweighting
 import AddPileupWeightings
 import AddKITMuAndTriggerSFs
+from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool
 
 def AddFinalWeights(FileToRun,args):
     print("")
@@ -70,6 +71,8 @@ def AddFinalWeights(FileToRun,args):
         
     print("Adding the final weighting...")
 
+    tauSFTool = TauIDSFTool("2017ReReco","DeepTau2017v2p1VSjet",'Medium')
+
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
 
@@ -88,7 +91,7 @@ def AddFinalWeights(FileToRun,args):
 
         #Tau ID weighting
         if FileName != "Embedded.root" and FileName != "Data.root":
-            Weight = Weight * 0.89
+            Weight = Weight * tauSFTool.getSFvsPT(TauVector.Pt())
         elif FileName == "Embedded.root":
             Weight = Weight * 0.97
 

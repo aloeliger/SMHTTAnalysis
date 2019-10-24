@@ -4,57 +4,112 @@ from array import array
 import argparse
 import FakeFactorConfiguration as cfg
 import AddMTandPZeta
+import ComputeFF2018.FFcode.ApplyFF as ApplyFF
+"""
+class FFApplicationTool():
+    def __init__(self):
+        #self.theFFDirectory = theFFDirectory
+        
+        self.AndrewRawFile = ROOT.TFile("Weightings/DeepFFs2018/uncorrected_fakefactors_mt.root")
+        self.CecileRawFile = ROOT.TFile("Weightings/DeepFFs2018-Cecile/uncorrected_fakefactors_et.root")
+        self.theRawFile = ROOT.TFile("Weightings/DeepFFs2018-Cecile/uncorrected_fakefactors_et.root")
+        if self.theRawFile.IsZombie():            
+            raise RuntimeError("Problem loading the files!")
+        self.ff_qcd_0jet = self.AndrewRawFile.Get("rawFF_mt_qcd_0jet")
+        self.ff_qcd_1jet = self.AndrewRawFile.Get("rawFF_mt_qcd_1jet")
+        self.ff_w_0jet = self.AndrewRawFile.Get("rawFF_mt_w_0jet")
+        self.ff_w_1jet = self.AndrewRawFile.Get("rawFF_mt_w_1jet")
+        self.ff_tt_0jet = self.AndrewRawFile.Get("mc_rawFF_mt_tt")
 
-#new way of accessing 
-def get_raw_FF(pt,fct):
-    ff=1.0
-    ff=fct.Eval(pt)    
-    #if(pt>80):
-    #    ff=fct.Eval(80)
-    return ff
+        self.AndrewFMvisFile = ROOT.TFile("Weightings/DeepFFs2018/FF_corrections_1.root")
+        self.CecileFMvisFile = ROOT.TFile("Weightings/DeepFFs2018-Cecile/FF_corrections_1.root")
+        self.theFMvisFile = ROOT.TFile("Weightings/DeepFFs2018/FF_corrections_1.root")
+        if self.theFMvisFile.IsZombie():
+            raise RuntimeError("Problem loading the files!")
+        self.mVisClosure_QCD = self.theFMvisFile.Get("closure_mvis_mt_qcd")
+        self.mVisClosure_W = self.theFMvisFile.Get("closure_mvis_mt_w")
+        self.mVisClosure_TT = self.theFMvisFile.Get("closure_mvis_mt_ttmc")
 
-def get_mvis_closure(mvis,fct):
-    corr = 1.0
-    corr = fct.Eval(mvis)
-    if(mvis>350):
-        corr=fct.Eval(350)
-    #if (mvis<50):
-    #    corr=fct.Eval(50)
-    return corr
+        self.AndrewFOSSSClosureFile = ROOT.TFile("Weightings/DeepFFs2018/FF_QCDcorrectionOSSS.root")
+        self.CecileFOSSSClosureFile = ROOT.TFile("Weightings/DeepFFs2018-Cecile/FF_QCDcorrectionOSSS.root")
+        self.theFOSSSClosureFile = ROOT.TFile("Weightings/DeepFFs2018/FF_QCDcorrectionOSSS.root")
+        if self.theFOSSSClosureFile.IsZombie():
+            raise RuntimeError("Problem loading the files!")
+        #self.OSSSClosure_QCD = self.theFOSSSClosureFile.Get("closure_OSSS_mvis_mt_qcd")
+        self.OSSSClosure_QCD = self.theFOSSSClosureFile.Get("closure_mvis_mt_qcd")
+        self.MTClosure_W = self.theFOSSSClosureFile.Get("closure_mt_mt_w")
 
-def get_mt_closure(mt, fct):
-    corr=1.0
-    corr=fct.Eval(mt)
-    #if (mt>120):
-    #    corr=fct.Eval(120)
-    return corr
+        self.theRawFile = ROOT.TFile(theFFDirectory+"uncorrected_fakefactors_"+channel+".root")
+        if self.theRawFile.IsZombie():            
+            raise RuntimeError("Problem loading the files!")
+        self.ff_qcd_0jet = self.theRawFile.Get("rawFF_"+channel+"_qcd_0jet")
+        self.ff_qcd_1jet = self.theRawFile.Get("rawFF_"+channel+"_qcd_1jet")
+        self.ff_w_0jet = self.theRawFile.Get("rawFF_"+channel+"_w_0jet")
+        self.ff_w_1jet = self.theRawFile.Get("rawFF_"+channel+"_w_1jet")
+        self.ff_tt_0jet = self.theRawFile.Get("mc_rawFF_"+channel+"_tt")
 
-def get_ff(pt, mt, mvis, njets, frac_tt, frac_qcd, frac_w, fct_raw_qcd_0, fct_raw_qcd_1, fct_raw_w_0, fct_raw_w_1, fct_raw_tt, fct_mvisclosure_qcd, fct_mvisclosure_w,fct_mvisclosure_tt, fct_mtcorrection_w, fct_OSSScorrection_qcd):
-    ff_qcd = 1.0
-    ff_w = 0
-    ff_tt = 1.0
+        self.theFMvisFile = ROOT.TFile(theFFDirectory+"FF_corrections_1.root")
+        if self.theFMvisFile.IsZombie():
+            raise RuntimeError("Problem loading the files!")
+        self.mVisClosure_QCD = self.theFMvisFile.Get("closure_mvis_"+channel+"_qcd")
+        self.mVisClosure_W = self.theFMvisFile.Get("closure_mvis_"+channel+"_w")
+        self.mVisClosure_TT = self.theFMvisFile.Get("closure_mvis_"+channel+"_ttmc")
+
+        self.theFOSSSClosureFile = ROOT.TFile(theFFDirectory+"FF_QCDcorrectionOSSS.root")
+        if self.theFOSSSClosureFile.IsZombie():
+            raise RuntimeError("Problem loading the files!")
+        self.OSSSClosure_QCD = self.theFOSSSClosureFile.Get("closure_OSSS_mvis_"+channel+"_qcd")
+        self.MTClosure_W = self.theFOSSSClosureFile.Get("closure_mt_"+channel+"_w")
+
+    def get_raw_FF(self,pt,fct):
+        ff=1.0
+        ff=fct.Eval(pt)    
+        #if(pt>80):
+        #    ff=fct.Eval(80)
+        return ff
+
+    def get_mvis_closure(self,mvis,fct):
+        corr = 1.0
+        corr = fct.Eval(mvis)
+        if(mvis>350):
+            corr=fct.Eval(350)
+        #if (mvis<50):
+        #    corr=fct.Eval(50)
+        return corr
+
+    def get_mt_closure(self,mt, fct):
+        corr=1.0
+        corr=fct.Eval(mt)
+        #if (mt>120):
+        #    corr=fct.Eval(120)
+        return corr
+
+    def get_ff(self, pt, mt, mvis, njets, frac_tt, frac_qcd, frac_w):
+        ff_qcd = 1.0
+        ff_w = 0
+        ff_tt = 1.0
     
-    #Raw ff
-    if(njets==0):
-        ff_qcd=get_raw_FF(pt,fct_raw_qcd_0)
-        ff_w=get_raw_FF(pt,fct_raw_w_0)
-    else:
-        ff_qcd=get_raw_FF(pt,fct_raw_qcd_0)
-        ff_w=get_raw_FF(pt,fct_raw_w_0)
-    ff_tt=get_raw_FF(pt,fct_raw_tt)
+        #Raw ff
+        if(njets==0):
+            ff_qcd=self.get_raw_FF(pt,self.ff_qcd_0jet)
+            ff_w=self.get_raw_FF(pt,self.ff_w_0jet)
+        else:
+            ff_qcd=self.get_raw_FF(pt,self.ff_qcd_1jet)
+            ff_w=self.get_raw_FF(pt,self.ff_w_1jet)
+        ff_tt=self.get_raw_FF(pt,self.ff_tt_0jet)
 
-    #mvis closure
-    ff_qcd = ff_qcd*get_mvis_closure(mvis,fct_mvisclosure_qcd)
-    ff_w = ff_w*get_mvis_closure(mvis,fct_mvisclosure_w)
-    ff_tt = ff_tt*get_mvis_closure(mvis,fct_mvisclosure_tt)
-
-    #MT and OSSS corrections
-    ff_w = ff_w*get_mt_closure(mt,fct_mtcorrection_w)
-    ff_qcd = ff_qcd*get_mvis_closure(mvis,fct_OSSScorrection_qcd)
-    
-    ff_cmb = frac_tt*ff_tt + frac_qcd*ff_qcd + frac_w*ff_w
-    return ff_cmb
-
+        #mvis closure
+        ff_qcd = ff_qcd*self.get_mvis_closure(mvis,self.mVisClosure_QCD)
+        ff_w = ff_w*self.get_mvis_closure(mvis,self.mVisClosure_W)
+        ff_tt = ff_tt*self.get_mvis_closure(mvis,self.mVisClosure_TT)
+        
+        #MT and OSSS corrections
+        ff_w = ff_w*self.get_mt_closure(mt,self.MTClosure_W)
+        ff_qcd = ff_qcd*self.get_mvis_closure(mvis,self.OSSSClosure_QCD)
+        
+        ff_cmb = frac_tt*ff_tt + frac_qcd*ff_qcd + frac_w*ff_w
+        return ff_cmb
+"""
 #Let's try splitting these up by triggers.
 # see if that helps us deal with the the problem in the 2017 cross trigger?
 WFracHisto = ROOT.TH2F("WFrac","WFrac",20,0.0,500.0,7,1.0,8.0)
@@ -288,32 +343,26 @@ def MakeFractions(args):
         QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
         QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
         QCDHistos[Trigger].Add(WHistos[Trigger],-1)
+
+    print("Writing files...")
     FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root","RECREATE")
-    for Histo in dataHistos:
+    for Histo in dataHistos:        
         WHistos[Histo].Write()
         QCDHistos[Histo].Write()
         TTHistos[Histo].Write()
         dataHistos[Histo].Write()
         RealHistos[Histo].Write()
-    
+    FractionFile.Close()   
 
 def AddFakeFactorWeightings(FileName,args):
-    print("Adding deep tau fake factors to "+FileName)
-    RawFF = ROOT.TFile("Weightings/DeepFFs/uncorrected_fakefactors_mt.root")
-    ff_qcd_0jet = RawFF.Get("rawFF_mt_qcd_0jet")
-    ff_qcd_1jet = RawFF.Get("rawFF_mt_qcd_1jet")
-    ff_w_0jet = RawFF.Get("rawFF_mt_w_0jet")
-    ff_w_1jet = RawFF.Get("rawFF_mt_w_1jet")
-    ff_tt_0jet = RawFF.Get("mc_rawFF_mt_tt")
-    
-    fmvisclosure = ROOT.TFile("Weightings/DeepFFs/FF_corrections_1.root")
-    mvisclosure_qcd = fmvisclosure.Get("closure_mvis_mt_qcd")
-    mvisclosure_w = fmvisclosure.Get("closure_mvis_mt_w")
-    mvisclosure_tt = fmvisclosure.Get("closure_mvis_mt_ttmc")
-    
-    fossclosure = ROOT.TFile("Weightings/DeepFFs/FF_QCDcorrectionOSSS.root")
-    osssclosure_qcd = fossclosure.Get("closure_mvis_mt_qcd")
-    mtclosure_w = fossclosure.Get("closure_mt_mt_w")
+    print("Adding deep tau fake factors to "+FileName)    
+    if args.year == '2016':
+        theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2016/","mt")
+    elif args.year == '2017':
+        theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2017-Cecile/","et")
+    elif args.year == '2018':
+        theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2018/","mt")        
+        #theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2018-Cecile/","et")                
 
     print("Retrieving reweight file and making branches")
     ReweightFile = ROOT.TFile(FileName,"UPDATE")
@@ -381,23 +430,13 @@ def AddFakeFactorWeightings(FileName,args):
         else:
             Modifier = 1.0
 
-        Event_Fake_Factor[0] = get_ff(TauVector.Pt(),
-                                      TransverseMass,
-                                      m_vis,
-                                      ReweightFile.mt_Selected.njets,
-                                      FracTT,
-                                      FracQCD,
-                                      FracW,
-                                      ff_qcd_0jet,
-                                      ff_qcd_1jet,
-                                      ff_w_0jet,
-                                      ff_w_1jet,
-                                      ff_tt_0jet,
-                                      mvisclosure_qcd,
-                                      mvisclosure_w,
-                                      mvisclosure_tt,
-                                      mtclosure_w,
-                                      osssclosure_qcd) * Modifier        
+        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),
+                                                           TransverseMass,
+                                                           m_vis,
+                                                           ReweightFile.mt_Selected.njets,
+                                                           FracTT,
+                                                           FracQCD,
+                                                           FracW) * Modifier                
 
         FakeFactorBranch.Fill()
     ReweightFile.cd()
@@ -415,15 +454,17 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     if(not args.DontRecomputeFractions):
-        MakeFractions(args)
-    else:
-        FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root")
-        for Histo in dataHistos:
-            WHistos[Histo] = FractionFile.Get(WHistos[Histo].GetName())
-            QCDHistos[Histo] = FractionFile.Get(QCDHistos[Histo].GetName())
-            TTHistos[Histo] = FractionFile.Get(TTHistos[Histo].GetName())
-            dataHistos[Histo] = FractionFile.Get(dataHistos[Histo].GetName())
-            RealHistos[Histo] = FractionFile.Get(RealHistos[Histo].GetName())
-
+        MakeFractions(args)        
+        
+    ("Retrieving fractions...")
+    FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root")
+    for Histo in dataHistos:
+        WHistos[Histo] = FractionFile.Get(WHistos[Histo].GetName())
+        QCDHistos[Histo] = FractionFile.Get(QCDHistos[Histo].GetName())
+        TTHistos[Histo] = FractionFile.Get(TTHistos[Histo].GetName())
+        dataHistos[Histo] = FractionFile.Get(dataHistos[Histo].GetName())
+        RealHistos[Histo] = FractionFile.Get(RealHistos[Histo].GetName())   
+    
+    print("Creating the fake factors.")
     for filename in args.files:
         AddFakeFactorWeightings(filename,args)

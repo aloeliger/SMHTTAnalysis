@@ -19,6 +19,7 @@ def AddFinalWeights(FileToRun, args):
 
     CheckFile = ROOT.TFile(FileToRun)
     FileName = FileToRun[FileToRun.rfind("/")+1:]
+    print(FileName)
 
     try: 
         CheckFile.mt_Selected.CrossSectionWeighting
@@ -67,7 +68,7 @@ def AddFinalWeights(FileToRun, args):
     Embedded_XTrg_TauLegWeight = 0.0
     X_Trg_Events = 0.0
 
-    tauSFTool = TauIDSFTool(2018,"DeepTau2017v2p1",'Medium')
+    tauSFTool = TauIDSFTool("2018ReReco","DeepTau2017v2p1VSjet",'Medium')
  
     for i in tqdm(range(ReweightFile.mt_Selected.GetEntries())):
         ReweightFile.mt_Selected.GetEntry(i)
@@ -90,9 +91,9 @@ def AddFinalWeights(FileToRun, args):
 
         if(FileName != "Data.root" and FileName != "Embedded.root"):
             #Weight = Weight * 0.90 #0.90 tight tau ID
-            Weight = Weight * 0.86 #Deep medium ID#Weight * tauSFTool.getSFvsPT(TauVector.Pt())#
+            Weight = Weight * tauSFTool.getSFvsPT(TauVector.Pt())#
         elif FileName == "Embedded.root":
-            Weight = Weight * 0.97 # make sure this is still correct on Deep Tau
+            Weight = Weight * 0.88
 
         if not args.DisableEtaWeighting:
             if(ReweightFile.mt_Selected.gen_match_2 == 2
@@ -173,7 +174,7 @@ def AddFinalWeights(FileToRun, args):
 
         #ALWAYS
         if FileName == "Data.root":
-            Weight = 1.0
+            Weight = 1.0            
         FinalWeighting[0] = Weight        
         if not args.DisableZPTWeighting:
             FinalWeighting_ZPT_DOWN[0] = Weight_ZPT_DOWN

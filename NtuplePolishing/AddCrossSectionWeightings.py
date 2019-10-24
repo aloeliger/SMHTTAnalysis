@@ -123,25 +123,25 @@ def AddCrossSectionWeightings(FileToRun,args):
         #2018
         elif(args.year == "2018"):
             if(FileName == "DY.root" and not args.UseInclusiveDY):
-                CrossSectionWeighting[0] = 3.7118
+                CrossSectionWeighting[0] = 3.7185
                 if ReweightFile.mt_Selected.numGenJets == 1:
-                    CrossSectionWeighting[0] = 0.64516
+                    CrossSectionWeighting[0] = 0.64580
                 elif ReweightFile.mt_Selected.numGenJets == 2:
-                    CrossSectionWeighting[0] = 0.56494
+                    CrossSectionWeighting[0] = 0.56562
                 elif ReweightFile.mt_Selected.numGenJets == 3:
-                    CrossSectionWeighting[0] = 0.61413
+                    CrossSectionWeighting[0] = 0.61552
                 elif ReweightFile.mt_Selected.numGenJets == 4:
-                    CrossSectionWeighting[0] = 1.11472
+                    CrossSectionWeighting[0] = 0.93957
             elif(FileName == "W.root"):
-                CrossSectionWeighting[0] = 51.7495
+                CrossSectionWeighting[0] = 51.81197688
                 if ReweightFile.mt_Selected.numGenJets == 1:
-                    CrossSectionWeighting[0] = 10.8788
+                    CrossSectionWeighting[0] = 10.902
                 elif ReweightFile.mt_Selected.numGenJets == 2:
-                    CrossSectionWeighting[0] = 5.2527
+                    CrossSectionWeighting[0] = 5.258
                 elif ReweightFile.mt_Selected.numGenJets == 3:
-                    CrossSectionWeighting[0] = 3.10898
+                    CrossSectionWeighting[0] = 3.12179
                 elif ReweightFile.mt_Selected.numGenJets == 4:
-                    CrossSectionWeighting[0] = 3.0223
+                    CrossSectionWeighting[0] = 3.0367
         elif (args.year=="2016"):
             if(FileName == "DY.root" and not args.UseInclusiveDY):
                 CrossSectionWeighting[0] = 1.5317
