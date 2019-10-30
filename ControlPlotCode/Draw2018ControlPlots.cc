@@ -13,7 +13,15 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   extraText = "Preliminary";
   lumi_sqrtS = "60 fb^{-1}, 13 TeV";
   
-  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion_2018.root","READ");
+  TFile* HistoFile;
+  if(!UseEmbedded)
+    {
+      HistoFile = new TFile("TemporaryFiles/ControlRegion_2018_MC.root","READ");
+    }
+  else
+    {
+      HistoFile = new TFile("TemporaryFiles/ControlRegion_2018.root","READ");
+    }
 
   TCanvas* Canvas = new TCanvas("Canvas",var.c_str(),550,550);
   Canvas->SetTickx();
@@ -122,22 +130,22 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   Legend->Draw();
   if(UseEmbedded)
     {
-      Canvas->SaveAs(("FinalPlots/"+var+"_Embedded.png").c_str());
-      Canvas->SaveAs(("FinalPlots/"+var+"_Embedded.pdf").c_str());
+      Canvas->SaveAs(("FinalPlots/"+var+"_2018_Embedded.png").c_str());
+      Canvas->SaveAs(("FinalPlots/"+var+"_2018_Embedded.pdf").c_str());
     }
   else
     {
-      Canvas->SaveAs(("FinalPlots/"+var+"_MC.png").c_str());
-      Canvas->SaveAs(("FinalPlots/"+var+"_MC.pdf").c_str());
+      Canvas->SaveAs(("FinalPlots/"+var+"_2018_MC.png").c_str());
+      Canvas->SaveAs(("FinalPlots/"+var+"_2018_MC.pdf").c_str());
     }
   
-  HistoFile->Close();
+  //HistoFile->Close();
 }
 
 void Draw2018ControlPlots()
 {  
 
-  bool UsingEmbedded = false;
+  bool UsingEmbedded = true;
 
   DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}");
   DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta");

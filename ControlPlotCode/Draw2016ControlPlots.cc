@@ -12,7 +12,16 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   extraText = "Preliminary";
   lumi_sqrtS = "35.9 fb^{-1}, 13 TeV";
   
-  TFile* HistoFile = new TFile("TemporaryFiles/ControlRegion_2016.root","READ");
+  TFile* HistoFile;
+  if(!UseEmbedded)
+    {
+      HistoFile = new TFile("TemporaryFiles/ControlRegion_2016_MC.root","READ");
+    }
+  else
+    {
+      HistoFile = new TFile("TemporaryFiles/ControlRegion_2016.root","READ");
+    }
+    
   
   TCanvas* CanvasOne = new TCanvas("Canvas",var.c_str(),550,550);
   CanvasOne->SetTickx();
@@ -21,7 +30,9 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   gStyle->SetOptStat(0);
   TH1F* Data = (TH1F*) HistoFile->Get(("Data_2016_"+var).c_str());
   TH1F* Data_Fake = (TH1F*) HistoFile->Get(("Fake_2016_"+var).c_str());
-  TH1F* DYTT = (TH1F*) HistoFile->Get(("DY_2016_genmatch_tt_"+var).c_str());
+  TH1F* DYTT;
+  if (UseEmbedded) DYTT = (TH1F*) HistoFile->Get(("Embedded_2016_genmatch_tt_"+var).c_str());
+  else DYTT = (TH1F*) HistoFile->Get(("DY_2016_genmatch_tt_"+var).c_str());
   TH1F* DYMM = (TH1F*) HistoFile->Get(("DY_2016_genmatch_low_"+var).c_str());
   TH1F* TT = (TH1F*) HistoFile->Get(("TT_2016_"+var).c_str());  
   //TH1F* WW1L1Nu2Q = (TH1F*) HistoFile->Get("WW1L1Nu2Q_2016");
@@ -123,20 +134,20 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   Legend->Draw();
   if(UseEmbedded)
     {
-      CanvasOne->SaveAs(("FinalPlots/"+var+"_Embedded.png").c_str());
-      CanvasOne->SaveAs(("FinalPlots/"+var+"_Embedded.pdf").c_str());
+      CanvasOne->SaveAs(("FinalPlots/"+var+"_2016_Embedded.png").c_str());
+      CanvasOne->SaveAs(("FinalPlots/"+var+"_2016_Embedded.pdf").c_str());
     }
   else
     {
-      CanvasOne->SaveAs(("FinalPlots/"+var+"_MC.png").c_str());
-      CanvasOne->SaveAs(("FinalPlots/"+var+"_MC.pdf").c_str());
+      CanvasOne->SaveAs(("FinalPlots/"+var+"_2016_MC.png").c_str());
+      CanvasOne->SaveAs(("FinalPlots/"+var+"_2016_MC.pdf").c_str());
     }
-  HistoFile->Close();
+  //HistoFile->Close();
 }
 
 void Draw2016ControlPlots()
 {    
-  bool UsingEmbedded = false;
+  bool UsingEmbedded = true;
   DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}");
   DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta");
   DrawControlPlot("TauPt",UsingEmbedded, "#tau p_{t}");
