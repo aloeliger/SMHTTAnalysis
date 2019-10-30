@@ -336,7 +336,7 @@ def MakeFractions(args):
     ProcessNtuple(args,TTNtuple,TTHistos,[6])
     ProcessNtuple(args,TTNtuple,RealHistos,[1,2,3,4,5])
     if args.year!="2016" and not args.UseMC:
-        ProcessNtuple(args,EmbeddedNtuple,RealHistos,[6],"Embedded")
+        ProcessNtuple(args,EmbeddedNtuple,RealHistos,[5],"Embedded")
 
     #Perform the subtractions
     for Trigger in QCDHistos:
