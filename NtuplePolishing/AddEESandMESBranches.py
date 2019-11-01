@@ -128,8 +128,8 @@ def ApplyEESandMES(File,args):
 
                 #Do correct the EES tau vectors
                 EES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
-                EES_TauVector_UP = TauVector * (1.00 +(EnergyCorrectFactor + 0.03))
-                EES_TauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor - 0.03))
+                EES_TauVector_UP = TauVector * (1.00 +(EnergyCorrectFactor + 0.01))
+                EES_TauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor - 0.01))
                 EES_METVector = GetCorrectedMetVector(TauVector, EES_TauVector, METVector)
                 EES_METVector_UP = GetCorrectedMetVector(TauVector, EES_TauVector_UP, METVector)
                 EES_METVector_DOWN = GetCorrectedMetVector(TauVector, EES_TauVector_DOWN, METVector)
@@ -159,8 +159,8 @@ def ApplyEESandMES(File,args):
 
                 #Do correct the MES
                 MES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
-                MES_TauVector_UP = TauVector * (1.00 + (EnergyCorrectFactor + 0.03))
-                MES_TauVector_DOWN = TauVector * (1.00 + (EnergyCorrectFactor - 0.03))
+                MES_TauVector_UP = TauVector * (1.00 + (EnergyCorrectFactor + 0.01))
+                MES_TauVector_DOWN = TauVector * (1.00 + (EnergyCorrectFactor - 0.01))
                 MES_METVector = GetCorrectedMetVector(TauVector, MES_TauVector, METVector)
                 MES_METVector_UP = GetCorrectedMetVector(TauVector, MES_TauVector_UP, METVector)
                 MES_METVector_DOWN = GetCorrectedMetVector(TauVector, MES_TauVector_DOWN, METVector)
@@ -206,8 +206,8 @@ def ApplyEESandMES(File,args):
 
                 #Do correct the EES tau vectors
                 EES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
-                EES_TauVector_UP = TauVector * (1.00 +(EnergyCorrectFactor + 0.03))
-                EES_TauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor - 0.03))
+                EES_TauVector_UP = TauVector * (1.00 +(EnergyCorrectFactor + 0.01))
+                EES_TauVector_DOWN = TauVector * (1.00+(EnergyCorrectFactor - 0.01))
                 EES_METVector = GetCorrectedMetVector(TauVector, EES_TauVector, METVector)
                 EES_METVector_UP = GetCorrectedMetVector(TauVector, EES_TauVector_UP, METVector)
                 EES_METVector_DOWN = GetCorrectedMetVector(TauVector, EES_TauVector_DOWN, METVector)
@@ -237,8 +237,8 @@ def ApplyEESandMES(File,args):
 
                 #Do correct the MES
                 MES_TauVector = TauVector * (1.00 + EnergyCorrectFactor)
-                MES_TauVector_UP = TauVector * (1.00 + (EnergyCorrectFactor + 0.03))
-                MES_TauVector_DOWN = TauVector * (1.00 + (EnergyCorrectFactor - 0.03))
+                MES_TauVector_UP = TauVector * (1.00 + (EnergyCorrectFactor + 0.01))
+                MES_TauVector_DOWN = TauVector * (1.00 + (EnergyCorrectFactor - 0.01))
                 MES_METVector = GetCorrectedMetVector(TauVector, MES_TauVector, METVector)
                 MES_METVector_UP = GetCorrectedMetVector(TauVector, MES_TauVector_UP, METVector)
                 MES_METVector_DOWN = GetCorrectedMetVector(TauVector, MES_TauVector_DOWN, METVector)
