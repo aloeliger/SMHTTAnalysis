@@ -3,7 +3,7 @@ from tqdm import tqdm
 from array import array
 import argparse
 import FakeFactorConfiguration as cfg
-import AddMTandPZeta
+#import AddMTandPZeta
 import ComputeFF2018.FFcode.ApplyFF as ApplyFF
 
 #Let's try splitting these up by triggers.
@@ -184,7 +184,7 @@ def ClassifyEvent(TheEvent):
     TauVector.SetPtEtaPhiM(TheEvent.pt_2,TheEvent.eta_2,TheEvent.phi_2,TheEvent.m_2)
     METVector.SetPtEtaPhiM(TheEvent.met,0.0,TheEvent.metphi,0.0)
 
-    MT = AddMTandPZeta.CalculateMT(MuVector,METVector)
+    MT = TheEvent.MT
     HiggsPT = (MuVector+TauVector+METVector).Pt()
 
     #zero jet
@@ -249,6 +249,7 @@ def MakeFractions(args):
         dataHistos[Histo].Write()
         RealHistos[Histo].Write()
     FractionFile.Close()   
+    print("Done Writing files...")
 
 def AddFakeFactorWeightings(FileName,args):
     print("Adding deep tau fake factors to "+FileName)    
@@ -407,7 +408,7 @@ def AddFakeFactorWeightings(FileName,args):
             FracTT = 0.0        
 
         m_vis = (MuVector + TauVector).M()
-        TransverseMass = AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
+        TransverseMass = ReweightFile.mt_Selected.MT#AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
         
         if args.IsNegative:
             Modifier = -1.0
