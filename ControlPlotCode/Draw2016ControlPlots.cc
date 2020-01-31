@@ -23,7 +23,7 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
     }
     
   
-  TCanvas* CanvasOne = new TCanvas("Canvas",var.c_str(),550,550);
+  TCanvas* CanvasOne = new TCanvas(("Canvas_"+var).c_str(),var.c_str(),550,550);
   CanvasOne->SetTickx();
   CanvasOne->SetTicky();
 
@@ -35,12 +35,13 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   else DYTT = (TH1F*) HistoFile->Get(("DY_2016_genmatch_tt_"+var).c_str());
   TH1F* DYMM = (TH1F*) HistoFile->Get(("DY_2016_genmatch_low_"+var).c_str());
   TH1F* TT = (TH1F*) HistoFile->Get(("TT_2016_"+var).c_str());  
-  //TH1F* WW1L1Nu2Q = (TH1F*) HistoFile->Get("WW1L1Nu2Q_2016");
-  //TH1F* WZ1L1Nu2Q = (TH1F*) HistoFile->Get("WZ1L1Nu2Q_2016");
-  //TH1F* WZ2L2Q = (TH1F*) HistoFile->Get("WZ2L2Q_2016");
-  //TH1F* WZJLLLNu = (TH1F*) HistoFile->Get("WZJLLLNu_2016");
-  //TH1F* ZZ2L2Q = (TH1F*) HistoFile->Get("ZZ2L2Q_2016");
-  //TH1F* ZZ4L = (TH1F*) HistoFile->Get("ZZ4L_2016");
+  TH1F* WW1L1Nu2Q = (TH1F*) HistoFile->Get(("WW1L1Nu2Q_2016_"+var).c_str());
+  TH1F* WZ1L1Nu2Q = (TH1F*) HistoFile->Get(("WZ1L1Nu2Q_2016_"+var).c_str());
+  TH1F* WZ2L2Q = (TH1F*) HistoFile->Get(("WZ2L2Q_2016_"+var).c_str());
+  TH1F* WZ3L1Nu = (TH1F*) HistoFile->Get(("WZ3L1Nu_2016_"+var).c_str());
+  TH1F* ZZ2L2Q = (TH1F*) HistoFile->Get(("ZZ2L2Q_2016_"+var).c_str());
+  TH1F* ZZ4L = (TH1F*) HistoFile->Get(("ZZ4L_2016_"+var).c_str());
+  TH1F* VV2L2Nu = (TH1F*) HistoFile->Get(("VV2L2Nu_2016_"+var).c_str());
   TH1F* ST_tW_top = (TH1F*) HistoFile->Get(("ST_tW_top_2016_"+var).c_str());
   TH1F* ggH = (TH1F*) HistoFile->Get(("ggH_2016_"+var).c_str());
   TH1F* VBF = (TH1F*) HistoFile->Get(("VBF_2016_"+var).c_str());
@@ -50,15 +51,21 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* WW = (TH1F*) HistoFile->Get(("WW_2016_"+var).c_str());
   TH1F* WZ = (TH1F*) HistoFile->Get(("WZ_2016_"+var).c_str());
   TH1F* ZZ = (TH1F*) HistoFile->Get(("ZZ_2016_"+var).c_str());
+  TH1F* GGHWW = (TH1F*) HistoFile->Get(("GGHWW_2016_"+var).c_str());
+  TH1F* VBFHWW = (TH1F*) HistoFile->Get(("VBFHWW_2016_"+var).c_str());
+  TH1F* WHWW = (TH1F*) HistoFile->Get(("WHWW_2016_"+var).c_str());
+  TH1F* ZHWW = (TH1F*) HistoFile->Get(("ZHWW_2016_"+var).c_str());
+  TH1F* GGZHWW = (TH1F*) HistoFile->Get(("GGZHWW_2016_"+var).c_str());
 
-  TH1F* VVFinal = (TH1F*) WW->Clone();
-  //VVFinal->Add(WZ1L1Nu2Q);
-  //VVFinal->Add(WZ2L2Q);
-  //VVFinal->Add(WZJLLLNu);
-  //VVFinal->Add(ZZ2L2Q);
-  //VVFinal->Add(ZZ4L);  
-  VVFinal->Add(WZ);
-  VVFinal->Add(ZZ);
+  TH1F* VVFinal = (TH1F*) VV2L2Nu->Clone();
+  VVFinal->Add(WZ1L1Nu2Q);
+  VVFinal->Add(WZ2L2Q);
+  VVFinal->Add(WZ3L1Nu);
+  VVFinal->Add(ZZ2L2Q);
+  VVFinal->Add(ZZ4L);  
+  VVFinal->Add(WW1L1Nu2Q);
+  //VVFinal->Add(WZ);
+  //VVFinal->Add(ZZ);
   
   TH1F* VHFinal = (TH1F*) WHPlus->Clone();
   VHFinal->Add(WHMinus);
@@ -67,7 +74,12 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* Other = (TH1F*) VHFinal->Clone();
   Other->Add(ggH);
   Other->Add(VBF);
+  Other->Add(VHFinal);
   Other->Add(VVFinal);
+  Other->Add(GGHWW);
+  Other->Add(VBFHWW);
+  Other->Add(WHWW);
+  Other->Add(ZHWW);
 
   TH1F* AllHiggs = (TH1F*) VHFinal->Clone();
   AllHiggs->Add(ggH);

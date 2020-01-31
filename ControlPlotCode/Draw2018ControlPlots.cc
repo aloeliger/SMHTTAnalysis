@@ -37,24 +37,36 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* TTToHadronic = (TH1F*) HistoFile->Get(("TTToHadronic_2018_"+var).c_str());
   TH1F* TTTo2L2Nu = (TH1F*) HistoFile->Get(("TTTo2L2Nu_2018_"+var).c_str());
   TH1F* TTToSemiLeptonic = (TH1F*) HistoFile->Get(("TTToSemiLeptonic_2018_"+var).c_str());  
-  TH1F* WW = (TH1F*) HistoFile->Get(("WW_2018_"+var).c_str());
-  TH1F* WZ = (TH1F*) HistoFile->Get(("WZ_2018_"+var).c_str());
-  TH1F* ZZ = (TH1F*) HistoFile->Get(("ZZ_2018_"+var).c_str());
+  TH1F* WW1L1Nu2Q = (TH1F*) HistoFile->Get(("WW1L1Nu2Q_2018_"+var).c_str());
+  TH1F* WZ1L1Nu2Q = (TH1F*) HistoFile->Get(("WZ1L1Nu2Q_2018_"+var).c_str());
+  TH1F* WZ2L2Q = (TH1F*) HistoFile->Get(("WZ2L2Q_2018_"+var).c_str());
+  TH1F* WZ3L1Nu = (TH1F*) HistoFile->Get(("WZ3L1Nu_2018_"+var).c_str());
+  TH1F* ZZ2L2Q = (TH1F*) HistoFile->Get(("ZZ2L2Q_2018_"+var).c_str());
+  TH1F* ZZ4L = (TH1F*) HistoFile->Get(("ZZ4L_2018_"+var).c_str());
+  TH1F* VV2L2Nu = (TH1F*) HistoFile->Get(("VV2L2Nu_2018_"+var).c_str());
   TH1F* ST_tW_top = (TH1F*) HistoFile->Get(("ST_tW_top_2018_"+var).c_str());
   TH1F* ggH = (TH1F*) HistoFile->Get(("ggH_2018_"+var).c_str());
   TH1F* VBF = (TH1F*) HistoFile->Get(("VBF_2018_"+var).c_str());
   TH1F* WHPlus = (TH1F*) HistoFile->Get(("WHPlus_2018_"+var).c_str());
   TH1F* WHMinus = (TH1F*) HistoFile->Get(("WHMinus_2018_"+var).c_str());
   TH1F* ZH = (TH1F*) HistoFile->Get(("ZH_2018_"+var).c_str());
+  TH1F* GGHWW = (TH1F*) HistoFile->Get(("GGHWW_2018_"+var).c_str());
+  TH1F* VBFHWW = (TH1F*) HistoFile->Get(("VBFHWW_2018_"+var).c_str());
+  TH1F* WHWW = (TH1F*) HistoFile->Get(("WHWW_2018_"+var).c_str());
+  TH1F* ZHWW = (TH1F*) HistoFile->Get(("ZHWW_2018_"+var).c_str());
+  TH1F* GGZHWW = (TH1F*) HistoFile->Get(("GGZHWW_2018_"+var).c_str());
 
   TH1F* TTFinal = (TH1F*) TTToHadronic->Clone();
   TTFinal->Add(TTTo2L2Nu);
   TTFinal->Add(TTToSemiLeptonic);
 
-  TH1F* VVFinal = (TH1F*) WW->Clone();
-  VVFinal->Add(WZ);
-  VVFinal->Add(ZZ);
-  VVFinal->Add(ST_tW_top);
+  TH1F* VVFinal = (TH1F*) VV2L2Nu->Clone();
+  VVFinal->Add(WZ1L1Nu2Q);
+  VVFinal->Add(WZ2L2Q);
+  VVFinal->Add(WZ3L1Nu);
+  VVFinal->Add(ZZ2L2Q);
+  VVFinal->Add(ZZ4L);  
+  VVFinal->Add(WW1L1Nu2Q);
   
   TH1F* VHFinal = (TH1F*) WHPlus->Clone();
   VHFinal->Add(WHMinus);
@@ -63,7 +75,12 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* Other = (TH1F*) VHFinal->Clone();
   Other->Add(ggH);
   Other->Add(VBF);
+  Other->Add(VHFinal);
   Other->Add(VVFinal);
+  Other->Add(GGHWW);
+  Other->Add(VBFHWW);
+  Other->Add(WHWW);
+  Other->Add(ZHWW);
 
   TH1F* AllHiggs = (TH1F*) VHFinal->Clone();
   AllHiggs->Add(ggH);
