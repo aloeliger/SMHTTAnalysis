@@ -6,45 +6,51 @@ import FakeFactorConfiguration as cfg
 #import AddMTandPZeta
 import ComputeFF2018.FFcode.ApplyFF as ApplyFF
 
+#m_svBinning = array('d',[0.0,50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0,350.0])
+#m_svBins = [0.0,50.0,70.0,90.0,110.0,130.0,150.0,290.0,350.0]
+m_svBins = [0.0,50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0,350.0]
+nBins = len(m_svBins)-1
+theBinning = array('d',m_svBins)
+
 #Let's try splitting these up by triggers.
 # see if that helps us deal with the the problem in the 2017 cross trigger?
-WFracHisto = ROOT.TH2F("WFrac","WFrac",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto = ROOT.TH2F("QCDFrac","QCDFrac",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto = ROOT.TH2F("TTFrac","TTFrac",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto = ROOT.TH2F("DataFrac","DataFrac",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto = ROOT.TH2F("RealFrac","RealFrac",20,0.0,500.0,7,1.0,8.0)
+WFracHisto = ROOT.TH2F("WFrac","WFrac",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto = ROOT.TH2F("QCDFrac","QCDFrac",nBins,theBinning,7,1.0,8.0)
+TTFracHisto = ROOT.TH2F("TTFrac","TTFrac",nBins,theBinning,7,1.0,8.0)
+dataFracHisto = ROOT.TH2F("DataFrac","DataFrac",nBins,theBinning,7,1.0,8.0)
+RealFracHisto = ROOT.TH2F("RealFrac","RealFrac",nBins,theBinning,7,1.0,8.0)
 
 #2016 triggers
-WFracHisto_Trigger22 = ROOT.TH2F("WFrac_Trigger22","WFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto_Trigger22 = ROOT.TH2F("QCDFrac_Trigger22","QCDFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto_Trigger22 = ROOT.TH2F("TTFrac_Trigger22","TTFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto_Trigger22 = ROOT.TH2F("DataFrac_Trigger22","DataFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto_Trigger22 = ROOT.TH2F("RealFrac_Trigger22","RealFrac_Trigger22",20,0.0,500.0,7,1.0,8.0)
+WFracHisto_Trigger22 = ROOT.TH2F("WFrac_Trigger22","WFrac_Trigger22",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto_Trigger22 = ROOT.TH2F("QCDFrac_Trigger22","QCDFrac_Trigger22",nBins,theBinning,7,1.0,8.0)
+TTFracHisto_Trigger22 = ROOT.TH2F("TTFrac_Trigger22","TTFrac_Trigger22",nBins,theBinning,7,1.0,8.0)
+dataFracHisto_Trigger22 = ROOT.TH2F("DataFrac_Trigger22","DataFrac_Trigger22",nBins,theBinning,7,1.0,8.0)
+RealFracHisto_Trigger22 = ROOT.TH2F("RealFrac_Trigger22","RealFrac_Trigger22",nBins,theBinning,7,1.0,8.0)
 
-WFracHisto_Trigger1920 = ROOT.TH2F("WFrac_Trigger1920","WFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto_Trigger1920 = ROOT.TH2F("QCDFrac_Trigger1920","QCDFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto_Trigger1920 = ROOT.TH2F("TTFrac_Trigger1920","TTFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto_Trigger1920 = ROOT.TH2F("DataFrac_Trigger1920","DataFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto_Trigger1920 = ROOT.TH2F("RealFrac_Trigger1920","RealFrac_Trigger1920",20,0.0,500.0,7,1.0,8.0)
+WFracHisto_Trigger1920 = ROOT.TH2F("WFrac_Trigger1920","WFrac_Trigger1920",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto_Trigger1920 = ROOT.TH2F("QCDFrac_Trigger1920","QCDFrac_Trigger1920",nBins,theBinning,7,1.0,8.0)
+TTFracHisto_Trigger1920 = ROOT.TH2F("TTFrac_Trigger1920","TTFrac_Trigger1920",nBins,theBinning,7,1.0,8.0)
+dataFracHisto_Trigger1920 = ROOT.TH2F("DataFrac_Trigger1920","DataFrac_Trigger1920",nBins,theBinning,7,1.0,8.0)
+RealFracHisto_Trigger1920 = ROOT.TH2F("RealFrac_Trigger1920","RealFrac_Trigger1920",nBins,theBinning,7,1.0,8.0)
 
 #2017 & 2018 triggers
-WFracHisto_Trigger24 = ROOT.TH2F("WFrac_Trigger24","WFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto_Trigger24 = ROOT.TH2F("QCDFrac_Trigger24","QCDFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto_Trigger24 = ROOT.TH2F("TTFrac_Trigger24","TTFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto_Trigger24 = ROOT.TH2F("DataFrac_Trigger24","DataFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto_Trigger24 = ROOT.TH2F("RealFrac_Trigger24","RealFrac_Trigger24",20,0.0,500.0,7,1.0,8.0)
+WFracHisto_Trigger24 = ROOT.TH2F("WFrac_Trigger24","WFrac_Trigger24",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto_Trigger24 = ROOT.TH2F("QCDFrac_Trigger24","QCDFrac_Trigger24",nBins,theBinning,7,1.0,8.0)
+TTFracHisto_Trigger24 = ROOT.TH2F("TTFrac_Trigger24","TTFrac_Trigger24",nBins,theBinning,7,1.0,8.0)
+dataFracHisto_Trigger24 = ROOT.TH2F("DataFrac_Trigger24","DataFrac_Trigger24",nBins,theBinning,7,1.0,8.0)
+RealFracHisto_Trigger24 = ROOT.TH2F("RealFrac_Trigger24","RealFrac_Trigger24",nBins,theBinning,7,1.0,8.0)
 
-WFracHisto_Trigger27 = ROOT.TH2F("WFrac_Trigger27","WFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto_Trigger27 = ROOT.TH2F("QCDFrac_Trigger27","QCDFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto_Trigger27 = ROOT.TH2F("TTFrac_Trigger27","TTFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto_Trigger27 = ROOT.TH2F("DataFrac_Trigger27","DataFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto_Trigger27 = ROOT.TH2F("RealFrac_Trigger27","RealFrac_Trigger27",20,0.0,500.0,7,1.0,8.0)
+WFracHisto_Trigger27 = ROOT.TH2F("WFrac_Trigger27","WFrac_Trigger27",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto_Trigger27 = ROOT.TH2F("QCDFrac_Trigger27","QCDFrac_Trigger27",nBins,theBinning,7,1.0,8.0)
+TTFracHisto_Trigger27 = ROOT.TH2F("TTFrac_Trigger27","TTFrac_Trigger27",nBins,theBinning,7,1.0,8.0)
+dataFracHisto_Trigger27 = ROOT.TH2F("DataFrac_Trigger27","DataFrac_Trigger27",nBins,theBinning,7,1.0,8.0)
+RealFracHisto_Trigger27 = ROOT.TH2F("RealFrac_Trigger27","RealFrac_Trigger27",nBins,theBinning,7,1.0,8.0)
 
-WFracHisto_Trigger2027 = ROOT.TH2F("WFrac_Trigger2027","WFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
-QCDFracHisto_Trigger2027 = ROOT.TH2F("QCDFrac_Trigger2027","QCDFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
-TTFracHisto_Trigger2027 = ROOT.TH2F("TTFrac_Trigger2027","TTFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
-dataFracHisto_Trigger2027 = ROOT.TH2F("DataFrac_Trigger2027","DataFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
-RealFracHisto_Trigger2027 = ROOT.TH2F("RealFrac_Trigger2027","RealFrac_Trigger2027",20,0.0,500.0,7,1.0,8.0)
+WFracHisto_Trigger2027 = ROOT.TH2F("WFrac_Trigger2027","WFrac_Trigger2027",nBins,theBinning,7,1.0,8.0)
+QCDFracHisto_Trigger2027 = ROOT.TH2F("QCDFrac_Trigger2027","QCDFrac_Trigger2027",nBins,theBinning,7,1.0,8.0)
+TTFracHisto_Trigger2027 = ROOT.TH2F("TTFrac_Trigger2027","TTFrac_Trigger2027",nBins,theBinning,7,1.0,8.0)
+dataFracHisto_Trigger2027 = ROOT.TH2F("DataFrac_Trigger2027","DataFrac_Trigger2027",nBins,theBinning,7,1.0,8.0)
+RealFracHisto_Trigger2027 = ROOT.TH2F("RealFrac_Trigger2027","RealFrac_Trigger2027",nBins,theBinning,7,1.0,8.0)
 
 WHistos = {
     "Inclusive": WFracHisto,
@@ -134,18 +140,14 @@ def MakeAllNtuples(args):
 
 def ProcessNtuple(args,Ntuple,HistogramFamily,GenMatches,Sample=""):
     for i in tqdm(range(Ntuple.GetEntries())):
-        Ntuple.GetEntry(i)
-        MuVector = ROOT.TLorentzVector()
-        TauVector = ROOT.TLorentzVector()
-        MuVector.SetPtEtaPhiM(Ntuple.pt_1,Ntuple.eta_1,Ntuple.phi_1,Ntuple.m_1)
-        TauVector.SetPtEtaPhiM(Ntuple.pt_2,Ntuple.eta_2,Ntuple.phi_2,Ntuple.m_2)
+        Ntuple.GetEntry(i)        
         #print(Ntuple.gen_match_2)
         #print(GenMatches)
         #print(Ntuple.gen_match_2 in GenMatches)
         if Ntuple.gen_match_2 in GenMatches:
             #print("Match!")
-            HistogramFamily[ClassifyTrigger(args,Ntuple,Sample)].Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
-            HistogramFamily["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
+            HistogramFamily[ClassifyTrigger(args,Ntuple,Sample)].Fill(Ntuple.m_sv,ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
+            HistogramFamily["Inclusive"].Fill(Ntuple.m_sv,ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
 
 def ClassifyTrigger(args,TheEvent,Sample=""):
     if args.year == "2017" or args.year == "2018":
@@ -226,21 +228,20 @@ def MakeFractions(args):
         ProcessNtuple(args,EmbeddedNtuple,RealHistos,[5],"Embedded")
     #process the data ntuple
     for i in tqdm(range(DataNtuple.GetEntries())):
-        DataNtuple.GetEntry(i)
-        MuVector = ROOT.TLorentzVector()
-        TauVector = ROOT.TLorentzVector()
-        MuVector.SetPtEtaPhiM(DataNtuple.pt_1,DataNtuple.eta_1,DataNtuple.phi_1,DataNtuple.m_1)
-        TauVector.SetPtEtaPhiM(DataNtuple.pt_2,DataNtuple.eta_2,DataNtuple.phi_2,DataNtuple.m_2)
-        QCDHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
-        QCDHistos["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
-        dataHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))        
-        dataHistos["Inclusive"].Fill((TauVector+MuVector).M(),ClassifyEvent(DataNtuple))
+        DataNtuple.GetEntry(i)        
+        QCDHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
+        QCDHistos["Inclusive"].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
+        dataHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))        
+        dataHistos["Inclusive"].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
 
     #Perform the subtractions
     for Trigger in QCDHistos:
         QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
         QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
         QCDHistos[Trigger].Add(WHistos[Trigger],-1)
+
+    print("Finalizing Histograms")
+    FinalizeFractionHistos(QCDHistos,WHistos,TTHistos)
 
     print("Writing files...")
     FractionFile = ROOT.TFile("Weightings/FFFractionFile"+args.year+".root","RECREATE")
@@ -252,6 +253,59 @@ def MakeFractions(args):
         RealHistos[Histo].Write()
     FractionFile.Close()   
     print("Done Writing files...")
+
+#Okay, let's make a change for our benefit reading this,
+#let's change it so that the fractions of this are calculated in place in the 
+#histograms that should represent them.
+def FinalizeFractionHistos(QCDHistoFamily,WHistoFamily,TTHistoFamily):
+    # let's pick out a histogram
+    for Trigger in QCDHistoFamily:
+        QCDHisto = QCDHistoFamily[Trigger].Clone()
+        WHisto = WHistoFamily[Trigger].Clone()
+        TTHisto = TTHistoFamily[Trigger].Clone()
+        QCDHisto.Reset()
+        WHisto.Reset()
+        TTHisto.Reset()
+        #print('\n'+Trigger)
+        #loop over X
+        for j in range(1,QCDHisto.GetYaxis().GetNbins()+1):
+            for i in range(1,QCDHisto.GetXaxis().GetNbins()+1):            
+                QCDContribution = QCDHistoFamily[Trigger].GetBinContent(i,j)
+                if QCDContribution < 0:
+                    QCDContribution = 0
+                #print("i,j: "+str(i)+","+str(j))
+                #print("QCD: "+str(QCDContribution))
+                #print("W: "+str(WHistoFamily[Trigger].GetBinContent(i,j)))
+                #print("TT: "+str(TTHistoFamily[Trigger].GetBinContent(i,j)))
+                Denom = QCDContribution + WHistoFamily[Trigger].GetBinContent(i,j) + TTHistoFamily[Trigger].GetBinContent(i,j)
+                try:
+                    FracQCD = QCDContribution / Denom
+                    FracW = WHistoFamily[Trigger].GetBinContent(i,j) / Denom
+                    FracTT = TTHistoFamily[Trigger].GetBinContent(i,j) / Denom
+                except ZeroDivisionError:
+                    #print("Denom Zero!")
+                    #print("Trigger: "+Trigger+" "+str(i)+","+str(j))
+                    #print("QCD: "+str(QCDHistoFamily[Trigger].GetBinContent(i,j)))
+                    #print("W: "+str(WHistoFamily[Trigger].GetBinContent(i,j)))
+                    #print("TT: "+str(TTHistoFamily[Trigger].GetBinContent(i,j)))
+                    #let's just do some quick estimating
+                    if i <= 2:
+                        FracQCD = 1.0
+                        FracW = 0
+                        FracTT = 0
+                    else:
+                        FracQCD = 0.0
+                        FracW = 1.0
+                        FracTT = 0.0                    
+                #print("FracQCD: "+str(FracQCD))
+                #print("FracW: "+str(FracW))
+                #print("FracTT: "+str(FracTT))
+                QCDHisto.SetBinContent(i,j, FracQCD)
+                WHisto.SetBinContent(i,j, FracW)
+                TTHisto.SetBinContent(i,j, FracTT)
+        QCDHistoFamily[Trigger] = QCDHisto
+        WHistoFamily[Trigger] = WHisto
+        TTHistoFamily[Trigger] = TTHisto
 
 def AddFakeFactorWeightings(FileName,args):
     print("Adding deep tau fake factors to "+FileName)    
@@ -437,32 +491,16 @@ def AddFakeFactorWeightings(FileName,args):
 
         #now we need to compute proper fractions now        
         EventClassification = ClassifyEvent(ReweightFile.mt_Selected)
-        TriggerClassification = ClassifyTrigger(args,ReweightFile.mt_Selected,Sample)        
+        TriggerClassification = ClassifyTrigger(args,ReweightFile.mt_Selected,Sample)                
+        
+        FracQCD = QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
+        FracW = WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
+        FracTT = TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)            
 
-
-        Denom = ( QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
-                  WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) + 
-                  TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) )
-        try:
-            FracQCD = QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
-            FracW = WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom
-            FracTT = TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification) / Denom            
-        except ZeroDivisionError:
-            print("Denom zero!")
-            print("Denom: "+str(Denom))
-            print("QCD Content: "+str(QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
-            print("W Content: "+str(WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification))) 
-            print("TT Content: "+str(TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin((TauVector+MuVector).M()),EventClassification)))
-            print("mass: "+str((TauVector+MuVector).M()))
-            print("Event classification: "+str(EventClassification))
+        if ReweightFile.mt_Selected.njets == 0 and ReweightFile.mt_Selected.met > 60.0:
+            FracW = 1.0
             FracQCD = 0.0
-            FracW = 0.0
             FracTT = 0.0        
-
-        #if FracQCD < 1.0:
-        #    print ("Frac QCD: "+str(FracQCD))
-        #    print ("Frac W: "+str(FracW))
-            print ("Frac TT: "+str(FracTT))
             
         m_vis = (MuVector + TauVector).M()
         TransverseMass = ReweightFile.mt_Selected.MT#AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
@@ -477,76 +515,78 @@ def AddFakeFactorWeightings(FileName,args):
         else:
             Modifier = 1.0
 
-        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                
-        ff_qcd_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','up') * Modifier                
-        ff_qcd_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','down') * Modifier                
-        ff_qcd_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','up') * Modifier                
-        ff_qcd_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','down') * Modifier                
-        ff_qcd_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','up') * Modifier                
-        ff_qcd_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','down') * Modifier                
-        ff_qcd_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','up') * Modifier                
-        ff_qcd_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','down') * Modifier                
-        ff_qcd_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','up') * Modifier                
-        ff_qcd_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','down') * Modifier                
-        ff_qcd_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','up') * Modifier                
-        ff_qcd_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','down') * Modifier                
+        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                
+        #if ReweightFile.mt_Selected.njets == 0:
+        #    print("Event Fake Factor: "+str(Event_Fake_Factor[0]))
+        ff_qcd_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','up') * Modifier                
+        ff_qcd_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','down') * Modifier                
+        ff_qcd_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','up') * Modifier                
+        ff_qcd_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','down') * Modifier                
+        ff_qcd_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','up') * Modifier                
+        ff_qcd_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','down') * Modifier                
+        ff_qcd_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','up') * Modifier                
+        ff_qcd_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','down') * Modifier                
+        ff_qcd_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','up') * Modifier                
+        ff_qcd_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','down') * Modifier                
+        ff_qcd_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','up') * Modifier                
+        ff_qcd_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','down') * Modifier                
         
-        ff_w_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','up') * Modifier                
-        ff_w_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','down') * Modifier                
-        ff_w_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','up') * Modifier                
-        ff_w_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','down') * Modifier                
-        ff_w_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','up') * Modifier                
-        ff_w_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','down') * Modifier                
-        ff_w_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','up') * Modifier                
-        ff_w_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','down') * Modifier            
-        ff_w_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','up') * Modifier                
-        ff_w_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','down') * Modifier                
-        ff_w_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','up') * Modifier                
-        ff_w_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','down') * Modifier            
+        ff_w_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','up') * Modifier                
+        ff_w_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','down') * Modifier            
+        ff_w_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','up') * Modifier                
+        ff_w_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','down') * Modifier                
+        ff_w_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','up') * Modifier                
+        ff_w_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','down') * Modifier                
+        ff_w_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','up') * Modifier                
+        ff_w_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','down') * Modifier            
+        ff_w_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','up') * Modifier                
+        ff_w_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','down') * Modifier                
         
-        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier                
-        ff_tt_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','down') * Modifier                
-        ff_tt_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','up') * Modifier                
-        ff_tt_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','down') * Modifier                
+        ff_w_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','up') * Modifier                
+        ff_w_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','down') * Modifier            
+        
+        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier                
+        ff_tt_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','down') * Modifier                
+        ff_tt_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','up') * Modifier                
+        ff_tt_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','down') * Modifier                
         """
-        mvisclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','up') * Modifier                
-        mvisclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','down') * Modifier
-        mvisclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','up') * Modifier                
-        mvisclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','down') * Modifier                
-        mvisclosure_qcd_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','up') * Modifier                
-        mvisclosure_qcd_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','down') * Modifier
-        mvisclosure_w_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','up') * Modifier                
-        mvisclosure_w_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','down') * Modifier                
-        mvisclosure_qcd_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','up') * Modifier                
-        mvisclosure_qcd_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','down') * Modifier
-        mvisclosure_w_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','up') * Modifier                
-        mvisclosure_w_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','down') * Modifier                
+        mvisclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','up') * Modifier                
+        mvisclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','down') * Modifier
+        mvisclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','up') * Modifier                
+        mvisclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','down') * Modifier                
+        mvisclosure_qcd_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','up') * Modifier                
+        mvisclosure_qcd_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','down') * Modifier
+        mvisclosure_w_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','up') * Modifier                
+        mvisclosure_w_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','down') * Modifier                
+        mvisclosure_qcd_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','up') * Modifier                
+        mvisclosure_qcd_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','down') * Modifier
+        mvisclosure_w_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','up') * Modifier                
+        mvisclosure_w_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','down') * Modifier                
         
-        mvisclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','up') * Modifier                
-        mvisclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','down') * Modifier
+        mvisclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','up') * Modifier                
+        mvisclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','down') * Modifier
         """
 
-        mtclosure_w_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','up') * Modifier                
-        mtclosure_w_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','down') * Modifier                
-        mtclosure_w_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','up') * Modifier                
-        mtclosure_w_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','down') * Modifier                        
+        mtclosure_w_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','up') * Modifier                
+        mtclosure_w_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','down') * Modifier                        
+        mtclosure_w_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','up') * Modifier                
+        mtclosure_w_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','down') * Modifier                        
 
-        lptclosure_xtrg_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd_0jet','up') * Modifier
-        lptclosure_xtrg_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd_0jet','down') * Modifier
-        lptclosure_xtrg_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w_0jet','up') * Modifier
-        lptclosure_xtrg_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w_0jet','down') * Modifier
-        lptclosure_xtrg_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','up') * Modifier
-        lptclosure_xtrg_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','down') * Modifier
+        lptclosure_xtrg_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','up') * Modifier
+        lptclosure_xtrg_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','down') * Modifier
+        lptclosure_xtrg_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','up') * Modifier
+        lptclosure_xtrg_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','down') * Modifier        
+        lptclosure_xtrg_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','up') * Modifier
+        lptclosure_xtrg_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','down') * Modifier
     
-        lptclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd_0jet','up') * Modifier
-        lptclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd_0jet','down') * Modifier
-        lptclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w_0jet','up') * Modifier
-        lptclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w_0jet','down') * Modifier
-        lptclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','up') * Modifier
-        lptclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','down') * Modifier
-        
-        osssclosure_qcd_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd_unc1','up') * Modifier                
-        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd_unc1','down') * Modifier                
+        lptclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','up') * Modifier
+        lptclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','down') * Modifier
+        lptclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','up') * Modifier
+        lptclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','down') * Modifier
+        lptclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','up') * Modifier
+        lptclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','down') * Modifier
+        osssclosure_qcd_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','up') * Modifier                
+        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','down') * Modifier                
 
         FakeFactorBranch.Fill()
         ff_qcd_0jet_unc1_up_Branch.Fill()

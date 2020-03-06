@@ -7,8 +7,11 @@ import os
 
 ntuple_path_2016 = "/data/aloeliger/SMHTT_Selected_2016_AntiIso_Deep/"
 ntuple_path_2017 = "/data/aloeliger/SMHTT_Selected_2017_AntiIso_Deep/"
-#ntuple_path_2018 = "/data/aloeliger/SMHTT_Selected_2018_AntiIso/"
 ntuple_path_2018 = "/data/aloeliger/SMHTT_Selected_2018_AntiIso_Deep/"
+
+#ntuple_path_2016 = "/data/aloeliger/SMHTT_Selected_2016_Deep/"
+#ntuple_path_2017 = "/data/aloeliger/SMHTT_Selected_2017_Deep/"
+#ntuple_path_2018 = "/data/aloeliger/SMHTT_Selected_2018_Deep/"
 
 Data_Files_2016 = {'data':'Data.root'}
 Data_Files_2017 = {'data':'Data.root'}

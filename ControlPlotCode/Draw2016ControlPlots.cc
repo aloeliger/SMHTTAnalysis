@@ -74,7 +74,7 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* Other = (TH1F*) VHFinal->Clone();
   Other->Add(ggH);
   Other->Add(VBF);
-  Other->Add(VHFinal);
+  //Other->Add(VHFinal);
   Other->Add(VVFinal);
   Other->Add(GGHWW);
   Other->Add(VBFHWW);
@@ -117,7 +117,7 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 
   TH1F* BackgroundStack_Errors = MakeStackErrors(BackgroundStack);
 
-  TPad* PlotPad = MakeRatioPlot(CanvasOne,BackgroundStack, Data, axisLabel.c_str(),0.7,1.3);
+  TPad* PlotPad = MakeRatioPlot(CanvasOne,BackgroundStack, Data, axisLabel.c_str(),0.5,1.5);
   PlotPad->SetTickx();
   PlotPad->SetTicky();
 
@@ -160,14 +160,15 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 void Draw2016ControlPlots()
 {    
   bool UsingEmbedded = true;
+  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}");
+
   DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}");
   DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta");
   DrawControlPlot("TauPt",UsingEmbedded, "#tau p_{t}");
   DrawControlPlot("TauEta",UsingEmbedded,"#tau #eta");
   DrawControlPlot("MT",UsingEmbedded,"Transverse Mass");
 
-  DrawControlPlot("mvis",UsingEmbedded,"m_{vis}");
-  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}");
+  DrawControlPlot("mvis",UsingEmbedded,"m_{vis}");  
   DrawControlPlot("Njets",UsingEmbedded,"N_{jets}");
   DrawControlPlot("HiggsPt",UsingEmbedded,"Higgs p_{t}");
   DrawControlPlot("MET",UsingEmbedded,"MET");

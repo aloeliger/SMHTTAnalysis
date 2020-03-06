@@ -119,7 +119,7 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 
   TH1F* BackgroundStack_Errors = MakeStackErrors(BackgroundStack);
 
-  TPad* PlotPad = MakeRatioPlot(Canvas,BackgroundStack, Data, axisLabel.c_str(),0.7,1.3);
+  TPad* PlotPad = MakeRatioPlot(Canvas,BackgroundStack, Data, axisLabel.c_str(),0.5,1.5);
   PlotPad->SetTickx();
   PlotPad->SetTicky();
 

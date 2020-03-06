@@ -31,7 +31,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     mvisHisto = ROOT.TH1F(FullHistoName+"_mvis",FullHistoName+"_mvis",30,50.0,200.0)
     msvHisto = ROOT.TH1F(FullHistoName+"_msv",FullHistoName+"_msv",25,50.0,300.0)
     NJetsHisto = ROOT.TH1F(FullHistoName+"_Njets",FullHistoName+"_Njets",6,0.0,6.0)
-    HiggsPtHisto = ROOT.TH1F(FullHistoName+"_HiggsPt",FullHistoName+"_HiggsPt",24,0.0,120.0)
+    HiggsPtHisto = ROOT.TH1F(FullHistoName+"_HiggsPt",FullHistoName+"_HiggsPt",40,0.0,400.0)
     METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",20,0.0,200.0)
     DRHisto = ROOT.TH1F(FullHistoName+"_DR",FullHistoName+"_DR",40,0,6.0)
 
@@ -54,7 +54,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     mvisHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mvis",FullHistoName+"_genmatch_low_mvis",30,50.0,200.0)
     msvHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_msv",FullHistoName+"_genmatch_low_msv",25,50.0,300.0)
     NJetsHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_Njets",FullHistoName+"_genmatch_low_Njets",6,0.0,6.0)
-    HiggsPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_HiggsPt",FullHistoName+"_genmatch_low_HiggsPt",24,0.0,120.0)
+    HiggsPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_HiggsPt",FullHistoName+"_genmatch_low_HiggsPt",40,0.0,400.0)
     METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",20,0.0,200.0)
     DRHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_DR",FullHistoName+"_genmatch_low_DR",40,0,6.0)
     
@@ -77,7 +77,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     mvisHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_mvis",FullHistoName+"_genmatch_tt_mvis",30,50.0,200.0)
     msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_genmatch_tt_msv",25,50.0,300.0)
     NJetsHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_Njets",FullHistoName+"_genmatch_tt_Njets",6,0.0,6.0)
-    HiggsPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_HiggsPt",FullHistoName+"_genmatch_tt_HiggsPt",24,0.0,120.0)
+    HiggsPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_HiggsPt",FullHistoName+"_genmatch_tt_HiggsPt",40,0.0,400.0)
     METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",20,0.0,200.0)
     DRHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_DR",FullHistoName+"_genmatch_tt_DR",40,0,6.0)
     
@@ -91,6 +91,13 @@ def GenerateControlPlots(TheFile,OutFile,args):
     TriggerHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_trigger",FullHistoName+"_genmatch_tt_trigger",3,0.0,3.0)
     METPhiHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_METPhi",FullHistoName+"_genmatch_tt_METPhi",20,-3.14,3.14)
 
+    #Ad-Hoc correction file
+    #zeroJetMetCorrectionFile = ROOT.TFile("CorrectionFile.root")
+    #zeroJetMetCorrection = zeroJetMetCorrectionFile.Get("metCorrections")
+    
+    passesTauCut = 0
+    passesMTCut = 0
+
     #numAccepted=1
     for i in tqdm(range(TheTree.GetEntries())):
         TheTree.GetEntry(i)
@@ -102,25 +109,37 @@ def GenerateControlPlots(TheFile,OutFile,args):
         METVector.SetPtEtaPhiM(TheTree.met,0.0,TheTree.metphi,0.0)
         MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
 
-        TheWeighting = TheTree.FinalWeighting        
+        TheWeighting = TheTree.FinalWeighting                
         if UseFakeFactor:
-            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor        
+            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor      
+            #if TheTree.njets == 0:
+            #    theCorrection = zeroJetMetCorrection.GetBinContent(zeroJetMetCorrection.FindBin(TheTree.met))
+            #    TheWeighting = TheWeighting*theCorrection
 
         #REMOVE ME
-        #if (not(TheTree.njets >= 2 and TheTree.mjj < 350.0)):
-            #continue
-        
-        if(TauVector.Pt() < 30.0):            
+        #if (TheTree.njets != 1):
+        #    continue
+        #if (not(TheTree.njets == 0 and TauVector.DeltaR(MuVector) < 3.0)):
+        #    continue
+
+        #if(args.Year== '2016'):
+        #    if TheHisto == 'Embedded':
+        #        TheWeighting = TheWeighting * 0.947
+            
+        if(TauVector.Pt() < 30.0):                        
             continue                      
+        passesTauCut += 1
+            
 
         MTHisto.Fill(MT,TheWeighting)        
         if TheHisto == "Embedded" or (args.UseMC and TheHisto == "DY" and TheTree.gen_match_2 == 5):
             MTHisto_DYtt.Fill(MT,TheWeighting)
         if TheHisto=="DY" and TheTree.gen_match_2 < 5:
             MTHisto_DYll.Fill(MT,TheWeighting)        
-        
+                    
         if(MT > 50.0):
             continue
+        passesMTCut+=1
         
         #print("FinalWeight #"+str(numAccepted)+": "+str(TheWeighting))
         #numAccepted+=1
@@ -307,6 +326,8 @@ def GenerateControlPlots(TheFile,OutFile,args):
         
         METPhiHisto_DYll.Write()
         TriggerHisto_DYll.Write()
+    print("Passes Tau Cut: "+str(passesTauCut))
+    print("Passes MT Cut: "+str(passesMTCut))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate control plots.")
