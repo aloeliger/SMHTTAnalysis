@@ -4,7 +4,7 @@
 #include "/afs/cern.ch/user/a/aloelige/private/ScriptsAndMacros/MakeRatioPlot.cc"
 #include "/afs/cern.ch/user/a/aloelige/private/ScriptsAndMacros/MakeStackErrors.cc"
 
-void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
+void DrawControlPlot(string var, bool UseEmbedded,string axisLabel, bool isAntiIso)
 {
   setTDRStyle();
 
@@ -29,7 +29,8 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 
   gStyle->SetOptStat(0);
   TH1F* Data = (TH1F*) HistoFile->Get(("Data_2016_"+var).c_str());
-  TH1F* Data_Fake = (TH1F*) HistoFile->Get(("Fake_2016_"+var).c_str());
+  TH1F* Data_Fake;
+  if (not isAntiIso) Data_Fake  = (TH1F*) HistoFile->Get(("Fake_2016_"+var).c_str());
   TH1F* DYTT;
   if (UseEmbedded) DYTT = (TH1F*) HistoFile->Get(("Embedded_2016_genmatch_tt_"+var).c_str());
   else DYTT = (TH1F*) HistoFile->Get(("DY_2016_genmatch_tt_"+var).c_str());
@@ -51,11 +52,21 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   TH1F* WW = (TH1F*) HistoFile->Get(("WW_2016_"+var).c_str());
   TH1F* WZ = (TH1F*) HistoFile->Get(("WZ_2016_"+var).c_str());
   TH1F* ZZ = (TH1F*) HistoFile->Get(("ZZ_2016_"+var).c_str());
-  TH1F* GGHWW = (TH1F*) HistoFile->Get(("GGHWW_2016_"+var).c_str());
-  TH1F* VBFHWW = (TH1F*) HistoFile->Get(("VBFHWW_2016_"+var).c_str());
-  TH1F* WHWW = (TH1F*) HistoFile->Get(("WHWW_2016_"+var).c_str());
-  TH1F* ZHWW = (TH1F*) HistoFile->Get(("ZHWW_2016_"+var).c_str());
-  TH1F* GGZHWW = (TH1F*) HistoFile->Get(("GGZHWW_2016_"+var).c_str());
+  TH1F* GGHWW;
+  TH1F* VBFHWW;
+  TH1F* WHWW;
+  TH1F* ZHWW;
+  TH1F* GGZHWW;
+  if (not isAntiIso)
+    {
+      GGHWW = (TH1F*) HistoFile->Get(("GGHWW_2016_"+var).c_str());
+      VBFHWW = (TH1F*) HistoFile->Get(("VBFHWW_2016_"+var).c_str());
+      WHWW = (TH1F*) HistoFile->Get(("WHWW_2016_"+var).c_str());
+      ZHWW = (TH1F*) HistoFile->Get(("ZHWW_2016_"+var).c_str());
+      GGZHWW = (TH1F*) HistoFile->Get(("GGZHWW_2016_"+var).c_str());
+    }
+  TH1F* W;
+  if (isAntiIso) W  = (TH1F*) HistoFile->Get(("W_2016_"+var).c_str());
 
   TH1F* VVFinal = (TH1F*) VV2L2Nu->Clone();
   VVFinal->Add(WZ1L1Nu2Q);
@@ -76,20 +87,32 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   Other->Add(VBF);
   //Other->Add(VHFinal);
   Other->Add(VVFinal);
-  Other->Add(GGHWW);
-  Other->Add(VBFHWW);
-  Other->Add(WHWW);
-  Other->Add(ZHWW);
+  if (not isAntiIso)
+    {
+      Other->Add(GGHWW);
+      Other->Add(VBFHWW);
+      Other->Add(WHWW);
+      Other->Add(ZHWW);
+    }
 
   TH1F* AllHiggs = (TH1F*) VHFinal->Clone();
   AllHiggs->Add(ggH);
   AllHiggs->Add(VBF);
 
+
   Data->SetMarkerStyle(20);
   Data->Sumw2();
   
-  Data_Fake->SetLineColor(kBlack);
-  Data_Fake->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+  if(not isAntiIso)
+    {
+      Data_Fake->SetLineColor(kBlack);
+      Data_Fake->SetFillColor(TColor::GetColor("#ffccff"));//FakesColor->GetNumber());
+    }
+  if (isAntiIso)
+    {
+      W->SetLineColor(kBlack);
+      W->SetFillColor(TColor::GetColor("#ffccff"));
+    }
     
   DYTT->SetLineColor(kBlack);
   DYTT->SetFillColor(TColor::GetColor("#ffcc66"));
@@ -104,12 +127,19 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   Other->SetFillColor(TColor::GetColor("#12cadd"));
   
   AllHiggs->SetLineColor(kRed);
-  AllHiggs->Scale(30);
+  AllHiggs->Scale(30);  
 
-  std::cout<<"Fake Background Integral: "<<Data_Fake->Integral()<<std::endl;
+  if(not isAntiIso) std::cout<<"Fake Background Integral: "<<Data_Fake->Integral()<<std::endl;
 
   THStack* BackgroundStack = new THStack("BackgroundStack","BackgroundStack");  
-  BackgroundStack->Add(Data_Fake,"hist");  
+  if (not isAntiIso)
+    {
+      BackgroundStack->Add(Data_Fake,"hist");  
+    }
+  if (isAntiIso)
+    {
+      BackgroundStack->Add(W,"hist");
+    }
   BackgroundStack->Add(TT,"hist");
   BackgroundStack->Add(DYMM,"hist");
   BackgroundStack->Add(Other,"hist");
@@ -140,7 +170,14 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
   Legend->AddEntry(Other,"Other","f");  
   Legend->AddEntry(DYMM,"DY #rightarrow ll","f");  
   Legend->AddEntry(TT,"t#bar{t}","f");  
-  Legend->AddEntry(Data_Fake,"Fakes","f");
+  if (not isAntiIso)
+    {
+      Legend->AddEntry(Data_Fake,"Fakes","f");
+    }
+  if (isAntiIso)
+    {
+      Legend->AddEntry(W,"W+Jets","f");
+    }
   Legend->AddEntry(AllHiggs,"All Higgs (#times 30)","l");
 
   Legend->Draw();
@@ -160,27 +197,29 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 void Draw2016ControlPlots()
 {    
   bool UsingEmbedded = true;
-  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}");
+  bool isAntiIso = false;
 
-  DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}");
-  DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta");
-  DrawControlPlot("TauPt",UsingEmbedded, "#tau p_{t}");
-  DrawControlPlot("TauEta",UsingEmbedded,"#tau #eta");
-  DrawControlPlot("MT",UsingEmbedded,"Transverse Mass");
+  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}",isAntiIso);
 
-  DrawControlPlot("mvis",UsingEmbedded,"m_{vis}");  
-  DrawControlPlot("Njets",UsingEmbedded,"N_{jets}");
-  DrawControlPlot("HiggsPt",UsingEmbedded,"Higgs p_{t}");
-  DrawControlPlot("MET",UsingEmbedded,"MET");
-  DrawControlPlot("DR",UsingEmbedded,"#Delta r_{#mu,#tau}");
+  DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}",isAntiIso);
+  DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta",isAntiIso);
+  DrawControlPlot("TauPt",UsingEmbedded, "#tau p_{t}",isAntiIso);
+  DrawControlPlot("TauEta",UsingEmbedded,"#tau #eta",isAntiIso);
+  DrawControlPlot("MT",UsingEmbedded,"Transverse Mass",isAntiIso);
 
-  DrawControlPlot("mjj",UsingEmbedded,"m_{jj}");
-  DrawControlPlot("detajj",UsingEmbedded,"#Delta#eta_{jj}");
-  DrawControlPlot("j1pt",UsingEmbedded,"p_{t} j_{1}");
-  DrawControlPlot("j1eta",UsingEmbedded,"#eta j_{1}");
-  DrawControlPlot("j2pt",UsingEmbedded,"p_{t} j_{2}");
-  DrawControlPlot("j2eta",UsingEmbedded,"#eta j_{2}");
+  DrawControlPlot("mvis",UsingEmbedded,"m_{vis}",isAntiIso);
+  DrawControlPlot("Njets",UsingEmbedded,"N_{jets}",isAntiIso);
+  DrawControlPlot("HiggsPt",UsingEmbedded,"Higgs p_{t}",isAntiIso);
+  DrawControlPlot("MET",UsingEmbedded,"MET",isAntiIso);
+  DrawControlPlot("DR",UsingEmbedded,"#Delta r_{#mu,#tau}",isAntiIso);
 
-  DrawControlPlot("METPhi",UsingEmbedded,"MET_{#phi}");      
-  DrawControlPlot("trigger",UsingEmbedded,"trigger");  
+  DrawControlPlot("mjj",UsingEmbedded,"m_{jj}",isAntiIso);
+  DrawControlPlot("detajj",UsingEmbedded,"#Delta#eta_{jj}",isAntiIso);
+  DrawControlPlot("j1pt",UsingEmbedded,"p_{t} j_{1}",isAntiIso);
+  DrawControlPlot("j1eta",UsingEmbedded,"#eta j_{1}",isAntiIso);
+  DrawControlPlot("j2pt",UsingEmbedded,"p_{t} j_{2}",isAntiIso);
+  DrawControlPlot("j2eta",UsingEmbedded,"#eta j_{2}",isAntiIso);
+
+  DrawControlPlot("METPhi",UsingEmbedded,"MET_{#phi}",isAntiIso);      
+  DrawControlPlot("trigger",UsingEmbedded,"trigger",isAntiIso);  
 }

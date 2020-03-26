@@ -11,7 +11,7 @@ void DrawControlPlot(string var, bool UseEmbedded,string axisLabel)
 
   writeExtraText = true;
   extraText = "Preliminary";
-  lumi_sqrtS = "60 fb^{-1}, 13 TeV";
+  lumi_sqrtS = "59.7 fb^{-1}, 13 TeV";
   
   TFile* HistoFile;
   if(!UseEmbedded)
@@ -164,6 +164,8 @@ void Draw2018ControlPlots()
 
   bool UsingEmbedded = true;
 
+  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}");
+
   DrawControlPlot("MuPt",UsingEmbedded,"#mu p_{t}");
   DrawControlPlot("MuEta",UsingEmbedded,"#mu #eta");
   DrawControlPlot("TauPt",UsingEmbedded, "#tau p_{t}");
@@ -171,7 +173,6 @@ void Draw2018ControlPlots()
   DrawControlPlot("MT",UsingEmbedded,"Transverse Mass");
 
   DrawControlPlot("mvis",UsingEmbedded,"m_{vis}");
-  DrawControlPlot("msv", UsingEmbedded, "m_{#tau#tau}");
   DrawControlPlot("Njets",UsingEmbedded,"N_{jets}");
   DrawControlPlot("HiggsPt",UsingEmbedded,"Higgs p_{t}");
   DrawControlPlot("MET",UsingEmbedded,"MET");

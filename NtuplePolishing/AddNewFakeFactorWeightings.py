@@ -3,12 +3,9 @@ from tqdm import tqdm
 from array import array
 import argparse
 import FakeFactorConfiguration as cfg
-#import AddMTandPZeta
 import ComputeFF2018.FFcode.ApplyFF as ApplyFF
 
-#m_svBinning = array('d',[0.0,50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0,350.0])
-#m_svBins = [0.0,50.0,70.0,90.0,110.0,130.0,150.0,290.0,350.0]
-m_svBins = [0.0,50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0,350.0]
+m_svBins = [0.0,50.0,100.0,150.0,200.0,300.0]
 nBins = len(m_svBins)-1
 theBinning = array('d',m_svBins)
 
@@ -110,6 +107,7 @@ def MakeAllNtuples(args):
         DataFiles = cfg.Data_Files_2016
         WFiles = cfg.W_Files_2016
         TTFiles = cfg.TT_Files_2016
+        OtherFiles = cfg.Other_Files_2016
         EmbeddedFiles = cfg.Embedded_Files_2016
         EmbeddedNtuple = MakeNtuples(FilePath,EmbeddedFiles)
         EmbeddedNtuple.SetNameTitle("Embedded","Embedded")
@@ -118,6 +116,7 @@ def MakeAllNtuples(args):
         DataFiles = cfg.Data_Files_2017
         WFiles = cfg.W_Files_2017
         TTFiles = cfg.TT_Files_2017
+        OtherFiles = cfg.Other_Files_2017
         EmbeddedFiles = cfg.Embedded_Files_2017
         EmbeddedNtuple = MakeNtuples(FilePath,EmbeddedFiles)
         EmbeddedNtuple.SetNameTitle("Embedded","Embedded")
@@ -126,17 +125,23 @@ def MakeAllNtuples(args):
         DataFiles = cfg.Data_Files_2018
         WFiles = cfg.W_Files_2018
         TTFiles = cfg.TT_Files_2018
+        OtherFiles = cfg.Other_Files_2018
         EmbeddedFiles = cfg.Embedded_Files_2017
         EmbeddedNtuple = MakeNtuples(FilePath,EmbeddedFiles)
         EmbeddedNtuple.SetNameTitle("Embedded","Embedded")
     DataNtuple = MakeNtuples(FilePath,DataFiles)
+    print("DataNtuple: "+str(DataNtuple.GetEntries()))
     DataNtuple.SetNameTitle("Data","Data")
     WNtuple = MakeNtuples(FilePath,WFiles)
+    print("W: "+str(WNtuple.GetEntries()))
     WNtuple.SetNameTitle("W","W")
     TTNtuple = MakeNtuples(FilePath,TTFiles)
+    print("TT: "+str(TTNtuple.GetEntries()))
     TTNtuple.SetNameTitle("TT","TT")
+
+    OtherNtuple = MakeNtuples(FilePath,OtherFiles)
         
-    return DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple
+    return DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple,OtherNtuple
 
 def ProcessNtuple(args,Ntuple,HistogramFamily,GenMatches,Sample=""):
     for i in tqdm(range(Ntuple.GetEntries())):
@@ -216,16 +221,19 @@ def ClassifyEvent(TheEvent):
 
 def MakeFractions(args):
     #get ntuples to make fractions with         
-    DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple = MakeAllNtuples(args)    
+    DataNtuple,WNtuple,TTNtuple,EmbeddedNtuple,OtherNtuple = MakeAllNtuples(args)    
     #fill in W and tt histograms
     #ProcessNtuple(WNtuple,WFracHisto,RealFracHisto)
-    #ProcessNtuple(TTNtuple,TTFracHisto,RealFracHisto)
-    ProcessNtuple(args,WNtuple,RealHistos,[1,2,3,4,5])
-    ProcessNtuple(args,WNtuple,WHistos,[6])  
+    #ProcessNtuple(TTNtuple,TTFracHisto,RealFracHisto)     
+    #print("Real TT")
     ProcessNtuple(args,TTNtuple,RealHistos,[1,2,3,4,5])
-    ProcessNtuple(args,TTNtuple,TTHistos,[6])    
+    #print("TT 6:")
+    ProcessNtuple(args,TTNtuple,TTHistos,[6])
+    #ProcessNtuple(args,WNtuple,RealHistos,[1,2,3,4,5]) #there is no "real" in these
+    ProcessNtuple(args,WNtuple,WHistos,[6])      
+    ProcessNtuple(args,OtherNtuple,RealHistos,[1,2,3,4,5,6])
     if not args.UseMC:
-        ProcessNtuple(args,EmbeddedNtuple,RealHistos,[5],"Embedded")
+        ProcessNtuple(args,EmbeddedNtuple,RealHistos,[1,2,3,4,5],"Embedded")
     #process the data ntuple
     for i in tqdm(range(DataNtuple.GetEntries())):
         DataNtuple.GetEntry(i)        
@@ -235,10 +243,24 @@ def MakeFractions(args):
         dataHistos["Inclusive"].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
 
     #Perform the subtractions
+    #CanvasOne = ROOT.TCanvas("CanvasOne","CanvasOne")
+    #print("QCD bins before subtraction:")
+    #QCDHistos["Inclusive"].Draw("COLZ TEXT")
+    #CanvasThree = ROOT.TCanvas("CanvasThree","CanvasThree")
+    #RealHistos["Inclusive"].Draw("COLZ TEXT")
+    #CanvasFour = ROOT.TCanvas("CanvasFour","CanvasFour")
+    #TTHistos["Inclusive"].Draw("COLZ TEXT")
+    #CanvasFive = ROOT.TCanvas("CanvasFive","CanvasFive")
+    #WHistos["Inclusive"].Draw("COLZ TEXT")    
+    #raw_input('Press Enter To Continue...')
     for Trigger in QCDHistos:
         QCDHistos[Trigger].Add(RealHistos[Trigger],-1)
         QCDHistos[Trigger].Add(TTHistos[Trigger],-1)
         QCDHistos[Trigger].Add(WHistos[Trigger],-1)
+    #CanvasTwo = ROOT.TCanvas("CanvasTwo","CanvasTwo")
+    #print("QCD bins after subtraction: ")
+    #QCDHistos["Inclusive"].Draw("COLZ TEXT")
+    #raw_input('Press Enter To Continue...')
 
     print("Finalizing Histograms")
     FinalizeFractionHistos(QCDHistos,WHistos,TTHistos)
@@ -493,14 +515,14 @@ def AddFakeFactorWeightings(FileName,args):
         EventClassification = ClassifyEvent(ReweightFile.mt_Selected)
         TriggerClassification = ClassifyTrigger(args,ReweightFile.mt_Selected,Sample)                
         
-        FracQCD = QCDHistos[TriggerClassification].GetBinContent(QCDHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
-        FracW = WHistos[TriggerClassification].GetBinContent(WHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
-        FracTT = TTHistos[TriggerClassification].GetBinContent(TTHistos[TriggerClassification].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)            
+        FracQCD = QCDHistos["Inclusive"].GetBinContent(QCDHistos["Inclusive"].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
+        FracW = WHistos["Inclusive"].GetBinContent(WHistos["Inclusive"].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)
+        FracTT = TTHistos["Inclusive"].GetBinContent(TTHistos["Inclusive"].GetXaxis().FindBin(ReweightFile.mt_Selected.m_sv),EventClassification)            
 
-        if ReweightFile.mt_Selected.njets == 0 and ReweightFile.mt_Selected.met > 60.0:
-            FracW = 1.0
-            FracQCD = 0.0
-            FracTT = 0.0        
+        #if ReweightFile.mt_Selected.njets == 0 and ReweightFile.mt_Selected.met > 60.0:
+        #    FracW = 1.0
+        #    FracQCD = 0.0
+        #    FracTT = 0.0        
             
         m_vis = (MuVector + TauVector).M()
         TransverseMass = ReweightFile.mt_Selected.MT#AddMTandPZeta.CalculateMT(MuVector,MissingMomentumVector)
@@ -515,9 +537,11 @@ def AddFakeFactorWeightings(FileName,args):
         else:
             Modifier = 1.0
 
-        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                
-        #if ReweightFile.mt_Selected.njets == 0:
-        #    print("Event Fake Factor: "+str(Event_Fake_Factor[0]))
+        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                                
+        """
+        if ReweightFile.mt_Selected.njets == 1:
+            print("Event Fake Factor: "+str(Event_Fake_Factor[0]))
+        """
         ff_qcd_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','up') * Modifier                
         ff_qcd_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','down') * Modifier                
         ff_qcd_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','up') * Modifier                
@@ -544,29 +568,11 @@ def AddFakeFactorWeightings(FileName,args):
         
         ff_w_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','up') * Modifier                
         ff_w_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','down') * Modifier            
-        
-        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier                
+        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier 
+
         ff_tt_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','down') * Modifier                
         ff_tt_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','up') * Modifier                
         ff_tt_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','down') * Modifier                
-        """
-        mvisclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','up') * Modifier                
-        mvisclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_0jet','down') * Modifier
-        mvisclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','up') * Modifier                
-        mvisclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_0jet','down') * Modifier                
-        mvisclosure_qcd_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','up') * Modifier                
-        mvisclosure_qcd_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_1jet','down') * Modifier
-        mvisclosure_w_1jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','up') * Modifier                
-        mvisclosure_w_1jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_1jet','down') * Modifier                
-        mvisclosure_qcd_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','up') * Modifier                
-        mvisclosure_qcd_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_qcd_2jet','down') * Modifier
-        mvisclosure_w_2jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','up') * Modifier                
-        mvisclosure_w_2jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_w_2jet','down') * Modifier                
-        
-        mvisclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','up') * Modifier                
-        mvisclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mvisclosure_tt','down') * Modifier
-        """
-
         mtclosure_w_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','up') * Modifier                
         mtclosure_w_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','down') * Modifier                        
         mtclosure_w_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','up') * Modifier                
@@ -586,7 +592,7 @@ def AddFakeFactorWeightings(FileName,args):
         lptclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','up') * Modifier
         lptclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','down') * Modifier
         osssclosure_qcd_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','up') * Modifier                
-        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','down') * Modifier                
+        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','down') * Modifier           
 
         FakeFactorBranch.Fill()
         ff_qcd_0jet_unc1_up_Branch.Fill()
@@ -619,23 +625,6 @@ def AddFakeFactorWeightings(FileName,args):
         ff_tt_0jet_unc1_down_Branch.Fill()
         ff_tt_0jet_unc2_up_Branch.Fill()
         ff_tt_0jet_unc2_down_Branch.Fill()
-        
-        """
-        mvisclosure_qcd_0jet_up_Branch.Fill()
-        mvisclosure_qcd_0jet_down_Branch.Fill()
-        mvisclosure_w_0jet_up_Branch.Fill()
-        mvisclosure_w_0jet_down_Branch.Fill()
-        mvisclosure_qcd_1jet_up_Branch.Fill()
-        mvisclosure_qcd_1jet_down_Branch.Fill()
-        mvisclosure_w_1jet_up_Branch.Fill()
-        mvisclosure_w_1jet_down_Branch.Fill()
-        mvisclosure_qcd_2jet_up_Branch.Fill()
-        mvisclosure_qcd_2jet_down_Branch.Fill()
-        mvisclosure_w_2jet_up_Branch.Fill()
-        mvisclosure_w_2jet_down_Branch.Fill()
-        mvisclosure_tt_up_Branch.Fill()
-        mvisclosure_tt_down_Branch.Fill()
-        """
 
         lptclosure_xtrg_qcd_0jet_up_Branch.Fill()
         lptclosure_xtrg_qcd_0jet_down_Branch.Fill()
