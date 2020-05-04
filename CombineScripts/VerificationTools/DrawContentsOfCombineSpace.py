@@ -131,17 +131,17 @@ def DrawDirectoryContents(TheDirectory,args):
     else:
         ZT = TheDirectory.Get("ZT")    
     ZL = TheDirectory.Get("ZL")
-    TT = TheDirectory.Get("TTL")    
-    if not args.UseEmbedded:
-        TT.Add(TheDirectory.Get("TTT"))
+    TT = TheDirectory.Get("TTL")        
+    TT.Add(TheDirectory.Get("TTT"))
     #create the other category
     Other = TheDirectory.Get("VVL")
+    Other.Add(TheDirectory.Get("VVT"))    
     Other.Add(TheDirectory.Get("qqH_htt125"))
     Other.Add(TheDirectory.Get("ggH_htt125"))
     Other.Add(TheDirectory.Get("WH_htt125"))
-    Other.Add(TheDirectory.Get("ZH_htt125"))    
-    if not args.UseEmbedded:
-        Other.Add(TheDirectory.Get("VVT"))    
+    Other.Add(TheDirectory.Get("ZH_htt125"))            
+    Other.Add(TheDirectory.Get("STL"))
+    Other.Add(TheDirectory.Get("STT"))
     HiggsUpscale = TheDirectory.Get("qqH_htt125") #create the upscale
     HiggsUpscale.Add(TheDirectory.Get("ggH_htt125"))
     HiggsUpscale.Add(TheDirectory.Get("WH_htt125"))
@@ -220,6 +220,7 @@ def DrawDirectoryContents(TheDirectory,args):
     HiggsUpscale.SetLineWidth(2)
 
     #Signal blinding
+    """
     for i in range(1,data_obs.GetNbinsX()+1):
         SignalContribution = HiggsUpscale.GetBinContent(i) / 30.0
         NonHiggsOtherContribution = Other.GetBinContent(i) - SignalContribution
@@ -233,6 +234,7 @@ def DrawDirectoryContents(TheDirectory,args):
         except ValueError:
             print("Negative Background in this bin.")
             print("Not blinding this bin.")
+    """
     BackgroundStack = ROOT.THStack("BackgroundStack","BackgroundStack")
     BackgroundStack.Add(Other,"HIST")
     BackgroundStack.Add(TT,"HIST")
@@ -295,7 +297,7 @@ def DrawDirectoryContents(TheDirectory,args):
     #Image.WriteImage("PrefitCheck/"+TheDirectory.GetName()+".png")
 
     #Create Grid Divisions
-    numCategories = int((BackgroundStack.GetHistogram().GetXaxis().GetXmax()-BackgroundStack.GetHistogram().GetXaxis().GetXmin()))/11
+    numCategories = int((BackgroundStack.GetHistogram().GetXaxis().GetXmax()-BackgroundStack.GetHistogram().GetXaxis().GetXmin()))/9
     print("Number of unrolled bins: "+str(numCategories))
     TheGridDivisions = ROOT.TH1F("GridDivisions","GridDivisions",
                                  HiggsUpscale.GetNbinsX(),
