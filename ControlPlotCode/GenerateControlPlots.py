@@ -31,10 +31,11 @@ def GenerateControlPlots(TheFile,OutFile,args):
 
     mvisHisto = ROOT.TH1F(FullHistoName+"_mvis",FullHistoName+"_mvis",30,50.0,200.0)
     msvHisto = ROOT.TH1F(FullHistoName+"_msv",FullHistoName+"_msv",25,50.0,300.0)
+    #msvHisto = ROOT.TH1F(FullHistoName+"_msv",FullHistoName+"_msv",9,array('f',[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0]))
     #msvHisto = ROOT.TH1F(FullHistoName+"_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto = ROOT.TH1F(FullHistoName+"_Njets",FullHistoName+"_Njets",6,0.0,6.0)
     HiggsPtHisto = ROOT.TH1F(FullHistoName+"_HiggsPt",FullHistoName+"_HiggsPt",40,0.0,400.0)
-    METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",20,0.0,200.0)
+    METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",40,0.0,400.0)
     DRHisto = ROOT.TH1F(FullHistoName+"_DR",FullHistoName+"_DR",40,0,6.0)
 
     mjjHisto = ROOT.TH1F(FullHistoName+"_mjj",FullHistoName+"_mjj",20,0.0,500.0)
@@ -55,10 +56,11 @@ def GenerateControlPlots(TheFile,OutFile,args):
 
     mvisHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mvis",FullHistoName+"_genmatch_low_mvis",30,50.0,200.0)
     msvHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_msv",FullHistoName+"_genmatch_low_msv",25,50.0,300.0)
+    #msvHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_msv",FullHistoName+"_genmatch_low_msv",9,array('f',[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0]))
     #msvHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_Njets",FullHistoName+"_genmatch_low_Njets",6,0.0,6.0)
     HiggsPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_HiggsPt",FullHistoName+"_genmatch_low_HiggsPt",40,0.0,400.0)
-    METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",20,0.0,200.0)
+    METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",40,0.0,400.0)
     DRHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_DR",FullHistoName+"_genmatch_low_DR",40,0,6.0)
     
     mjjHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mjj",FullHistoName+"_genmatch_low_mjj",20,0.0,500.0)
@@ -78,11 +80,12 @@ def GenerateControlPlots(TheFile,OutFile,args):
     MTHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MT",FullHistoName+"_genmatch_tt_MT",20,0.0,200.0)
 
     mvisHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_mvis",FullHistoName+"_genmatch_tt_mvis",30,50.0,200.0)
-    msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_genmatch_tt_msv",25,50.0,300.0)
+    msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_genmatch_tt_msv",25,50.0,300)
+    #msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_genmatch_tt_msv",9,array('f',[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,290.0]))
     #msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_Njets",FullHistoName+"_genmatch_tt_Njets",6,0.0,6.0)
     HiggsPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_HiggsPt",FullHistoName+"_genmatch_tt_HiggsPt",40,0.0,400.0)
-    METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",20,0.0,200.0)
+    METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",40,0.0,400.0)
     DRHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_DR",FullHistoName+"_genmatch_tt_DR",40,0,6.0)
     
     mjjHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_mjj",FullHistoName+"_genmatch_tt_mjj",20,0.0,500.0)
@@ -95,9 +98,10 @@ def GenerateControlPlots(TheFile,OutFile,args):
     TriggerHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_trigger",FullHistoName+"_genmatch_tt_trigger",3,0.0,3.0)
     METPhiHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_METPhi",FullHistoName+"_genmatch_tt_METPhi",20,-3.14,3.14)
 
-    #Ad-Hoc correction file
-    #zeroJetMetCorrectionFile = ROOT.TFile("CorrectionFile.root")
-    #zeroJetMetCorrection = zeroJetMetCorrectionFile.Get("metCorrections")
+    #Ad-Hoc correction files
+    #metCorrectionFile_2016 = ROOT.TFile('../Skunkworks/MetCorrectionFile_2016.root')
+    #metCorrectionFile_2017 = ROOT.TFile('../Skunkworks/MetCorrectionFile_2017.root')
+    #metCorrectionFile_2018 = ROOT.TFile('../Skunkworks/MetCorrectionFile_2018.root')
     
     passesTauCut = 0
     passesMTCut = 0    
@@ -112,26 +116,36 @@ def GenerateControlPlots(TheFile,OutFile,args):
         TauVector.SetPtEtaPhiM(TheTree.pt_2,TheTree.eta_2,TheTree.phi_2,TheTree.m_2)        
         METVector.SetPtEtaPhiM(TheTree.met,0.0,TheTree.metphi,0.0)
         MT = math.sqrt(2.0*MuVector.Pt()*METVector.Pt()*(1.0-math.cos(MuVector.DeltaPhi(METVector))))
+        HiggsPt = (MuVector+TauVector+METVector).Pt()
 
         TheWeighting = TheTree.FinalWeighting                
         if UseFakeFactor:                                                
-            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor      
-            #if TheTree.njets == 0:
-            #    theCorrection = zeroJetMetCorrection.GetBinContent(zeroJetMetCorrection.FindBin(TheTree.met))
-            #    TheWeighting = TheWeighting*theCorrection
-
+            TheWeighting = TheWeighting*TheTree.Event_Fake_Factor
         #REMOVE ME
         #if (TheTree.gen_match_2 == 6):
         #    continue
-        #if (TheTree.njets != 1):
+        #HiggsPt = (TauVector+MuVector+METVector).Pt()
+        #if (not(TheTree.njets >= 2 and TheTree.mjj > 350 and HiggsPt > 200 )):            
+        #    continue                
+        if (not(TheTree.pt_2 > 70 )):
+            continue
+        if(TheTree.m_sv > 300):
+            continue
+        #if HiggsPt < 120 or HiggsPt > 200:
+        #    continue            
+        #if TheTree.m_sv < 170 or TheTree.m_sv > 250:
         #    continue
-        #if (not(TheTree.njets == 0 and TauVector.DeltaR(MuVector) < 3.0)):
+        #if (not(TheTree.njets == 0)):
+        #    continue
+        #if (not(TheTree.njets == 0 and TauVector.DeltaR(MuVector) > 3.0 and TauVector.Pt() > 50)):
         #    continue
         #if (not(TheTree.njets == 2 and TheTree.mjj < 350)):
         #    continue
         #if (not TheTree.byVLooseDeepVSe_2):
-        #    continue        
-            
+        #    continue                        
+        #potentially required because fake factors don't exist in this region?
+        
+
         if(TauVector.Pt() < 30.0):                        
             continue                      
         passesTauCut += 1
