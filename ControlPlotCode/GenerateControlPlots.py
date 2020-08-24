@@ -35,7 +35,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     #msvHisto = ROOT.TH1F(FullHistoName+"_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto = ROOT.TH1F(FullHistoName+"_Njets",FullHistoName+"_Njets",6,0.0,6.0)
     HiggsPtHisto = ROOT.TH1F(FullHistoName+"_HiggsPt",FullHistoName+"_HiggsPt",40,0.0,400.0)
-    METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",40,0.0,400.0)
+    METHisto = ROOT.TH1F(FullHistoName+"_MET",FullHistoName+"_MET",40,0.0,200.0)
     DRHisto = ROOT.TH1F(FullHistoName+"_DR",FullHistoName+"_DR",40,0,6.0)
 
     mjjHisto = ROOT.TH1F(FullHistoName+"_mjj",FullHistoName+"_mjj",20,0.0,500.0)
@@ -60,7 +60,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     #msvHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_Njets",FullHistoName+"_genmatch_low_Njets",6,0.0,6.0)
     HiggsPtHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_HiggsPt",FullHistoName+"_genmatch_low_HiggsPt",40,0.0,400.0)
-    METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",40,0.0,400.0)
+    METHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_MET",FullHistoName+"_genmatch_low_MET",40,0.0,200.0)
     DRHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_DR",FullHistoName+"_genmatch_low_DR",40,0,6.0)
     
     mjjHisto_DYll = ROOT.TH1F(FullHistoName+"_genmatch_low_mjj",FullHistoName+"_genmatch_low_mjj",20,0.0,500.0)
@@ -85,7 +85,7 @@ def GenerateControlPlots(TheFile,OutFile,args):
     #msvHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_msv",FullHistoName+"_msv",4,array('f',[0.0,50.0,100.0,150.0,200.0,300.0]))
     NJetsHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_Njets",FullHistoName+"_genmatch_tt_Njets",6,0.0,6.0)
     HiggsPtHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_HiggsPt",FullHistoName+"_genmatch_tt_HiggsPt",40,0.0,400.0)
-    METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",40,0.0,400.0)
+    METHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_MET",FullHistoName+"_genmatch_tt_MET",40,0.0,200.0)
     DRHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_DR",FullHistoName+"_genmatch_tt_DR",40,0,6.0)
     
     mjjHisto_DYtt = ROOT.TH1F(FullHistoName+"_genmatch_tt_mjj",FullHistoName+"_genmatch_tt_mjj",20,0.0,500.0)
@@ -121,16 +121,34 @@ def GenerateControlPlots(TheFile,OutFile,args):
         TheWeighting = TheTree.FinalWeighting                
         if UseFakeFactor:                                                
             TheWeighting = TheWeighting*TheTree.Event_Fake_Factor
-        #REMOVE ME
+            #FIX ME:
+            #if TheTree.njets == 0:
+                #if TheTree.met > 0 and TheTree.met < 5:
+                #    TheWeighting = TheWeighting * 1.1
+                #if TheTree.met > 5 and TheTree.met < 10:
+                #    TheWeighting = TheWeighting * 1.08
+                #if TheTree.met > 10 and TheTree.met < 15:
+                #    TheWeighting = TheWeighting * 1.06
+                #if TheTree.met > 35 and TheTree.met < 65:
+                #    TheWeighting = TheWeighting * 0.86
+                #if TheTree.met > 65 and TheTree.met < 95:
+                #    TheWeighting = TheWeighting * 0.8
+                #    TheWeighting  = TheWeighting*((1/1.3)-((1.3-0.8)/80)*TheTree.met)
+                #metCorrection = metCorrectionFile.METCorrection.GetBinContent(metCorrectionFile.METCorrection.FindBin(TheTree.met))
+                #print metCorrection
+                #TheWeighting = TheWeighting*metCorrection
+        #FIX ME
         #if (TheTree.gen_match_2 == 6):
         #    continue
         #HiggsPt = (TauVector+MuVector+METVector).Pt()
         #if (not(TheTree.njets >= 2 and TheTree.mjj > 350 and HiggsPt > 200 )):            
         #    continue                
-        if (not(TheTree.pt_2 > 70 )):
-            continue
-        if(TheTree.m_sv > 300):
-            continue
+        #if (not(TheTree.pt_2 > 70 )):
+        #    continue
+        #if (not (TheTree.njets == 0 and HiggsPt > 45 and HiggsPt < 80)):
+        #    continue
+        #if(TheTree.m_sv > 300):
+        #    continue
         #if HiggsPt < 120 or HiggsPt > 200:
         #    continue            
         #if TheTree.m_sv < 170 or TheTree.m_sv > 250:
