@@ -45,8 +45,6 @@ variableAxisTitleDictionary = {
     'MT':'Transverse Mass',
     }
 
-standardHistogramCuttingString = 'pt_2 > 30 && MT < 50'
-
 #just compile our standard cutting and weighting string for ttree.draw()
 def CreateCutString(standardCutString,
                     otherCuts,
@@ -61,11 +59,14 @@ def CreateCutString(standardCutString,
 #quick macro to cut 3 repeated lines of code down into one.
 def StandardDraw(theFile,
                  variable,
+                 standardCutString,
                  additionalSelections,
-                 histogramName='h'):
+                 histogramName='h',
+                 theWeight = 'FinalWeighting'):
     theFile.mt_Selected.Draw(variable+'>>'+histogramName+'('+variableSettingDictionary[variable]+')',
-                             CreateCutString(standardHistogramCuttingString,
-                                             additionalSelections))
+                             CreateCutString(standardCutString,
+                                             additionalSelections,
+                                             weighting=theWeight))
     #so, if the tree has no entries, root doesn't even hand back an empty histogram
     # and therefore this ends up trying to get clone a none type
     #pass the None forward, and we can let the Add handle this
@@ -169,8 +170,7 @@ def main():
                                  'jpt_1',
                                  'jeta_1',
                                  'jpt_2',
-                                 'jeta_2',
-                                 'met',])
+                                 'jeta_2',])
     parser.add_argument('--additionalSelections',
                         nargs='+',
                         help='additional region selections',
@@ -178,10 +178,19 @@ def main():
     parser.add_argument('--pause',
                         help='pause after drawing each plot to make it easier to view',
                         action='store_true')
+    parser.add_argument('--standardCutString',
+                        nargs='?',
+                        help='Change the standard cutting definition',
+                        default='pt_2 > 30 && MT < 50')
+    parser.add_argument('--changeHistogramBounds',
+                        nargs = '?',
+                        help = 'Change the standard histogram bounding (affects all histograms)')
 
     args = parser.parse_args()    
 
     ROOT.gStyle.SetOptStat(0)
+
+    #change the standard cut definition if that's available
 
     #okay, let's grab some files and get to work
     if args.year == '2016':
@@ -242,60 +251,63 @@ def main():
         except KeyError:
             print("No defined title information for variable: "+variable)
             continue
+
+        if args.changeHistogramBounds != None:
+            variableSettingDictionary[variable] = args.changeHistogramBounds
         ZLFile.mt_Selected.Draw(variable+'>>ZL('+variableSettingDictionary[variable]+')',
-                                CreateCutString(standardHistogramCuttingString,
+                                CreateCutString(args.standardCutString,
                                                 args.additionalSelections+['gen_match_2 < 5']))
         dyHisto = ROOT.gDirectory.Get("ZL").Clone()
-        dyHisto.Add(StandardDraw(EWKZLLFile,variable,args.additionalSelections,'ewkzll'))
-        dyHisto.Add(StandardDraw(EWKZNuNuFile,variable,args.additionalSelections,'ewkznunu'))
+        dyHisto.Add(StandardDraw(EWKZLLFile,variable,args.standardCutString,args.additionalSelections,'ewkzll'))
+        dyHisto.Add(StandardDraw(EWKZNuNuFile,variable,args.standardCutString,args.additionalSelections,'ewkznunu'))
         
         dataFile.mt_Selected.Draw(variable+'>>data('+variableSettingDictionary[variable]+')',
-                                  CreateCutString(standardHistogramCuttingString,
+                                  CreateCutString(args.standardCutString,
                                                   args.additionalSelections,
                                                   weighting='1'))
         dataHisto = ROOT.gDirectory.Get('data').Clone()
 
         fakesFile.mt_Selected.Draw(variable+'>>fake('+variableSettingDictionary[variable]+')',
-                                   CreateCutString(standardHistogramCuttingString,
+                                   CreateCutString(args.standardCutString,
                                                    args.additionalSelections,
                                                    weighting='FinalWeighting*Event_Fake_Factor'))
         fakeHisto = ROOT.gDirectory.Get("fake").Clone()
 
-        embeddedHisto = StandardDraw(embeddedFile,variable,args.additionalSelections,'embedded')
+        embeddedHisto = StandardDraw(embeddedFile,variable,args.standardCutString,args.additionalSelections,'embedded')
 
-        otherHisto = StandardDraw(GGHWWFile,variable,args.additionalSelections,'gghww')
-        otherHisto.Add(StandardDraw(GGZHWWFile,variable,args.additionalSelections,'ggzhww'))
-        otherHisto.Add(StandardDraw(ST_tW_antitopFile,variable,args.additionalSelections,'st_tw_antitop'))
-        otherHisto.Add(StandardDraw(ST_tW_topFile,variable,args.additionalSelections,'st_tw_top'))
-        otherHisto.Add(StandardDraw(ST_t_antitopFile,variable,args.additionalSelections,'st_t_antitop'))
-        otherHisto.Add(StandardDraw(ST_t_topFile,variable,args.additionalSelections,'st_t_top'))
-        otherHisto.Add(StandardDraw(VBFHWWFile,variable,args.additionalSelections,'vbfhww'))
-        otherHisto.Add(StandardDraw(VV2L2NuFile,variable,args.additionalSelections,'vv2l2nu'))
-        otherHisto.Add(StandardDraw(WW1L1Nu2QFile,variable,args.additionalSelections,'ww1l1nu2q'))
-        otherHisto.Add(StandardDraw(WZ1L1Nu2QFile,variable,args.additionalSelections,'wz1l1nu2q'))
-        otherHisto.Add(StandardDraw(WZ3L1NuFile,variable,args.additionalSelections,'wz3l1nu'))
-        otherHisto.Add(StandardDraw(WZ2L2QFile,variable,args.additionalSelections,'wz2l2q'))
-        otherHisto.Add(StandardDraw(WminusHWWFile,variable,args.additionalSelections,'wminushww'))
-        otherHisto.Add(StandardDraw(WplusHWWFile,variable,args.additionalSelections,'wplushww'))
-        otherHisto.Add(StandardDraw(ZHWWFile,variable,args.additionalSelections,'zhww'))
-        otherHisto.Add(StandardDraw(ZZ2L2QFile,variable,args.additionalSelections,'zz2l2q'))
-        otherHisto.Add(StandardDraw(ZZ4LFile,variable,args.additionalSelections,'zz4l'))
+        otherHisto = StandardDraw(GGHWWFile,variable,args.standardCutString,args.additionalSelections,'gghww')
+        otherHisto.Add(StandardDraw(GGZHWWFile,variable,args.standardCutString,args.additionalSelections,'ggzhww'))
+        otherHisto.Add(StandardDraw(ST_tW_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop'))
+        otherHisto.Add(StandardDraw(ST_tW_topFile,variable,args.standardCutString,args.additionalSelections,'st_tw_top'))
+        otherHisto.Add(StandardDraw(ST_t_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_t_antitop'))
+        otherHisto.Add(StandardDraw(ST_t_topFile,variable,args.standardCutString,args.additionalSelections,'st_t_top'))
+        otherHisto.Add(StandardDraw(VBFHWWFile,variable,args.standardCutString,args.additionalSelections,'vbfhww'))
+        otherHisto.Add(StandardDraw(VV2L2NuFile,variable,args.standardCutString,args.additionalSelections,'vv2l2nu'))
+        otherHisto.Add(StandardDraw(WW1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q'))
+        otherHisto.Add(StandardDraw(WZ1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q'))
+        otherHisto.Add(StandardDraw(WZ3L1NuFile,variable,args.standardCutString,args.additionalSelections,'wz3l1nu'))
+        otherHisto.Add(StandardDraw(WZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'wz2l2q'))
+        otherHisto.Add(StandardDraw(WminusHWWFile,variable,args.standardCutString,args.additionalSelections,'wminushww'))
+        otherHisto.Add(StandardDraw(WplusHWWFile,variable,args.standardCutString,args.additionalSelections,'wplushww'))
+        otherHisto.Add(StandardDraw(ZHWWFile,variable,args.standardCutString,args.additionalSelections,'zhww'))
+        otherHisto.Add(StandardDraw(ZZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'zz2l2q'))
+        otherHisto.Add(StandardDraw(ZZ4LFile,variable,args.standardCutString,args.additionalSelections,'zz4l'))
 
         if args.year == '2016':
-            TTHisto = StandardDraw(TTFile,variable,args.additionalSelections,'tt')
+            TTHisto = StandardDraw(TTFile,variable,args.standardCutString,args.additionalSelections,'tt')
         else:
-            TTHisto = StandardDraw(TTToHadronicFile,variable,args.additionalSelections,'tttohadronic')
-            TTHisto.Add(StandardDraw(TTTo2L2NuFile,variable,args.additionalSelections,'ttto2l2nu'))
-            TTHisto.Add(StandardDraw(TTToSemiLeptonicFile,variable,args.additionalSelections,'tttosemileptonic'))
+            TTHisto = StandardDraw(TTToSemiLeptonicFile,variable,args.standardCutString,args.additionalSelections,'tttosemileptonic')            
+            TTHisto.Add(StandardDraw(TTTo2L2NuFile,variable,args.standardCutString,args.additionalSelections,'ttto2l2nu'))
+            TTHisto.Add(StandardDraw(TTToHadronicFile,variable,args.standardCutString,args.additionalSelections,'tttohadronic'))
 
-        signalHisto = StandardDraw(GGZHLLTTFile,variable,args.additionalSelections,'ggzhlltt')
-        signalHisto.Add(StandardDraw(GGZHNNTTFile,variable,args.additionalSelections,'ggzhnntt'))
-        signalHisto.Add(StandardDraw(GGZHQQTTFile,variable,args.additionalSelections,'ggzhqqtt'))
-        signalHisto.Add(StandardDraw(VBFFile,variable,args.additionalSelections,'vbf'))
-        signalHisto.Add(StandardDraw(WHMinusFile,variable,args.additionalSelections,'wminush'))
-        signalHisto.Add(StandardDraw(WHPlusFile,variable,args.additionalSelections,'wplush'))
-        signalHisto.Add(StandardDraw(ZHFile,variable,args.additionalSelections,'zh'))
-        signalHisto.Add(StandardDraw(ggHFile,variable,args.additionalSelections,'ggh'))        
+        signalHisto = StandardDraw(GGZHLLTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhlltt')
+        signalHisto.Add(StandardDraw(GGZHNNTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhnntt'))
+        signalHisto.Add(StandardDraw(GGZHQQTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt'))
+        signalHisto.Add(StandardDraw(VBFFile,variable,args.standardCutString,args.additionalSelections,'vbf'))
+        signalHisto.Add(StandardDraw(WHMinusFile,variable,args.standardCutString,args.additionalSelections,'wminush'))
+        signalHisto.Add(StandardDraw(WHPlusFile,variable,args.standardCutString,args.additionalSelections,'wplush'))
+        signalHisto.Add(StandardDraw(ZHFile,variable,args.standardCutString,args.additionalSelections,'zh'))
+        signalHisto.Add(StandardDraw(ggHFile,variable,args.standardCutString,args.additionalSelections,'ggh'))        
         
         otherHisto.Add(signalHisto.Clone())
 
@@ -403,6 +415,10 @@ def main():
         
         if args.pause:
             raw_input("Press Enter to Continue...")
+        #this causes issues if you don't get rid of the canvas
+        #I suspect it to be something to do with modifiying histograms that 
+        # are alreayd referenced by the canvas in preparing the next one
+        del theCanvas
     ZLFile.Close()
     dataFile.Close()
     EWKZLLFile.Close()
