@@ -209,13 +209,13 @@ def ProcessNtuple(args,Ntuple,HistogramFamily,GenMatches,Sample=""):
             #print("Match!")
             HistogramFamily[ClassifyTrigger(args,Ntuple,Sample)].Fill(Ntuple.m_sv,ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
             HistogramFamily["Inclusive"].Fill(Ntuple.m_sv,ClassifyEvent(Ntuple),Ntuple.FinalWeighting)
-            HistogramFamily['Differential'].Fill(Ntuple.m_sv,HiggsPT,Ntuple.FinalWeighting)
+            HistogramFamily['Differential'].Fill(Ntuple.m_sv,Ntuple.HiggsPt_Differential,Ntuple.FinalWeighting)
             if Ntuple.njets == 0:
-                HistogramFamily['Differential_0jet'].Fill(Ntuple.m_sv,HiggsPT,Ntuple.FinalWeighting)
+                HistogramFamily['Differential_0jet'].Fill(Ntuple.m_sv,Ntuple.HiggsPt_Differential,Ntuple.FinalWeighting)
             elif Ntuple.njets == 1:
-                HistogramFamily['Differential_1jet'].Fill(Ntuple.m_sv,HiggsPT,Ntuple.FinalWeighting)
+                HistogramFamily['Differential_1jet'].Fill(Ntuple.m_sv,Ntuple.HiggsPt_Differential,Ntuple.FinalWeighting)
             else:
-                HistogramFamily['Differential_ge2jet'].Fill(Ntuple.m_sv,HiggsPT,Ntuple.FinalWeighting)
+                HistogramFamily['Differential_ge2jet'].Fill(Ntuple.m_sv,Ntuple.HiggsPt_Differential,Ntuple.FinalWeighting)
 
 def ClassifyTrigger(args,TheEvent,Sample=""):
     if args.year == "2017" or args.year == "2018":
@@ -315,23 +315,21 @@ def MakeFractions(args):
         
         QCDHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
         QCDHistos["Inclusive"].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
-        QCDHistos["Differential"].Fill(DataNtuple.m_sv,HiggsPT)
+        QCDHistos["Differential"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
                 
         dataHistos[ClassifyTrigger(args,DataNtuple,"Data")].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))        
         dataHistos["Inclusive"].Fill(DataNtuple.m_sv,ClassifyEvent(DataNtuple))
-        dataHistos["Differential"].Fill(DataNtuple.m_sv,HiggsPT)
+        dataHistos["Differential"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
         if DataNtuple.njets == 0:
-            QCDHistos["Differential_0jet"].Fill(DataNtuple.m_sv,HiggsPT)
-            dataHistos["Differential_0jet"].Fill(DataNtuple.m_sv,HiggsPT)
+            QCDHistos["Differential_0jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
+            dataHistos["Differential_0jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
         elif DataNtuple.njets == 1:
-            QCDHistos["Differential_1jet"].Fill(DataNtuple.m_sv,HiggsPT)
-            dataHistos["Differential_1jet"].Fill(DataNtuple.m_sv,HiggsPT)
+            QCDHistos["Differential_1jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
+            dataHistos["Differential_1jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
         else:
-            QCDHistos["Differential_ge2jet"].Fill(DataNtuple.m_sv,HiggsPT)
-            dataHistos["Differential_ge2jet"].Fill(DataNtuple.m_sv,HiggsPT)
+            QCDHistos["Differential_ge2jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
+            dataHistos["Differential_ge2jet"].Fill(DataNtuple.m_sv,DataNtuple.HiggsPt_Differential)
         
-    print("High HPT events: "+str(nHighHPT))
-
     #Perform the subtractions
     #CanvasOne = ROOT.TCanvas("CanvasOne","CanvasOne")
     #print("QCD bins before subtraction:")
@@ -423,7 +421,7 @@ def AddFakeFactorWeightings(FileName,args):
     print("Adding deep tau fake factors to "+FileName)    
     if args.isDifferential:
         if args.year == '2016':
-            theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2016_Differential/",'mt',isDifferential=True,attempt0JetMETCorrection=True)
+            theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2016_Differential/",'mt',isDifferential=True)
         elif args.year == '2017':
             theFFApplicationTool = ApplyFF.FFApplicationTool("Weightings/DeepFFs2017_Differential/",'mt',isDifferential=True)
         elif args.year == '2018':
@@ -441,53 +439,63 @@ def AddFakeFactorWeightings(FileName,args):
     ReweightFile = ROOT.TFile(FileName,"UPDATE")
     Event_Fake_Factor = array('f',[0.])    
 
-    ff_qcd_0jet_unc1_up = array('f',[0.])
-    ff_qcd_0jet_unc1_down = array('f',[0.])
-    ff_qcd_0jet_unc2_up = array('f',[0.])
-    ff_qcd_0jet_unc2_down = array('f',[0.])
-    ff_qcd_1jet_unc1_up = array('f',[0.])
-    ff_qcd_1jet_unc1_down = array('f',[0.])
-    ff_qcd_1jet_unc2_up = array('f',[0.])
-    ff_qcd_1jet_unc2_down = array('f',[0.])
-    ff_qcd_2jet_unc1_up = array('f',[0.])
-    ff_qcd_2jet_unc1_down = array('f',[0.])
-    ff_qcd_2jet_unc2_up = array('f',[0.])
-    ff_qcd_2jet_unc2_down = array('f',[0.])
+    ff_qcd_0jet_barrel_unc1_up = array('f',[0.])
+    ff_qcd_0jet_barrel_unc1_down = array('f',[0.])
+    ff_qcd_0jet_barrel_unc2_up = array('f',[0.])
+    ff_qcd_0jet_barrel_unc2_down = array('f',[0.])
+    ff_qcd_1jet_barrel_unc1_up = array('f',[0.])
+    ff_qcd_1jet_barrel_unc1_down = array('f',[0.])
+    ff_qcd_1jet_barrel_unc2_up = array('f',[0.])
+    ff_qcd_1jet_barrel_unc2_down = array('f',[0.])
+    ff_qcd_2jet_barrel_unc1_up = array('f',[0.])
+    ff_qcd_2jet_barrel_unc1_down = array('f',[0.])
+    ff_qcd_2jet_barrel_unc2_up = array('f',[0.])
+    ff_qcd_2jet_barrel_unc2_down = array('f',[0.])
 
-    ff_w_0jet_unc1_up = array('f',[0.])
-    ff_w_0jet_unc1_down = array('f',[0.])
-    ff_w_0jet_unc2_up = array('f',[0.])
-    ff_w_0jet_unc2_down = array('f',[0.])
-    ff_w_1jet_unc1_up = array('f',[0.])
-    ff_w_1jet_unc1_down = array('f',[0.])
-    ff_w_1jet_unc2_up = array('f',[0.])
-    ff_w_1jet_unc2_down = array('f',[0.])
-    ff_w_2jet_unc1_up = array('f',[0.])
-    ff_w_2jet_unc1_down = array('f',[0.])
-    ff_w_2jet_unc2_up = array('f',[0.])
-    ff_w_2jet_unc2_down = array('f',[0.])
+    ff_qcd_0jet_endcaps_unc1_up = array('f',[0.])
+    ff_qcd_0jet_endcaps_unc1_down = array('f',[0.])
+    ff_qcd_0jet_endcaps_unc2_up = array('f',[0.])
+    ff_qcd_0jet_endcaps_unc2_down = array('f',[0.])
+    ff_qcd_1jet_endcaps_unc1_up = array('f',[0.])
+    ff_qcd_1jet_endcaps_unc1_down = array('f',[0.])
+    ff_qcd_1jet_endcaps_unc2_up = array('f',[0.])
+    ff_qcd_1jet_endcaps_unc2_down = array('f',[0.])
+    ff_qcd_2jet_endcaps_unc1_up = array('f',[0.])
+    ff_qcd_2jet_endcaps_unc1_down = array('f',[0.])
+    ff_qcd_2jet_endcaps_unc2_up = array('f',[0.])
+    ff_qcd_2jet_endcaps_unc2_down = array('f',[0.])
+
+    ff_w_0jet_barrel_unc1_up = array('f',[0.])
+    ff_w_0jet_barrel_unc1_down = array('f',[0.])
+    ff_w_0jet_barrel_unc2_up = array('f',[0.])
+    ff_w_0jet_barrel_unc2_down = array('f',[0.])
+    ff_w_1jet_barrel_unc1_up = array('f',[0.])
+    ff_w_1jet_barrel_unc1_down = array('f',[0.])
+    ff_w_1jet_barrel_unc2_up = array('f',[0.])
+    ff_w_1jet_barrel_unc2_down = array('f',[0.])
+    ff_w_2jet_barrel_unc1_up = array('f',[0.])
+    ff_w_2jet_barrel_unc1_down = array('f',[0.])
+    ff_w_2jet_barrel_unc2_up = array('f',[0.])
+    ff_w_2jet_barrel_unc2_down = array('f',[0.])
+
+    ff_w_0jet_endcaps_unc1_up = array('f',[0.])
+    ff_w_0jet_endcaps_unc1_down = array('f',[0.])
+    ff_w_0jet_endcaps_unc2_up = array('f',[0.])
+    ff_w_0jet_endcaps_unc2_down = array('f',[0.])
+    ff_w_1jet_endcaps_unc1_up = array('f',[0.])
+    ff_w_1jet_endcaps_unc1_down = array('f',[0.])
+    ff_w_1jet_endcaps_unc2_up = array('f',[0.])
+    ff_w_1jet_endcaps_unc2_down = array('f',[0.])
+    ff_w_2jet_endcaps_unc1_up = array('f',[0.])
+    ff_w_2jet_endcaps_unc1_down = array('f',[0.])
+    ff_w_2jet_endcaps_unc2_up = array('f',[0.])
+    ff_w_2jet_endcaps_unc2_down = array('f',[0.])
     
     ff_tt_0jet_unc1_up = array('f',[0.])
     ff_tt_0jet_unc1_down = array('f',[0.])
     ff_tt_0jet_unc2_up = array('f',[0.])
     ff_tt_0jet_unc2_down = array('f',[0.])
 
-    """
-    mvisclosure_qcd_0jet_up = array('f',[0.])
-    mvisclosure_qcd_0jet_down = array('f',[0.])    
-    mvisclosure_w_0jet_up = array('f',[0.])
-    mvisclosure_w_0jet_down = array('f',[0.])
-    mvisclosure_qcd_1jet_up = array('f',[0.])
-    mvisclosure_qcd_1jet_down = array('f',[0.])    
-    mvisclosure_w_1jet_up = array('f',[0.])
-    mvisclosure_w_1jet_down = array('f',[0.])
-    mvisclosure_qcd_2jet_up = array('f',[0.])
-    mvisclosure_qcd_2jet_down = array('f',[0.])    
-    mvisclosure_w_2jet_up = array('f',[0.])
-    mvisclosure_w_2jet_down = array('f',[0.])
-    mvisclosure_tt_up = array('f',[0.])
-    mvisclosure_tt_down = array('f',[0.])    
-    """
     lptclosure_xtrg_qcd_0jet_up = array('f',[0.])
     lptclosure_xtrg_qcd_0jet_down = array('f',[0.])
     lptclosure_xtrg_w_0jet_up = array('f',[0.])
@@ -510,62 +518,84 @@ def AddFakeFactorWeightings(FileName,args):
     #pthclosure_w_up = array('f',[0.])
     #pthclosure_w_down = array('f',[0.])
 
-    mtclosure_w_njets_pth_ljpt_up = array('f',[0.])
-    mtclosure_w_njets_pth_ljpt_down = array('f',[0.])
+    #mtclosure_w_njets_pth_ljpt_up = array('f',[0.])
+    #mtclosure_w_njets_pth_ljpt_down = array('f',[0.])
+
+    mtclosure_w_njets0_pth_up = array('f',[0.])
+    mtclosure_w_njets0_pth_down = array('f',[0.])
+    mtclosure_w_njets_pth0to45_ljpt_up = array('f',[0.])
+    mtclosure_w_njets_pth0to45_ljpt_down = array('f',[0.])
+    mtclosure_w_njets_pth45to80_ljpt_up = array('f',[0.])
+    mtclosure_w_njets_pth45to80_ljpt_down = array('f',[0.])
+    mtclosure_w_njets_pth80to120_ljpt_up = array('f',[0.])
+    mtclosure_w_njets_pth80to120_ljpt_down = array('f',[0.])
+    mtclosure_w_njets_pth120to200_ljpt_up = array('f',[0.])
+    mtclosure_w_njets_pth120to200_ljpt_down = array('f',[0.])
+    mtclosure_w_njets_pthgt200_ljpt_up = array('f',[0.])
+    mtclosure_w_njets_pthgt200_ljpt_down = array('f',[0.])
 
     osssclosure_qcd_unc1_up = array('f',[0.])
     osssclosure_qcd_unc1_down = array('f',[0.])
 
     FakeFactorBranch = ReweightFile.mt_Selected.Branch('Event_Fake_Factor',Event_Fake_Factor,'Event_Fake_Factor/F')    
     
-    ff_qcd_0jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_unc1_up',ff_qcd_0jet_unc1_up,'ff_qcd_0jet_unc1_up/F')
-    ff_qcd_0jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_unc1_down',ff_qcd_0jet_unc1_down,'ff_qcd_0jet_unc1_down/F')
-    ff_qcd_0jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_unc2_up',ff_qcd_0jet_unc2_up,'ff_qcd_0jet_unc2_up/F')
-    ff_qcd_0jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_unc2_down',ff_qcd_0jet_unc2_down,'ff_qcd_0jet_unc2_down/F')
-    ff_qcd_1jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_unc1_up',ff_qcd_1jet_unc1_up,'ff_qcd_1jet_unc1_up/F')
-    ff_qcd_1jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_unc1_down',ff_qcd_1jet_unc1_down,'ff_qcd_1jet_unc1_down/F')
-    ff_qcd_1jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_unc2_up',ff_qcd_1jet_unc2_up,'ff_qcd_1jet_unc2_up/F')
-    ff_qcd_1jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_unc2_down',ff_qcd_1jet_unc2_down,'ff_qcd_1jet_unc2_down/F')
-    ff_qcd_2jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_unc1_up',ff_qcd_2jet_unc1_up,'ff_qcd_2jet_unc1_up/F')
-    ff_qcd_2jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_unc1_down',ff_qcd_2jet_unc1_down,'ff_qcd_2jet_unc1_down/F')
-    ff_qcd_2jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_unc2_up',ff_qcd_2jet_unc2_up,'ff_qcd_2jet_unc2_up/F')
-    ff_qcd_2jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_unc2_down',ff_qcd_2jet_unc2_down,'ff_qcd_2jet_unc2_down/F')
+    ff_qcd_0jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_barrel_unc1_up',ff_qcd_0jet_barrel_unc1_up,'ff_qcd_0jet_barrel_unc1_up/F')
+    ff_qcd_0jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_barrel_unc1_down',ff_qcd_0jet_barrel_unc1_down,'ff_qcd_0jet_barrel_unc1_down/F')
+    ff_qcd_0jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_barrel_unc2_up',ff_qcd_0jet_barrel_unc2_up,'ff_qcd_0jet_barrel_unc2_up/F')
+    ff_qcd_0jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_barrel_unc2_down',ff_qcd_0jet_barrel_unc2_down,'ff_qcd_0jet_barrel_unc2_down/F')
+    ff_qcd_1jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_barrel_unc1_up',ff_qcd_1jet_barrel_unc1_up,'ff_qcd_1jet_barrel_unc1_up/F')
+    ff_qcd_1jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_barrel_unc1_down',ff_qcd_1jet_barrel_unc1_down,'ff_qcd_1jet_barrel_unc1_down/F')
+    ff_qcd_1jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_barrel_unc2_up',ff_qcd_1jet_barrel_unc2_up,'ff_qcd_1jet_barrel_unc2_up/F')
+    ff_qcd_1jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_barrel_unc2_down',ff_qcd_1jet_barrel_unc2_down,'ff_qcd_1jet_barrel_unc2_down/F')
+    ff_qcd_2jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_barrel_unc1_up',ff_qcd_2jet_barrel_unc1_up,'ff_qcd_2jet_barrel_unc1_up/F')
+    ff_qcd_2jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_barrel_unc1_down',ff_qcd_2jet_barrel_unc1_down,'ff_qcd_2jet_barrel_unc1_down/F')
+    ff_qcd_2jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_barrel_unc2_up',ff_qcd_2jet_barrel_unc2_up,'ff_qcd_2jet_barrel_unc2_up/F')
+    ff_qcd_2jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_barrel_unc2_down',ff_qcd_2jet_barrel_unc2_down,'ff_qcd_2jet_barrel_unc2_down/F')
 
-    ff_w_0jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_unc1_up',ff_w_0jet_unc1_up,'ff_w_0jet_unc1_up/F')
-    ff_w_0jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_unc1_down',ff_w_0jet_unc1_down,'ff_w_0jet_unc1_down/F')
-    ff_w_0jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_unc2_up',ff_w_0jet_unc2_up,'ff_w_0jet_unc2_up/F')
-    ff_w_0jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_unc2_down',ff_w_0jet_unc2_down,'ff_w_0jet_unc2_down/F')
-    ff_w_1jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_unc1_up',ff_w_1jet_unc1_up,'ff_w_1jet_unc1_up/F')
-    ff_w_1jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_unc1_down',ff_w_1jet_unc1_down,'ff_w_1jet_unc1_down/F')
-    ff_w_1jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_unc2_up',ff_w_1jet_unc2_up,'ff_w_1jet_unc2_up/F')
-    ff_w_1jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_unc2_down',ff_w_1jet_unc2_down,'ff_w_1jet_unc2_down/F')
-    ff_w_2jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_unc1_up',ff_w_2jet_unc1_up,'ff_w_2jet_unc1_up/F')
-    ff_w_2jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_unc1_down',ff_w_2jet_unc1_down,'ff_w_2jet_unc1_down/F')
-    ff_w_2jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_unc2_up',ff_w_2jet_unc2_up,'ff_w_2jet_unc2_up/F')
-    ff_w_2jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_unc2_down',ff_w_2jet_unc2_down,'ff_w_2jet_unc2_down/F')
+    ff_qcd_0jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_endcaps_unc1_up',ff_qcd_0jet_endcaps_unc1_up,'ff_qcd_0jet_endcaps_unc1_up/F')
+    ff_qcd_0jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_endcaps_unc1_down',ff_qcd_0jet_endcaps_unc1_down,'ff_qcd_0jet_endcaps_unc1_down/F')
+    ff_qcd_0jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_endcaps_unc2_up',ff_qcd_0jet_endcaps_unc2_up,'ff_qcd_0jet_endcaps_unc2_up/F')
+    ff_qcd_0jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_0jet_endcaps_unc2_down',ff_qcd_0jet_endcaps_unc2_down,'ff_qcd_0jet_endcaps_unc2_down/F')
+    ff_qcd_1jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_endcaps_unc1_up',ff_qcd_1jet_endcaps_unc1_up,'ff_qcd_1jet_endcaps_unc1_up/F')
+    ff_qcd_1jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_endcaps_unc1_down',ff_qcd_1jet_endcaps_unc1_down,'ff_qcd_1jet_endcaps_unc1_down/F')
+    ff_qcd_1jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_endcaps_unc2_up',ff_qcd_1jet_endcaps_unc2_up,'ff_qcd_1jet_endcaps_unc2_up/F')
+    ff_qcd_1jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_1jet_endcaps_unc2_down',ff_qcd_1jet_endcaps_unc2_down,'ff_qcd_1jet_endcaps_unc2_down/F')
+    ff_qcd_2jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_endcaps_unc1_up',ff_qcd_2jet_endcaps_unc1_up,'ff_qcd_2jet_endcaps_unc1_up/F')
+    ff_qcd_2jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_endcaps_unc1_down',ff_qcd_2jet_endcaps_unc1_down,'ff_qcd_2jet_endcaps_unc1_down/F')
+    ff_qcd_2jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_endcaps_unc2_up',ff_qcd_2jet_endcaps_unc2_up,'ff_qcd_2jet_endcaps_unc2_up/F')
+    ff_qcd_2jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_qcd_2jet_endcaps_unc2_down',ff_qcd_2jet_endcaps_unc2_down,'ff_qcd_2jet_endcaps_unc2_down/F')
+
+    ff_w_0jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_barrel_unc1_up',ff_w_0jet_barrel_unc1_up,'ff_w_0jet_barrel_unc1_up/F')
+    ff_w_0jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_barrel_unc1_down',ff_w_0jet_barrel_unc1_down,'ff_w_0jet_barrel_unc1_down/F')
+    ff_w_0jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_barrel_unc2_up',ff_w_0jet_barrel_unc2_up,'ff_w_0jet_barrel_unc2_up/F')
+    ff_w_0jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_barrel_unc2_down',ff_w_0jet_barrel_unc2_down,'ff_w_0jet_barrel_unc2_down/F')
+    ff_w_1jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_barrel_unc1_up',ff_w_1jet_barrel_unc1_up,'ff_w_1jet_barrel_unc1_up/F')
+    ff_w_1jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_barrel_unc1_down',ff_w_1jet_barrel_unc1_down,'ff_w_1jet_barrel_unc1_down/F')
+    ff_w_1jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_barrel_unc2_up',ff_w_1jet_barrel_unc2_up,'ff_w_1jet_barrel_unc2_up/F')
+    ff_w_1jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_barrel_unc2_down',ff_w_1jet_barrel_unc2_down,'ff_w_1jet_barrel_unc2_down/F')
+    ff_w_2jet_barrel_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_barrel_unc1_up',ff_w_2jet_barrel_unc1_up,'ff_w_2jet_barrel_unc1_up/F')
+    ff_w_2jet_barrel_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_barrel_unc1_down',ff_w_2jet_barrel_unc1_down,'ff_w_2jet_barrel_unc1_down/F')
+    ff_w_2jet_barrel_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_barrel_unc2_up',ff_w_2jet_barrel_unc2_up,'ff_w_2jet_barrel_unc2_up/F')
+    ff_w_2jet_barrel_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_barrel_unc2_down',ff_w_2jet_barrel_unc2_down,'ff_w_2jet_barrel_unc2_down/F')
+
+    ff_w_0jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_endcaps_unc1_up',ff_w_0jet_endcaps_unc1_up,'ff_w_0jet_endcaps_unc1_up/F')
+    ff_w_0jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_endcaps_unc1_down',ff_w_0jet_endcaps_unc1_down,'ff_w_0jet_endcaps_unc1_down/F')
+    ff_w_0jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_endcaps_unc2_up',ff_w_0jet_endcaps_unc2_up,'ff_w_0jet_endcaps_unc2_up/F')
+    ff_w_0jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_0jet_endcaps_unc2_down',ff_w_0jet_endcaps_unc2_down,'ff_w_0jet_endcaps_unc2_down/F')
+    ff_w_1jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_endcaps_unc1_up',ff_w_1jet_endcaps_unc1_up,'ff_w_1jet_endcaps_unc1_up/F')
+    ff_w_1jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_endcaps_unc1_down',ff_w_1jet_endcaps_unc1_down,'ff_w_1jet_endcaps_unc1_down/F')
+    ff_w_1jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_endcaps_unc2_up',ff_w_1jet_endcaps_unc2_up,'ff_w_1jet_endcaps_unc2_up/F')
+    ff_w_1jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_1jet_endcaps_unc2_down',ff_w_1jet_endcaps_unc2_down,'ff_w_1jet_endcaps_unc2_down/F')
+    ff_w_2jet_endcaps_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_endcaps_unc1_up',ff_w_2jet_endcaps_unc1_up,'ff_w_2jet_endcaps_unc1_up/F')
+    ff_w_2jet_endcaps_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_endcaps_unc1_down',ff_w_2jet_endcaps_unc1_down,'ff_w_2jet_endcaps_unc1_down/F')
+    ff_w_2jet_endcaps_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_endcaps_unc2_up',ff_w_2jet_endcaps_unc2_up,'ff_w_2jet_endcaps_unc2_up/F')
+    ff_w_2jet_endcaps_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_w_2jet_endcaps_unc2_down',ff_w_2jet_endcaps_unc2_down,'ff_w_2jet_endcaps_unc2_down/F')
 
     ff_tt_0jet_unc1_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_0jet_unc1_up',ff_tt_0jet_unc1_up,'ff_tt_0jet_unc1_up/F')
     ff_tt_0jet_unc1_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_0jet_unc1_down',ff_tt_0jet_unc1_down,'ff_tt_0jet_unc1_down/F')
     ff_tt_0jet_unc2_up_Branch = ReweightFile.mt_Selected.Branch('ff_tt_0jet_unc2_up',ff_tt_0jet_unc2_up,'ff_tt_0jet_unc2_up/F')
     ff_tt_0jet_unc2_down_Branch = ReweightFile.mt_Selected.Branch('ff_tt_0jet_unc2_down',ff_tt_0jet_unc2_down,'ff_tt_0jet_unc2_down/F')
 
-    """
-    mvisclosure_qcd_0jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_0jet_up',mvisclosure_qcd_0jet_up,'mvisclosure_qcd_0jet_up/F')
-    mvisclosure_qcd_0jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_0jet_down',mvisclosure_qcd_0jet_down,'mvisclosure_qcd_0jet_down/F')    
-    mvisclosure_w_0jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_0jet_up',mvisclosure_w_0jet_up,'mvisclosure_w_0jet_up/F')
-    mvisclosure_w_0jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_0jet_down',mvisclosure_w_0jet_down,'mvisclosure_w_0jet_down/F')
-    mvisclosure_qcd_1jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_1jet_up',mvisclosure_qcd_1jet_up,'mvisclosure_qcd_1jet_up/F')
-    mvisclosure_qcd_1jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_1jet_down',mvisclosure_qcd_1jet_down,'mvisclosure_qcd_1jet_down/F')    
-    mvisclosure_w_1jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_1jet_up',mvisclosure_w_1jet_up,'mvisclosure_w_1jet_up/F')
-    mvisclosure_w_1jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_1jet_down',mvisclosure_w_1jet_down,'mvisclosure_w_1jet_down/F')
-    mvisclosure_qcd_2jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_2jet_up',mvisclosure_qcd_2jet_up,'mvisclosure_qcd_2jet_up/F')
-    mvisclosure_qcd_2jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_qcd_2jet_down',mvisclosure_qcd_2jet_down,'mvisclosure_qcd_2jet_down/F')    
-    mvisclosure_w_2jet_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_2jet_up',mvisclosure_w_2jet_up,'mvisclosure_w_2jet_up/F')
-    mvisclosure_w_2jet_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_w_2jet_down',mvisclosure_w_2jet_down,'mvisclosure_w_2jet_down/F')
-    
-    mvisclosure_tt_up_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_tt_up',mvisclosure_tt_up,'mvisclosure_tt_up/F')
-    mvisclosure_tt_down_Branch = ReweightFile.mt_Selected.Branch('mvisclosure_tt_down',mvisclosure_tt_down,'mvisclosure_tt_down/F')    
-    """
     lptclosure_xtrg_qcd_0jet_up_Branch = ReweightFile.mt_Selected.Branch('lptclosure_xtrg_qcd_0jet_up',lptclosure_xtrg_qcd_0jet_up, 'lptclosure_xtrg_qcd_0jet_up/F')
     lptclosure_xtrg_qcd_0jet_down_Branch = ReweightFile.mt_Selected.Branch('lptclosure_xtrg_qcd_0jet_down',lptclosure_xtrg_qcd_0jet_down, 'lptclosure_xtrg_qcd_0jet_down/F')
     lptclosure_xtrg_w_0jet_up_Branch = ReweightFile.mt_Selected.Branch('lptclosure_xtrg_w_0jet_up',lptclosure_xtrg_w_0jet_up, 'lptclosure_xtrg_w_0jet_up/F')
@@ -587,8 +617,20 @@ def AddFakeFactorWeightings(FileName,args):
     #pthclosure_w_up_Branch = ReweightFile.mt_Selected.Branch('pthclosure_w_up',pthclosure_w_up,'pthclosure_w_up/F')
     #pthclosure_w_down_Branch = ReweightFile.mt_Selected.Branch('pthclosure_w_down',pthclosure_w_down,'pthclosure_w_down/F')
 
-    mtclosure_w_njets_pth_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth_ljpt_up', mtclosure_w_njets_pth_ljpt_up, 'mtclosure_w_njets_pth_ljpt_up/F')
-    mtclosure_w_njets_pth_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth_ljpt_down', mtclosure_w_njets_pth_ljpt_down, 'mtclosure_w_njets_pth_ljpt_down/F')
+    #mtclosure_w_njets_pth_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth_ljpt_up', mtclosure_w_njets_pth_ljpt_up, 'mtclosure_w_njets_pth_ljpt_up/F')
+    #mtclosure_w_njets_pth_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth_ljpt_down', mtclosure_w_njets_pth_ljpt_down, 'mtclosure_w_njets_pth_ljpt_down/F')
+    mtclosure_w_njets0_pth_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets0_pth_up', mtclosure_w_njets0_pth_up, 'mtclosure_w_njets0_pth_up/F')
+    mtclosure_w_njets0_pth_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets0_pth_down', mtclosure_w_njets0_pth_down, 'mtclosure_w_njets0_pth_down/F')
+    mtclosure_w_njets_pth0to45_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth0to45_ljpt_up', mtclosure_w_njets_pth0to45_ljpt_up, 'mtclosure_w_njets_pth0to45_ljpt_up/F')
+    mtclosure_w_njets_pth0to45_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth0to45_ljpt_down', mtclosure_w_njets_pth0to45_ljpt_down, 'mtclosure_w_njets_pth0to45_ljpt_down/F')
+    mtclosure_w_njets_pth45to80_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth45to80_ljpt_up', mtclosure_w_njets_pth45to80_ljpt_up, 'mtclosure_w_njets_pth45to80_ljpt_up/F')
+    mtclosure_w_njets_pth45to80_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth45to80_ljpt_down', mtclosure_w_njets_pth45to80_ljpt_down, 'mtclosure_w_njets_pth45to80_ljpt_down/F')
+    mtclosure_w_njets_pth80to120_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth80to120_ljpt_up', mtclosure_w_njets_pth80to120_ljpt_up, 'mtclosure_w_njets_pth80to120_ljpt_up/F')
+    mtclosure_w_njets_pth80to120_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth80to120_ljpt_down', mtclosure_w_njets_pth80to120_ljpt_down, 'mtclosure_w_njets_pth80to120_ljpt_down/F')
+    mtclosure_w_njets_pth120to200_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth120to200_ljpt_up', mtclosure_w_njets_pth120to200_ljpt_up, 'mtclosure_w_njets_pth120to200_ljpt_up/F')
+    mtclosure_w_njets_pth120to200_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pth120to200_ljpt_down', mtclosure_w_njets_pth120to200_ljpt_down, 'mtclosure_w_njets_pth120to200_ljpt_down/F')
+    mtclosure_w_njets_pthgt200_ljpt_up_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pthgt200_ljpt_up', mtclosure_w_njets_pthgt200_ljpt_up, 'mtclosure_w_njets_pthgt200_ljpt_up/F')
+    mtclosure_w_njets_pthgt200_ljpt_down_Branch = ReweightFile.mt_Selected.Branch('mtclosure_w_njets_pthgt200_ljpt_down', mtclosure_w_njets_pthgt200_ljpt_down, 'mtclosure_w_njets_pthgt200_ljpt_down/F')
 
     osssclosure_qcd_unc1_up_Branch = ReweightFile.mt_Selected.Branch('osssclosure_qcd_unc1_up',osssclosure_qcd_unc1_up,'osssclosure_qcd_unc1_up/F')
     osssclosure_qcd_unc1_down_Branch = ReweightFile.mt_Selected.Branch('osssclosure_qcd_unc1_down',osssclosure_qcd_unc1_down,'osssclosure_qcd_unc1_down/F')
@@ -620,8 +662,13 @@ def AddFakeFactorWeightings(FileName,args):
                                            0,
                                            ReweightFile.mt_Selected.metphi,
                                            0)
+        
+        HPT = 0.0
+        if args.isDifferential:
+            HPT = ReweightFile.mt_Selected.HiggsPt_Differential
+        else:
+            HPT = ReweightFile.mt_Selected.HiggsPt#(MuVector + TauVector + MissingMomentumVector).Pt()
 
-        HPT = ReweightFile.mt_Selected.HiggsPt#(MuVector + TauVector + MissingMomentumVector).Pt()
 
         #now we need to compute proper fractions now        
         EventClassification = ClassifyEvent(ReweightFile.mt_Selected)
@@ -667,112 +714,156 @@ def AddFakeFactorWeightings(FileName,args):
         else:
             Modifier = 1.0
 
-        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                                
-        
-        """
-        if ReweightFile.mt_Selected.njets == 1 and ReweightFile.mt_Selected.m_sv > 130 and ReweightFile.mt_Selected.m_sv < 290 and HPT > 120 and HPT < 200:
-            print("Run: "+str(ReweightFile.mt_Selected.run))
-            print("Lumi: "+str(ReweightFile.mt_Selected.lumi))
-            print("Evt: "+str(ReweightFile.mt_Selected.evt))
-            print("m_sv: "+str(ReweightFile.mt_Selected.m_sv))
-            print("TauPt: "+str(TauVector.Pt()))
-            print("MuPt: "+str(MuVector.Pt()))
-            print("Frac_QCD: "+str(FracQCD))
-            print("Frac_W: "+str(FracW))
-            print("Frac_TT: "+str(FracTT))
-            print("Event Fake Factor: "+str(Event_Fake_Factor[0]))
-            print ''
-        """
-        
-        ff_qcd_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','up') * Modifier                
-        ff_qcd_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc1','down') * Modifier                
-        ff_qcd_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','up') * Modifier                
-        ff_qcd_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_unc2','down') * Modifier                
-        ff_qcd_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','up') * Modifier                
-        ff_qcd_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc1','down') * Modifier                
-        ff_qcd_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','up') * Modifier                
-        ff_qcd_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_unc2','down') * Modifier                
-        ff_qcd_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','up') * Modifier                
-        ff_qcd_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc1','down') * Modifier                
-        ff_qcd_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','up') * Modifier                
-        ff_qcd_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_unc2','down') * Modifier                
-        
-        ff_w_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','up') * Modifier                
-        ff_w_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc1','down') * Modifier            
-        ff_w_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','up') * Modifier                
-        ff_w_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_unc2','down') * Modifier                
-        ff_w_1jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','up') * Modifier                
-        ff_w_1jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc1','down') * Modifier                
-        ff_w_1jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','up') * Modifier                
-        ff_w_1jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_unc2','down') * Modifier            
-        ff_w_2jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','up') * Modifier                
-        ff_w_2jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc1','down') * Modifier                
-        
-        ff_w_2jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','up') * Modifier                
-        ff_w_2jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_unc2','down') * Modifier            
-        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier 
+        Event_Fake_Factor[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW) * Modifier                                
+                
+        ff_qcd_0jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_barrel_unc1','up') * Modifier                
+        ff_qcd_0jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_barrel_unc1','down') * Modifier                
+        ff_qcd_0jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_barrel_unc2','up') * Modifier                
+        ff_qcd_0jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_barrel_unc2','down') * Modifier                
+        ff_qcd_1jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_barrel_unc1','up') * Modifier                
+        ff_qcd_1jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_barrel_unc1','down') * Modifier                
+        ff_qcd_1jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_barrel_unc2','up') * Modifier                
+        ff_qcd_1jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_barrel_unc2','down') * Modifier                
+        ff_qcd_2jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_barrel_unc1','up') * Modifier                
+        ff_qcd_2jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_barrel_unc1','down') * Modifier                
+        ff_qcd_2jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_barrel_unc2','up') * Modifier                
+        ff_qcd_2jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_barrel_unc2','down') * Modifier                
 
-        ff_tt_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','down') * Modifier                
-        ff_tt_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','up') * Modifier                
-        ff_tt_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','down') * Modifier                
-        mtclosure_w_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','up') * Modifier                
-        mtclosure_w_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','down') * Modifier                        
-        mtclosure_w_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','up') * Modifier                
-        mtclosure_w_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','down') * Modifier                        
-        #pthclosure_w_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'pthclosure_w','up') * Modifier                
-        #pthclosure_w_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'pthclosure_w','down') * Modifier                
-        mtclosure_w_njets_pth_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth_ljpt_closure','up')* Modifier
-        #print("up")
-        #print(mtclosure_w_njets_pth_ljpt_up[0])
-        mtclosure_w_njets_pth_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth_ljpt_closure','down') * Modifier
-        #print("down")
-        #print(mtclosure_w_njets_pth_ljpt_down[0])
-        #print("nominal: ")
-        #print(Event_Fake_Factor[0])
-        #print("")
+        ff_qcd_0jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_endcaps_unc1','up') * Modifier                
+        ff_qcd_0jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_endcaps_unc1','down') * Modifier                
+        ff_qcd_0jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_endcaps_unc2','up') * Modifier                
+        ff_qcd_0jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_0jet_endcaps_unc2','down') * Modifier                
+        ff_qcd_1jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_endcaps_unc1','up') * Modifier                
+        ff_qcd_1jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_endcaps_unc1','down') * Modifier                
+        ff_qcd_1jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_endcaps_unc2','up') * Modifier                
+        ff_qcd_1jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_1jet_endcaps_unc2','down') * Modifier                
+        ff_qcd_2jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_endcaps_unc1','up') * Modifier                
+        ff_qcd_2jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_endcaps_unc1','down') * Modifier                
+        ff_qcd_2jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_endcaps_unc2','up') * Modifier                
+        ff_qcd_2jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_qcd_2jet_endcaps_unc2','down') * Modifier                
 
-        lptclosure_xtrg_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','up') * Modifier
-        lptclosure_xtrg_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','down') * Modifier
-        lptclosure_xtrg_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','up') * Modifier
-        lptclosure_xtrg_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','down') * Modifier        
-        lptclosure_xtrg_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','up') * Modifier
-        lptclosure_xtrg_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','down') * Modifier
+        ff_w_0jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_barrel_unc1','up') * Modifier                
+        ff_w_0jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_barrel_unc1','down') * Modifier            
+        ff_w_0jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_barrel_unc2','up') * Modifier                
+        ff_w_0jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_barrel_unc2','down') * Modifier                
+        ff_w_1jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_barrel_unc1','up') * Modifier                
+        ff_w_1jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_barrel_unc1','down') * Modifier                
+        ff_w_1jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_barrel_unc2','up') * Modifier                
+        ff_w_1jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_barrel_unc2','down') * Modifier            
+        ff_w_2jet_barrel_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_barrel_unc1','up') * Modifier                
+        ff_w_2jet_barrel_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_barrel_unc1','down') * Modifier                        
+        ff_w_2jet_barrel_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_barrel_unc2','up') * Modifier                
+        ff_w_2jet_barrel_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_barrel_unc2','down') * Modifier
+
+        ff_w_0jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_endcaps_unc1','up') * Modifier                
+        ff_w_0jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_endcaps_unc1','down') * Modifier            
+        ff_w_0jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_endcaps_unc2','up') * Modifier                
+        ff_w_0jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_0jet_endcaps_unc2','down') * Modifier                
+        ff_w_1jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_endcaps_unc1','up') * Modifier                
+        ff_w_1jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_endcaps_unc1','down') * Modifier                
+        ff_w_1jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_endcaps_unc2','up') * Modifier                
+        ff_w_1jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_1jet_endcaps_unc2','down') * Modifier            
+        ff_w_2jet_endcaps_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_endcaps_unc1','up') * Modifier                
+        ff_w_2jet_endcaps_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_endcaps_unc1','down') * Modifier                        
+        ff_w_2jet_endcaps_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_endcaps_unc2','up') * Modifier                
+        ff_w_2jet_endcaps_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_w_2jet_endcaps_unc2','down') * Modifier
+            
+        ff_tt_0jet_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','up') * Modifier 
+        ff_tt_0jet_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc1','down') * Modifier                
+        ff_tt_0jet_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','up') * Modifier                
+        ff_tt_0jet_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'ff_tt_0jet_unc2','down') * Modifier                
+        mtclosure_w_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','up') * Modifier                
+        mtclosure_w_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc1','down') * Modifier                        
+        mtclosure_w_unc2_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','up') * Modifier                
+        mtclosure_w_unc2_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'mtclosure_w_unc2','down') * Modifier                        
+        #pthclosure_w_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'pthclosure_w','up') * Modifier                
+        #pthclosure_w_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'pthclosure_w','down') * Modifier                
+
+#        mtclosure_w_njets_pth_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth_ljpt_closure','up')* Modifier
+ #       mtclosure_w_njets_pth_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth_ljpt_closure','down') * Modifier
+
+        mtclosure_w_njets0_pth_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets0_pth_closure','up')* Modifier
+        mtclosure_w_njets0_pth_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets0_pth_closure','down') * Modifier
+        mtclosure_w_njets_pth0to45_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth0to45_ljpt_closure','up')* Modifier
+        mtclosure_w_njets_pth0to45_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth0to45_ljpt_closure','down') * Modifier
+        mtclosure_w_njets_pth45to80_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth45to80_ljpt_closure','up')* Modifier
+        mtclosure_w_njets_pth45to80_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth45to80_ljpt_closure','down') * Modifier
+        mtclosure_w_njets_pth80to120_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth80to120_ljpt_closure','up')* Modifier
+        mtclosure_w_njets_pth80to120_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth80to120_ljpt_closure','down') * Modifier
+        mtclosure_w_njets_pth120to200_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth120to200_ljpt_closure','up')* Modifier
+        mtclosure_w_njets_pth120to200_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pth120to200_ljpt_closure','down') * Modifier
+        mtclosure_w_njets_pthgt200_ljpt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pthgt200_ljpt_closure','up')* Modifier
+        mtclosure_w_njets_pthgt200_ljpt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'njets_pthgt200_ljpt_closure','down') * Modifier
+
+
+        lptclosure_xtrg_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','up') * Modifier
+        lptclosure_xtrg_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_qcd','down') * Modifier
+        lptclosure_xtrg_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','up') * Modifier
+        lptclosure_xtrg_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_w','down') * Modifier        
+        lptclosure_xtrg_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','up') * Modifier
+        lptclosure_xtrg_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_xtrg_tt','down') * Modifier
     
-        lptclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','up') * Modifier
-        lptclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','down') * Modifier
-        lptclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','up') * Modifier
-        lptclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','down') * Modifier
-        lptclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','up') * Modifier
-        lptclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','down') * Modifier
-        osssclosure_qcd_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','up') * Modifier                
-        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','down') * Modifier           
+        lptclosure_qcd_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','up') * Modifier
+        lptclosure_qcd_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_qcd','down') * Modifier
+        lptclosure_w_0jet_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','up') * Modifier
+        lptclosure_w_0jet_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_w','down') * Modifier
+        lptclosure_tt_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','up') * Modifier
+        lptclosure_tt_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'lptclosure_tt','down') * Modifier
+        osssclosure_qcd_unc1_up[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','up') * Modifier                
+        osssclosure_qcd_unc1_down[0] = theFFApplicationTool.get_ff(TauVector.Pt(),TauVector.Eta(),TransverseMass,m_vis,MuVector.Pt(),TauVector.DeltaR(MuVector),ReweightFile.mt_Selected.met,ReweightFile.mt_Selected.njets,ReweightFile.mt_Selected.jpt_1,HPT,CrossTrigger,FracTT,FracQCD,FracW,'osssclosure_qcd','down') * Modifier           
 
         FakeFactorBranch.Fill()
-        ff_qcd_0jet_unc1_up_Branch.Fill()
-        ff_qcd_0jet_unc1_down_Branch.Fill()
-        ff_qcd_0jet_unc2_up_Branch.Fill()
-        ff_qcd_0jet_unc2_down_Branch.Fill()
-        ff_qcd_1jet_unc1_up_Branch.Fill()
-        ff_qcd_1jet_unc1_down_Branch.Fill()
-        ff_qcd_1jet_unc2_up_Branch.Fill()
-        ff_qcd_1jet_unc2_down_Branch.Fill()
-        ff_qcd_2jet_unc1_up_Branch.Fill()
-        ff_qcd_2jet_unc1_down_Branch.Fill()
-        ff_qcd_2jet_unc2_up_Branch.Fill()
-        ff_qcd_2jet_unc2_down_Branch.Fill()
+        ff_qcd_0jet_barrel_unc1_up_Branch.Fill()
+        ff_qcd_0jet_barrel_unc1_down_Branch.Fill()
+        ff_qcd_0jet_barrel_unc2_up_Branch.Fill()
+        ff_qcd_0jet_barrel_unc2_down_Branch.Fill()
+        ff_qcd_1jet_barrel_unc1_up_Branch.Fill()
+        ff_qcd_1jet_barrel_unc1_down_Branch.Fill()
+        ff_qcd_1jet_barrel_unc2_up_Branch.Fill()
+        ff_qcd_1jet_barrel_unc2_down_Branch.Fill()
+        ff_qcd_2jet_barrel_unc1_up_Branch.Fill()
+        ff_qcd_2jet_barrel_unc1_down_Branch.Fill()
+        ff_qcd_2jet_barrel_unc2_up_Branch.Fill()
+        ff_qcd_2jet_barrel_unc2_down_Branch.Fill()
+
+        ff_qcd_0jet_endcaps_unc1_up_Branch.Fill()
+        ff_qcd_0jet_endcaps_unc1_down_Branch.Fill()
+        ff_qcd_0jet_endcaps_unc2_up_Branch.Fill()
+        ff_qcd_0jet_endcaps_unc2_down_Branch.Fill()
+        ff_qcd_1jet_endcaps_unc1_up_Branch.Fill()
+        ff_qcd_1jet_endcaps_unc1_down_Branch.Fill()
+        ff_qcd_1jet_endcaps_unc2_up_Branch.Fill()
+        ff_qcd_1jet_endcaps_unc2_down_Branch.Fill()
+        ff_qcd_2jet_endcaps_unc1_up_Branch.Fill()
+        ff_qcd_2jet_endcaps_unc1_down_Branch.Fill()
+        ff_qcd_2jet_endcaps_unc2_up_Branch.Fill()
+        ff_qcd_2jet_endcaps_unc2_down_Branch.Fill()
         
-        ff_w_0jet_unc1_up_Branch.Fill()
-        ff_w_0jet_unc1_down_Branch.Fill()
-        ff_w_0jet_unc2_up_Branch.Fill()
-        ff_w_0jet_unc2_down_Branch.Fill()
-        ff_w_1jet_unc1_up_Branch.Fill()
-        ff_w_1jet_unc1_down_Branch.Fill()
-        ff_w_1jet_unc2_up_Branch.Fill()
-        ff_w_1jet_unc2_down_Branch.Fill()
-        ff_w_2jet_unc1_up_Branch.Fill()
-        ff_w_2jet_unc1_down_Branch.Fill()
-        ff_w_2jet_unc2_up_Branch.Fill()
-        ff_w_2jet_unc2_down_Branch.Fill()
+        ff_w_0jet_barrel_unc1_up_Branch.Fill()
+        ff_w_0jet_barrel_unc1_down_Branch.Fill()
+        ff_w_0jet_barrel_unc2_up_Branch.Fill()
+        ff_w_0jet_barrel_unc2_down_Branch.Fill()
+        ff_w_1jet_barrel_unc1_up_Branch.Fill()
+        ff_w_1jet_barrel_unc1_down_Branch.Fill()
+        ff_w_1jet_barrel_unc2_up_Branch.Fill()
+        ff_w_1jet_barrel_unc2_down_Branch.Fill()
+        ff_w_2jet_barrel_unc1_up_Branch.Fill()
+        ff_w_2jet_barrel_unc1_down_Branch.Fill()
+        ff_w_2jet_barrel_unc2_up_Branch.Fill()
+        ff_w_2jet_barrel_unc2_down_Branch.Fill()
+
+        ff_w_0jet_endcaps_unc1_up_Branch.Fill()
+        ff_w_0jet_endcaps_unc1_down_Branch.Fill()
+        ff_w_0jet_endcaps_unc2_up_Branch.Fill()
+        ff_w_0jet_endcaps_unc2_down_Branch.Fill()
+        ff_w_1jet_endcaps_unc1_up_Branch.Fill()
+        ff_w_1jet_endcaps_unc1_down_Branch.Fill()
+        ff_w_1jet_endcaps_unc2_up_Branch.Fill()
+        ff_w_1jet_endcaps_unc2_down_Branch.Fill()
+        ff_w_2jet_endcaps_unc1_up_Branch.Fill()
+        ff_w_2jet_endcaps_unc1_down_Branch.Fill()
+        ff_w_2jet_endcaps_unc2_up_Branch.Fill()
+        ff_w_2jet_endcaps_unc2_down_Branch.Fill()
     
         ff_tt_0jet_unc1_up_Branch.Fill()
         ff_tt_0jet_unc1_down_Branch.Fill()
@@ -798,8 +889,20 @@ def AddFakeFactorWeightings(FileName,args):
         mtclosure_w_unc2_down_Branch.Fill()
         #pthclosure_w_up_Branch.Fill()
         #pthclosure_w_down_Branch.Fill()
-        mtclosure_w_njets_pth_ljpt_up_Branch.Fill()
-        mtclosure_w_njets_pth_ljpt_down_Branch.Fill()
+        #mtclosure_w_njets_pth_ljpt_up_Branch.Fill()
+        #mtclosure_w_njets_pth_ljpt_down_Branch.Fill()
+        mtclosure_w_njets0_pth_up_Branch.Fill()
+        mtclosure_w_njets0_pth_down_Branch.Fill()
+        mtclosure_w_njets_pth0to45_ljpt_up_Branch.Fill()
+        mtclosure_w_njets_pth0to45_ljpt_down_Branch.Fill()
+        mtclosure_w_njets_pth45to80_ljpt_up_Branch.Fill()
+        mtclosure_w_njets_pth45to80_ljpt_down_Branch.Fill()
+        mtclosure_w_njets_pth80to120_ljpt_up_Branch.Fill()
+        mtclosure_w_njets_pth80to120_ljpt_down_Branch.Fill()
+        mtclosure_w_njets_pth120to200_ljpt_up_Branch.Fill()
+        mtclosure_w_njets_pth120to200_ljpt_down_Branch.Fill()
+        mtclosure_w_njets_pthgt200_ljpt_up_Branch.Fill()
+        mtclosure_w_njets_pthgt200_ljpt_down_Branch.Fill()
         
         osssclosure_qcd_unc1_up_Branch.Fill()
         osssclosure_qcd_unc1_down_Branch.Fill()
