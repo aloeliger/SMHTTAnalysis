@@ -14,6 +14,7 @@ variableSettingDictionary = {
     'm_sv':'25,50.0,300.0',
     'njets':'6,0.0,6.0',
     'HiggsPt':'40,0.0,400.0',
+    'HiggsPt_Differential':'40,0.0,400.0',
     'met':'40,0.0,400.0',
     'DeltaR':'40,0.0,6.0',
     'mjj':'20,0.0,500.0',
@@ -34,6 +35,7 @@ variableAxisTitleDictionary = {
     'm_sv':'m_{#tau#tau}',
     'njets':'N_{jets}',
     'HiggsPt':'Higgs p_{t}',
+    'HiggsPt_Differential':'Higgs p_{t}',
     'met':'MET',
     'DeltaR':'#Delta r_{#mu,#tau}',
     'mjj':'m_{jj}',
@@ -152,6 +154,9 @@ def main():
                         choices=['2016','2017','2018'],
                         help='Use the file\'s fake factor weightings when making plots for these files.',
                         required=True)
+    parser.add_argument('--batchMode',
+                        help='run in batch mode',
+                        action='store_true')
     parser.add_argument('--variables',
                         nargs='+',
                         help='Variables to draw the control plots for',
@@ -187,9 +192,10 @@ def main():
                         help = 'Change the standard histogram bounding (affects all histograms)')
 
     args = parser.parse_args()    
-
+    
     ROOT.gStyle.SetOptStat(0)
-
+    if args.batchMode:
+        ROOT.gROOT.SetBatch(ROOT.kTRUE)
     #change the standard cut definition if that's available
 
     #okay, let's grab some files and get to work

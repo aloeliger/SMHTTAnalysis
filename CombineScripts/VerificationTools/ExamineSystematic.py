@@ -1,7 +1,5 @@
 import ROOT
 import argparse
-from tqdm import tqdm
-import math
 import re
 import os
 
@@ -16,9 +14,15 @@ def ExamineSystematic(TheDirectory,NominalName,UncertaintyName,args,pause):
     DistributionPad.Draw()    
     RatioPad.Draw()
 
+    print("Nominal: "+NominalName)
+    #TheDirectory.ls(NominalName)
     Nominal = TheDirectory.Get(NominalName)
-    UpUncert = TheDirectory.Get(UncertaintyName+"Up")
-    DownUncert = TheDirectory.Get(UncertaintyName+"Down")    
+    print("Up Uncertainty: "+NominalName+"_"+UncertaintyName+"Up")
+    #TheDirectory.ls(NominalName+"_"+UncertaintyName+"Up")
+    UpUncert = TheDirectory.Get(NominalName+"_"+UncertaintyName+"Up")
+    print("Down Uncertainty: "+NominalName+"_"+UncertaintyName+"Down")
+    #TheDirectory.ls(NominalName+"_"+UncertaintyName+"Down")
+    DownUncert = TheDirectory.Get(NominalName+"_"+UncertaintyName+"Down")    
     
     Nominal.SetLineColor(ROOT.kBlack)
     UpUncert.SetLineColor(ROOT.kRed)
