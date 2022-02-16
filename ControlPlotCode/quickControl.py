@@ -24,6 +24,7 @@ variableSettingDictionary = {
     'jpt_2':'50,0.0,200.0',
     'jeta_2':'50,-5.0,5.0',
     'MT':'20,0.0,200.0',
+    'm_2': '32,0.0,1.6',
 }
 
 variableAxisTitleDictionary = {
@@ -45,6 +46,7 @@ variableAxisTitleDictionary = {
     'jpt_2':'p_{t} j_{2}',
     'jeta_2':'#eta j_{2}',    
     'MT':'Transverse Mass',
+    'm_2': 'Tau Mass'
     }
 
 #just compile our standard cutting and weighting string for ttree.draw()
@@ -151,7 +153,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate control plots quick.')    
     parser.add_argument('--year',
                         nargs='?',
-                        choices=['2016','2017','2018'],
+                        choices=['2016','2017','2018','Run2'],
                         help='Use the file\'s fake factor weightings when making plots for these files.',
                         required=True)
     parser.add_argument('--batchMode',
@@ -190,6 +192,10 @@ def main():
     parser.add_argument('--changeHistogramBounds',
                         nargs = '?',
                         help = 'Change the standard histogram bounding (affects all histograms)')
+    parser.add_argument('--upperText',
+                        nargs = '?',
+                        help = 'Change the upper text next to CMS',
+                        default = 'Preliminary')
 
     args = parser.parse_args()    
     
@@ -199,7 +205,7 @@ def main():
     #change the standard cut definition if that's available
 
     #okay, let's grab some files and get to work
-    if args.year == '2016':
+    if args.year == '2016' or args.year=='Run2':
         dataPath = '/data/aloeliger/SMHTT_Selected_2016_Deep/'
     elif args.year == '2017':
         dataPath = '/data/aloeliger/SMHTT_Selected_2017_Deep/'
@@ -221,7 +227,7 @@ def main():
     ST_tW_topFile = ROOT.TFile(dataPath+'ST_tW_top.root')
     ST_t_antitopFile = ROOT.TFile(dataPath+'ST_t_antitop.root')
     ST_t_topFile = ROOT.TFile(dataPath+'ST_t_top.root')
-    if args.year == '2016':
+    if args.year == '2016' or args.year=='Run2':
         TTFile = ROOT.TFile(dataPath+'TT.root')
     else:
         TTToHadronicFile = ROOT.TFile(dataPath+'TTToHadronic.root')
@@ -260,62 +266,299 @@ def main():
 
         if args.changeHistogramBounds != None:
             variableSettingDictionary[variable] = args.changeHistogramBounds
-        ZLFile.mt_Selected.Draw(variable+'>>ZL('+variableSettingDictionary[variable]+')',
-                                CreateCutString(args.standardCutString,
-                                                args.additionalSelections+['gen_match_2 < 5']))
-        dyHisto = ROOT.gDirectory.Get("ZL").Clone()
-        dyHisto.Add(StandardDraw(EWKZLLFile,variable,args.standardCutString,args.additionalSelections,'ewkzll'))
-        dyHisto.Add(StandardDraw(EWKZNuNuFile,variable,args.standardCutString,args.additionalSelections,'ewkznunu'))
-        
-        dataFile.mt_Selected.Draw(variable+'>>data('+variableSettingDictionary[variable]+')',
-                                  CreateCutString(args.standardCutString,
-                                                  args.additionalSelections,
-                                                  weighting='1'))
-        dataHisto = ROOT.gDirectory.Get('data').Clone()
+        if args.year != 'Run2':
+            ZLFile.mt_Selected.Draw(variable+'>>ZL('+variableSettingDictionary[variable]+')',
+                                    CreateCutString(args.standardCutString,
+                                                    args.additionalSelections+['gen_match_2 < 5']))
+            dyHisto = ROOT.gDirectory.Get("ZL").Clone()
+            dyHisto.Add(StandardDraw(EWKZLLFile,variable,args.standardCutString,args.additionalSelections,'ewkzll'))
+            dyHisto.Add(StandardDraw(EWKZNuNuFile,variable,args.standardCutString,args.additionalSelections,'ewkznunu'))
 
-        fakesFile.mt_Selected.Draw(variable+'>>fake('+variableSettingDictionary[variable]+')',
-                                   CreateCutString(args.standardCutString,
-                                                   args.additionalSelections,
-                                                   weighting='FinalWeighting*Event_Fake_Factor'))
-        fakeHisto = ROOT.gDirectory.Get("fake").Clone()
+            dataFile.mt_Selected.Draw(variable+'>>data('+variableSettingDictionary[variable]+')',
+                                      CreateCutString(args.standardCutString,
+                                                      args.additionalSelections,
+                                                      weighting='1'))
+            dataHisto = ROOT.gDirectory.Get('data').Clone()
 
-        embeddedHisto = StandardDraw(embeddedFile,variable,args.standardCutString,args.additionalSelections,'embedded')
+            fakesFile.mt_Selected.Draw(variable+'>>fake('+variableSettingDictionary[variable]+')',
+                                       CreateCutString(args.standardCutString,
+                                                       args.additionalSelections,
+                                                       weighting='FinalWeighting*Event_Fake_Factor'))
+            fakeHisto = ROOT.gDirectory.Get("fake").Clone()
 
-        otherHisto = StandardDraw(GGHWWFile,variable,args.standardCutString,args.additionalSelections,'gghww')
-        otherHisto.Add(StandardDraw(GGZHWWFile,variable,args.standardCutString,args.additionalSelections,'ggzhww'))
-        otherHisto.Add(StandardDraw(ST_tW_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop'))
-        otherHisto.Add(StandardDraw(ST_tW_topFile,variable,args.standardCutString,args.additionalSelections,'st_tw_top'))
-        otherHisto.Add(StandardDraw(ST_t_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_t_antitop'))
-        otherHisto.Add(StandardDraw(ST_t_topFile,variable,args.standardCutString,args.additionalSelections,'st_t_top'))
-        otherHisto.Add(StandardDraw(VBFHWWFile,variable,args.standardCutString,args.additionalSelections,'vbfhww'))
-        otherHisto.Add(StandardDraw(VV2L2NuFile,variable,args.standardCutString,args.additionalSelections,'vv2l2nu'))
-        otherHisto.Add(StandardDraw(WW1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q'))
-        otherHisto.Add(StandardDraw(WZ1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q'))
-        otherHisto.Add(StandardDraw(WZ3L1NuFile,variable,args.standardCutString,args.additionalSelections,'wz3l1nu'))
-        otherHisto.Add(StandardDraw(WZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'wz2l2q'))
-        otherHisto.Add(StandardDraw(WminusHWWFile,variable,args.standardCutString,args.additionalSelections,'wminushww'))
-        otherHisto.Add(StandardDraw(WplusHWWFile,variable,args.standardCutString,args.additionalSelections,'wplushww'))
-        otherHisto.Add(StandardDraw(ZHWWFile,variable,args.standardCutString,args.additionalSelections,'zhww'))
-        otherHisto.Add(StandardDraw(ZZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'zz2l2q'))
-        otherHisto.Add(StandardDraw(ZZ4LFile,variable,args.standardCutString,args.additionalSelections,'zz4l'))
+            embeddedHisto = StandardDraw(embeddedFile,variable,args.standardCutString,args.additionalSelections,'embedded')
 
-        if args.year == '2016':
-            TTHisto = StandardDraw(TTFile,variable,args.standardCutString,args.additionalSelections,'tt')
-        else:
-            TTHisto = StandardDraw(TTToSemiLeptonicFile,variable,args.standardCutString,args.additionalSelections,'tttosemileptonic')            
-            TTHisto.Add(StandardDraw(TTTo2L2NuFile,variable,args.standardCutString,args.additionalSelections,'ttto2l2nu'))
-            TTHisto.Add(StandardDraw(TTToHadronicFile,variable,args.standardCutString,args.additionalSelections,'tttohadronic'))
+            otherHisto = StandardDraw(GGHWWFile,variable,args.standardCutString,args.additionalSelections,'gghww')
+            otherHisto.Add(StandardDraw(GGZHWWFile,variable,args.standardCutString,args.additionalSelections,'ggzhww'))
+            otherHisto.Add(StandardDraw(ST_tW_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop'))
+            otherHisto.Add(StandardDraw(ST_tW_topFile,variable,args.standardCutString,args.additionalSelections,'st_tw_top'))
+            otherHisto.Add(StandardDraw(ST_t_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_t_antitop'))
+            otherHisto.Add(StandardDraw(ST_t_topFile,variable,args.standardCutString,args.additionalSelections,'st_t_top'))
+            otherHisto.Add(StandardDraw(VBFHWWFile,variable,args.standardCutString,args.additionalSelections,'vbfhww'))
+            otherHisto.Add(StandardDraw(VV2L2NuFile,variable,args.standardCutString,args.additionalSelections,'vv2l2nu'))
+            otherHisto.Add(StandardDraw(WW1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q'))
+            otherHisto.Add(StandardDraw(WZ1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q'))
+            otherHisto.Add(StandardDraw(WZ3L1NuFile,variable,args.standardCutString,args.additionalSelections,'wz3l1nu'))
+            otherHisto.Add(StandardDraw(WZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'wz2l2q'))
+            otherHisto.Add(StandardDraw(WminusHWWFile,variable,args.standardCutString,args.additionalSelections,'wminushww'))
+            otherHisto.Add(StandardDraw(WplusHWWFile,variable,args.standardCutString,args.additionalSelections,'wplushww'))
+            otherHisto.Add(StandardDraw(ZHWWFile,variable,args.standardCutString,args.additionalSelections,'zhww'))
+            otherHisto.Add(StandardDraw(ZZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'zz2l2q'))
+            otherHisto.Add(StandardDraw(ZZ4LFile,variable,args.standardCutString,args.additionalSelections,'zz4l'))
 
-        signalHisto = StandardDraw(GGZHLLTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhlltt')
-        signalHisto.Add(StandardDraw(GGZHNNTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhnntt'))
-        signalHisto.Add(StandardDraw(GGZHQQTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt'))
-        signalHisto.Add(StandardDraw(VBFFile,variable,args.standardCutString,args.additionalSelections,'vbf'))
-        signalHisto.Add(StandardDraw(WHMinusFile,variable,args.standardCutString,args.additionalSelections,'wminush'))
-        signalHisto.Add(StandardDraw(WHPlusFile,variable,args.standardCutString,args.additionalSelections,'wplush'))
-        signalHisto.Add(StandardDraw(ZHFile,variable,args.standardCutString,args.additionalSelections,'zh'))
-        signalHisto.Add(StandardDraw(ggHFile,variable,args.standardCutString,args.additionalSelections,'ggh'))        
-        
-        otherHisto.Add(signalHisto.Clone())
+            if args.year == '2016':
+                TTHisto = StandardDraw(TTFile,variable,args.standardCutString,args.additionalSelections,'tt')
+            else:
+                TTHisto = StandardDraw(TTToSemiLeptonicFile,variable,args.standardCutString,args.additionalSelections,'tttosemileptonic')            
+                TTHisto.Add(StandardDraw(TTTo2L2NuFile,variable,args.standardCutString,args.additionalSelections,'ttto2l2nu'))
+                TTHisto.Add(StandardDraw(TTToHadronicFile,variable,args.standardCutString,args.additionalSelections,'tttohadronic'))
+
+            signalHisto = StandardDraw(GGZHLLTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhlltt')
+            signalHisto.Add(StandardDraw(GGZHNNTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhnntt'))
+            signalHisto.Add(StandardDraw(GGZHQQTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt'))
+            signalHisto.Add(StandardDraw(VBFFile,variable,args.standardCutString,args.additionalSelections,'vbf'))
+            signalHisto.Add(StandardDraw(WHMinusFile,variable,args.standardCutString,args.additionalSelections,'wminush'))
+            signalHisto.Add(StandardDraw(WHPlusFile,variable,args.standardCutString,args.additionalSelections,'wplush'))
+            signalHisto.Add(StandardDraw(ZHFile,variable,args.standardCutString,args.additionalSelections,'zh'))
+            signalHisto.Add(StandardDraw(ggHFile,variable,args.standardCutString,args.additionalSelections,'ggh'))        
+
+            otherHisto.Add(signalHisto.Clone())
+        else: #this gets a bit complicated. We need to just start off like it's 2016, then add in the 2017 and 2018 histgorams
+            ZLFile.mt_Selected.Draw(variable+'>>ZL_2016('+variableSettingDictionary[variable]+')',
+                                    CreateCutString(args.standardCutString,
+                                                    args.additionalSelections+['gen_match_2 < 5']))
+            dyHisto = ROOT.gDirectory.Get("ZL_2016").Clone()
+            dyHisto.Add(StandardDraw(EWKZLLFile,variable,args.standardCutString,args.additionalSelections,'ewkzll_2016'))
+            dyHisto.Add(StandardDraw(EWKZNuNuFile,variable,args.standardCutString,args.additionalSelections,'ewkznunu_2016'))
+
+            dataFile.mt_Selected.Draw(variable+'>>data_2016('+variableSettingDictionary[variable]+')',
+                                      CreateCutString(args.standardCutString,
+                                                      args.additionalSelections,
+                                                      weighting='1'))
+            dataHisto = ROOT.gDirectory.Get('data_2016').Clone()
+
+            fakesFile.mt_Selected.Draw(variable+'>>fake_2016('+variableSettingDictionary[variable]+')',
+                                       CreateCutString(args.standardCutString,
+                                                       args.additionalSelections,
+                                                       weighting='FinalWeighting*Event_Fake_Factor'))
+            fakeHisto = ROOT.gDirectory.Get("fake_2016").Clone()
+
+            embeddedHisto = StandardDraw(embeddedFile,variable,args.standardCutString,args.additionalSelections,'embedded_2016')
+
+            otherHisto = StandardDraw(GGHWWFile,variable,args.standardCutString,args.additionalSelections,'gghww_2016')
+            otherHisto.Add(StandardDraw(GGZHWWFile,variable,args.standardCutString,args.additionalSelections,'ggzhww_2016'))
+            otherHisto.Add(StandardDraw(ST_tW_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop_2016'))
+            otherHisto.Add(StandardDraw(ST_tW_topFile,variable,args.standardCutString,args.additionalSelections,'st_tw_top_2016'))
+            otherHisto.Add(StandardDraw(ST_t_antitopFile,variable,args.standardCutString,args.additionalSelections,'st_t_antitop_2016'))
+            otherHisto.Add(StandardDraw(ST_t_topFile,variable,args.standardCutString,args.additionalSelections,'st_t_top_2016'))
+            otherHisto.Add(StandardDraw(VBFHWWFile,variable,args.standardCutString,args.additionalSelections,'vbfhww_2016'))
+            otherHisto.Add(StandardDraw(VV2L2NuFile,variable,args.standardCutString,args.additionalSelections,'vv2l2nu_2016'))
+            otherHisto.Add(StandardDraw(WW1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q_2016'))
+            otherHisto.Add(StandardDraw(WZ1L1Nu2QFile,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q_2016'))
+            otherHisto.Add(StandardDraw(WZ3L1NuFile,variable,args.standardCutString,args.additionalSelections,'wz3l1nu_2016'))
+            otherHisto.Add(StandardDraw(WZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'wz2l2q_2016'))
+            otherHisto.Add(StandardDraw(WminusHWWFile,variable,args.standardCutString,args.additionalSelections,'wminushww_2016'))
+            otherHisto.Add(StandardDraw(WplusHWWFile,variable,args.standardCutString,args.additionalSelections,'wplushww_2016'))
+            otherHisto.Add(StandardDraw(ZHWWFile,variable,args.standardCutString,args.additionalSelections,'zhww_2016'))
+            otherHisto.Add(StandardDraw(ZZ2L2QFile,variable,args.standardCutString,args.additionalSelections,'zz2l2q_2016'))
+            otherHisto.Add(StandardDraw(ZZ4LFile,variable,args.standardCutString,args.additionalSelections,'zz4l_2016'))
+
+            TTHisto = StandardDraw(TTFile,variable,args.standardCutString,args.additionalSelections,'tt_2016')
+
+            signalHisto = StandardDraw(GGZHLLTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhlltt_2016')
+            signalHisto.Add(StandardDraw(GGZHNNTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhnntt_2016'))
+            signalHisto.Add(StandardDraw(GGZHQQTTFile,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt_2016'))
+            signalHisto.Add(StandardDraw(VBFFile,variable,args.standardCutString,args.additionalSelections,'vbf_2016'))
+            signalHisto.Add(StandardDraw(WHMinusFile,variable,args.standardCutString,args.additionalSelections,'wminush_2016'))
+            signalHisto.Add(StandardDraw(WHPlusFile,variable,args.standardCutString,args.additionalSelections,'wplush_2016'))
+            signalHisto.Add(StandardDraw(ZHFile,variable,args.standardCutString,args.additionalSelections,'zh_2016'))
+            signalHisto.Add(StandardDraw(ggHFile,variable,args.standardCutString,args.additionalSelections,'ggh'))        
+
+            #now we change the files over to the 2017 version, and repeat the process
+            dataPath = '/data/aloeliger/SMHTT_Selected_2017_Deep/'
+
+            ZLFile_2017 = ROOT.TFile(dataPath+'DY.root')
+            dataFile_2017 = ROOT.TFile(dataPath+'Data.root')
+            EWKZLLFile_2017 = ROOT.TFile(dataPath+'EWKZLL.root')
+            EWKZNuNuFile_2017 = ROOT.TFile(dataPath+'EWKZNuNu.root')
+            embeddedFile_2017 = ROOT.TFile(dataPath+'Embedded.root')
+            fakesFile_2017 = ROOT.TFile(dataPath+'Fake.root')    
+            GGHWWFile_2017 = ROOT.TFile(dataPath+'GGHWW.root')
+            GGZHLLTTFile_2017 = ROOT.TFile(dataPath+'GGZHLLTT.root')
+            GGZHNNTTFile_2017 = ROOT.TFile(dataPath+'GGZHNNTT.root')
+            GGZHQQTTFile_2017 = ROOT.TFile(dataPath+'GGZHQQTT.root')
+            GGZHWWFile_2017 = ROOT.TFile(dataPath+'GGZHWW.root')
+            ST_tW_antitopFile_2017 = ROOT.TFile(dataPath+'ST_tW_antitop.root')
+            ST_tW_topFile_2017 = ROOT.TFile(dataPath+'ST_tW_top.root')
+            ST_t_antitopFile_2017 = ROOT.TFile(dataPath+'ST_t_antitop.root')
+            ST_t_topFile_2017 = ROOT.TFile(dataPath+'ST_t_top.root')
+            TTToHadronicFile_2017 = ROOT.TFile(dataPath+'TTToHadronic.root')
+            TTToSemiLeptonicFile_2017 = ROOT.TFile(dataPath+'TTToSemiLeptonic.root')
+            TTTo2L2NuFile_2017 = ROOT.TFile(dataPath+'TTTo2L2Nu.root')
+            VBFFile_2017 = ROOT.TFile(dataPath+'VBF.root')
+            VBFHWWFile_2017 = ROOT.TFile(dataPath+'VBFHWW.root')
+            VV2L2NuFile_2017 = ROOT.TFile(dataPath+'VV2L2Nu.root')
+            WHMinusFile_2017 = ROOT.TFile(dataPath+'WHMinus.root')
+            WHPlusFile_2017 = ROOT.TFile(dataPath+'WHPlus.root')
+            WW1L1Nu2QFile_2017 = ROOT.TFile(dataPath+'WW1L1Nu2Q.root')
+            WZ1L1Nu2QFile_2017 = ROOT.TFile(dataPath+'WZ1L1Nu2Q.root')
+            WZ1L3NuFile_2017 = ROOT.TFile(dataPath+'WZ1L3Nu.root')
+            WZ2L2QFile_2017 = ROOT.TFile(dataPath+'WZ2L2Q.root')
+            WZ3L1NuFile_2017 = ROOT.TFile(dataPath+'WZ3L1Nu.root')
+            WminusHWWFile_2017 = ROOT.TFile(dataPath+'WminusHWW.root')
+            WplusHWWFile_2017 = ROOT.TFile(dataPath+'WplusHWW.root')
+            ZHFile_2017 = ROOT.TFile(dataPath+'ZH.root')
+            ZHWWFile_2017 = ROOT.TFile(dataPath+'ZHWW.root')
+            ZZ2L2QFile_2017 = ROOT.TFile(dataPath+'ZZ2L2Q.root')
+            ZZ4LFile_2017 = ROOT.TFile(dataPath+'ZZ4L.root')
+            ggHFile_2017 = ROOT.TFile(dataPath+'ggH.root')
+
+            ZLFile_2017.mt_Selected.Draw(variable+'>>ZL_2017('+variableSettingDictionary[variable]+')',
+                                    CreateCutString(args.standardCutString,
+                                                    args.additionalSelections+['gen_match_2 < 5']))
+            dyHisto.Add(ROOT.gDirectory.Get("ZL_2017").Clone())
+            dyHisto.Add(StandardDraw(EWKZLLFile_2017,variable,args.standardCutString,args.additionalSelections,'ewkzll_2017'))
+            dyHisto.Add(StandardDraw(EWKZNuNuFile_2017,variable,args.standardCutString,args.additionalSelections,'ewkznunu_2017'))
+
+            dataFile_2017.mt_Selected.Draw(variable+'>>data_2017('+variableSettingDictionary[variable]+')',
+                                      CreateCutString(args.standardCutString,
+                                                      args.additionalSelections,
+                                                      weighting='1'))
+            dataHisto.Add(ROOT.gDirectory.Get('data_2017').Clone())
+
+            fakesFile_2017.mt_Selected.Draw(variable+'>>fake_2017('+variableSettingDictionary[variable]+')',
+                                       CreateCutString(args.standardCutString,
+                                                       args.additionalSelections,
+                                                       weighting='FinalWeighting*Event_Fake_Factor'))
+            fakeHisto.Add(ROOT.gDirectory.Get("fake_2017").Clone())
+
+            embeddedHisto.Add(StandardDraw(embeddedFile_2017,variable,args.standardCutString,args.additionalSelections,'embedded_2017'))
+
+            otherHisto.Add(StandardDraw(GGHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'gghww_2017'))
+            otherHisto.Add(StandardDraw(GGZHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'ggzhww_2017'))
+            otherHisto.Add(StandardDraw(ST_tW_antitopFile_2017,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop_2017'))
+            otherHisto.Add(StandardDraw(ST_tW_topFile_2017,variable,args.standardCutString,args.additionalSelections,'st_tw_top_2017'))
+            otherHisto.Add(StandardDraw(ST_t_antitopFile_2017,variable,args.standardCutString,args.additionalSelections,'st_t_antitop_2017'))
+            otherHisto.Add(StandardDraw(ST_t_topFile_2017,variable,args.standardCutString,args.additionalSelections,'st_t_top_2017'))
+            otherHisto.Add(StandardDraw(VBFHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'vbfhww_2017'))
+            otherHisto.Add(StandardDraw(VV2L2NuFile_2017,variable,args.standardCutString,args.additionalSelections,'vv2l2nu_2017'))
+            otherHisto.Add(StandardDraw(WW1L1Nu2QFile_2017,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q_2017'))
+            otherHisto.Add(StandardDraw(WZ1L1Nu2QFile_2017,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q_2017'))
+            otherHisto.Add(StandardDraw(WZ3L1NuFile_2017,variable,args.standardCutString,args.additionalSelections,'wz3l1nu_2017'))
+            otherHisto.Add(StandardDraw(WZ2L2QFile_2017,variable,args.standardCutString,args.additionalSelections,'wz2l2q_2017'))
+            otherHisto.Add(StandardDraw(WminusHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'wminushww_2017'))
+            otherHisto.Add(StandardDraw(WplusHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'wplushww_2017'))
+            otherHisto.Add(StandardDraw(ZHWWFile_2017,variable,args.standardCutString,args.additionalSelections,'zhww_2017'))
+            otherHisto.Add(StandardDraw(ZZ2L2QFile_2017,variable,args.standardCutString,args.additionalSelections,'zz2l2q_2017'))
+            otherHisto.Add(StandardDraw(ZZ4LFile_2017,variable,args.standardCutString,args.additionalSelections,'zz4l_2017'))
+
+            TTHisto.Add(StandardDraw(TTToSemiLeptonicFile_2017,variable,args.standardCutString,args.additionalSelections,'tttosemileptonic_2017')            )
+            TTHisto.Add(StandardDraw(TTTo2L2NuFile_2017,variable,args.standardCutString,args.additionalSelections,'ttto2l2nu_2017'))
+            TTHisto.Add(StandardDraw(TTToHadronicFile_2017,variable,args.standardCutString,args.additionalSelections,'tttohadronic_2017'))
+
+            signalHisto.Add(StandardDraw(GGZHLLTTFile_2017,variable,args.standardCutString,args.additionalSelections,'ggzhlltt_2017'))
+            signalHisto.Add(StandardDraw(GGZHNNTTFile_2017,variable,args.standardCutString,args.additionalSelections,'ggzhnntt_2017'))
+            signalHisto.Add(StandardDraw(GGZHQQTTFile_2017,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt_2017'))
+            signalHisto.Add(StandardDraw(VBFFile_2017,variable,args.standardCutString,args.additionalSelections,'vbf_2017'))
+            signalHisto.Add(StandardDraw(WHMinusFile_2017,variable,args.standardCutString,args.additionalSelections,'wminush_2017'))
+            signalHisto.Add(StandardDraw(WHPlusFile_2017,variable,args.standardCutString,args.additionalSelections,'wplush_2017'))
+            signalHisto.Add(StandardDraw(ZHFile_2017,variable,args.standardCutString,args.additionalSelections,'zh_2017'))
+            signalHisto.Add(StandardDraw(ggHFile_2017,variable,args.standardCutString,args.additionalSelections,'ggh_2017'))        
+
+            #and we do the same thing for 2018
+            dataPath = '/data/aloeliger/SMHTT_Selected_2018_Deep/'
+
+            ZLFile_2018 = ROOT.TFile(dataPath+'DY.root')
+            dataFile_2018 = ROOT.TFile(dataPath+'Data.root')
+            EWKZLLFile_2018 = ROOT.TFile(dataPath+'EWKZLL.root')
+            EWKZNuNuFile_2018 = ROOT.TFile(dataPath+'EWKZNuNu.root')
+            embeddedFile_2018 = ROOT.TFile(dataPath+'Embedded.root')
+            fakesFile_2018 = ROOT.TFile(dataPath+'Fake.root')    
+            GGHWWFile_2018 = ROOT.TFile(dataPath+'GGHWW.root')
+            GGZHLLTTFile_2018 = ROOT.TFile(dataPath+'GGZHLLTT.root')
+            GGZHNNTTFile_2018 = ROOT.TFile(dataPath+'GGZHNNTT.root')
+            GGZHQQTTFile_2018 = ROOT.TFile(dataPath+'GGZHQQTT.root')
+            GGZHWWFile_2018 = ROOT.TFile(dataPath+'GGZHWW.root')
+            ST_tW_antitopFile_2018 = ROOT.TFile(dataPath+'ST_tW_antitop.root')
+            ST_tW_topFile_2018 = ROOT.TFile(dataPath+'ST_tW_top.root')
+            ST_t_antitopFile_2018 = ROOT.TFile(dataPath+'ST_t_antitop.root')
+            ST_t_topFile_2018 = ROOT.TFile(dataPath+'ST_t_top.root')
+            TTToHadronicFile_2018 = ROOT.TFile(dataPath+'TTToHadronic.root')
+            TTToSemiLeptonicFile_2018 = ROOT.TFile(dataPath+'TTToSemiLeptonic.root')
+            TTTo2L2NuFile_2018 = ROOT.TFile(dataPath+'TTTo2L2Nu.root')
+            VBFFile_2018 = ROOT.TFile(dataPath+'VBF.root')
+            VBFHWWFile_2018 = ROOT.TFile(dataPath+'VBFHWW.root')
+            VV2L2NuFile_2018 = ROOT.TFile(dataPath+'VV2L2Nu.root')
+            WHMinusFile_2018 = ROOT.TFile(dataPath+'WHMinus.root')
+            WHPlusFile_2018 = ROOT.TFile(dataPath+'WHPlus.root')
+            WW1L1Nu2QFile_2018 = ROOT.TFile(dataPath+'WW1L1Nu2Q.root')
+            WZ1L1Nu2QFile_2018 = ROOT.TFile(dataPath+'WZ1L1Nu2Q.root')
+            WZ1L3NuFile_2018 = ROOT.TFile(dataPath+'WZ1L3Nu.root')
+            WZ2L2QFile_2018 = ROOT.TFile(dataPath+'WZ2L2Q.root')
+            WZ3L1NuFile_2018 = ROOT.TFile(dataPath+'WZ3L1Nu.root')
+            WminusHWWFile_2018 = ROOT.TFile(dataPath+'WminusHWW.root')
+            WplusHWWFile_2018 = ROOT.TFile(dataPath+'WplusHWW.root')
+            ZHFile_2018 = ROOT.TFile(dataPath+'ZH.root')
+            ZHWWFile_2018 = ROOT.TFile(dataPath+'ZHWW.root')
+            ZZ2L2QFile_2018 = ROOT.TFile(dataPath+'ZZ2L2Q.root')
+            ZZ4LFile_2018 = ROOT.TFile(dataPath+'ZZ4L.root')
+            ggHFile_2018 = ROOT.TFile(dataPath+'ggH.root')
+
+            ZLFile_2018.mt_Selected.Draw(variable+'>>ZL_2018('+variableSettingDictionary[variable]+')',
+                                    CreateCutString(args.standardCutString,
+                                                    args.additionalSelections+['gen_match_2 < 5']))
+            dyHisto.Add(ROOT.gDirectory.Get("ZL_2018").Clone())
+            dyHisto.Add(StandardDraw(EWKZLLFile_2018,variable,args.standardCutString,args.additionalSelections,'ewkzll_2018'))
+            dyHisto.Add(StandardDraw(EWKZNuNuFile_2018,variable,args.standardCutString,args.additionalSelections,'ewkznunu_2018'))
+
+            dataFile_2018.mt_Selected.Draw(variable+'>>data_2018('+variableSettingDictionary[variable]+')',
+                                      CreateCutString(args.standardCutString,
+                                                      args.additionalSelections,
+                                                      weighting='1'))
+            dataHisto.Add(ROOT.gDirectory.Get('data_2018').Clone())
+
+            fakesFile_2018.mt_Selected.Draw(variable+'>>fake_2018('+variableSettingDictionary[variable]+')',
+                                       CreateCutString(args.standardCutString,
+                                                       args.additionalSelections,
+                                                       weighting='FinalWeighting*Event_Fake_Factor'))
+            fakeHisto.Add(ROOT.gDirectory.Get("fake_2018").Clone())
+
+            embeddedHisto.Add(StandardDraw(embeddedFile_2018,variable,args.standardCutString,args.additionalSelections,'embedded_2018'))
+
+            otherHisto.Add(StandardDraw(GGHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'gghww_2018'))
+            otherHisto.Add(StandardDraw(GGZHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'ggzhww_2018'))
+            otherHisto.Add(StandardDraw(ST_tW_antitopFile_2018,variable,args.standardCutString,args.additionalSelections,'st_tw_antitop_2018'))
+            otherHisto.Add(StandardDraw(ST_tW_topFile_2018,variable,args.standardCutString,args.additionalSelections,'st_tw_top_2018'))
+            otherHisto.Add(StandardDraw(ST_t_antitopFile_2018,variable,args.standardCutString,args.additionalSelections,'st_t_antitop_2018'))
+            otherHisto.Add(StandardDraw(ST_t_topFile_2018,variable,args.standardCutString,args.additionalSelections,'st_t_top_2018'))
+            otherHisto.Add(StandardDraw(VBFHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'vbfhww_2018'))
+            otherHisto.Add(StandardDraw(VV2L2NuFile_2018,variable,args.standardCutString,args.additionalSelections,'vv2l2nu_2018'))
+            otherHisto.Add(StandardDraw(WW1L1Nu2QFile_2018,variable,args.standardCutString,args.additionalSelections,'ww1l1nu2q_2018'))
+            otherHisto.Add(StandardDraw(WZ1L1Nu2QFile_2018,variable,args.standardCutString,args.additionalSelections,'wz1l1nu2q_2018'))
+            otherHisto.Add(StandardDraw(WZ3L1NuFile_2018,variable,args.standardCutString,args.additionalSelections,'wz3l1nu_2018'))
+            otherHisto.Add(StandardDraw(WZ2L2QFile_2018,variable,args.standardCutString,args.additionalSelections,'wz2l2q_2018'))
+            otherHisto.Add(StandardDraw(WminusHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'wminushww_2018'))
+            otherHisto.Add(StandardDraw(WplusHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'wplushww_2018'))
+            otherHisto.Add(StandardDraw(ZHWWFile_2018,variable,args.standardCutString,args.additionalSelections,'zhww_2018'))
+            otherHisto.Add(StandardDraw(ZZ2L2QFile_2018,variable,args.standardCutString,args.additionalSelections,'zz2l2q_2018'))
+            otherHisto.Add(StandardDraw(ZZ4LFile_2018,variable,args.standardCutString,args.additionalSelections,'zz4l_2018'))
+
+            TTHisto.Add(StandardDraw(TTToSemiLeptonicFile_2018,variable,args.standardCutString,args.additionalSelections,'tttosemileptonic_2018')            )
+            TTHisto.Add(StandardDraw(TTTo2L2NuFile_2018,variable,args.standardCutString,args.additionalSelections,'ttto2l2nu_2018'))
+            TTHisto.Add(StandardDraw(TTToHadronicFile_2018,variable,args.standardCutString,args.additionalSelections,'tttohadronic_2018'))
+
+            signalHisto.Add(StandardDraw(GGZHLLTTFile_2018,variable,args.standardCutString,args.additionalSelections,'ggzhlltt_2018'))
+            signalHisto.Add(StandardDraw(GGZHNNTTFile_2018,variable,args.standardCutString,args.additionalSelections,'ggzhnntt_2018'))
+            signalHisto.Add(StandardDraw(GGZHQQTTFile_2018,variable,args.standardCutString,args.additionalSelections,'ggzhqqtt_2018'))
+            signalHisto.Add(StandardDraw(VBFFile_2018,variable,args.standardCutString,args.additionalSelections,'vbf_2018'))
+            signalHisto.Add(StandardDraw(WHMinusFile_2018,variable,args.standardCutString,args.additionalSelections,'wminush_2018'))
+            signalHisto.Add(StandardDraw(WHPlusFile_2018,variable,args.standardCutString,args.additionalSelections,'wplush_2018'))
+            signalHisto.Add(StandardDraw(ZHFile_2018,variable,args.standardCutString,args.additionalSelections,'zh_2018'))
+            signalHisto.Add(StandardDraw(ggHFile_2018,variable,args.standardCutString,args.additionalSelections,'ggh_2018'))        
+            
+            #we only need this once
+            otherHisto.Add(signalHisto.Clone())
+            
 
         dataHisto.SetMarkerStyle(20)
         dataHisto.Sumw2()
@@ -404,7 +647,7 @@ def main():
         cmsLatex.SetTextAlign(11)
         cmsLatex.DrawLatex(0.1,0.92,"CMS")
         cmsLatex.SetTextFont(52)
-        cmsLatex.DrawLatex(0.1+0.08,0.92,"Preliminary")
+        cmsLatex.DrawLatex(0.1+0.08,0.92,args.upperText)
         
         cmsLatex.SetTextAlign(31)
         cmsLatex.SetTextFont(42)
@@ -414,6 +657,8 @@ def main():
             lumiText = '41.5 fb^{-1}, 13TeV'
         elif args.year == '2018':
             lumiText = '59.7 fb^{-1}, 13TeV'
+        elif args.year == 'Run2':
+            lumiText = '138 fb^{-1}, 13TeV'
         cmsLatex.DrawLatex(0.9,0.92,lumiText)
 
         theCanvas.SaveAs('QuickControlPlots/'+variable+'_'+args.year+'.png')
@@ -440,7 +685,7 @@ def main():
     ST_tW_topFile.Close()
     ST_t_antitopFile.Close()
     ST_t_topFile.Close()
-    if args.year == '2016':
+    if args.year == '2016' or args.year=='Run2':
         TTFile.Close()
     else:
         TTToHadronicFile.Close()
